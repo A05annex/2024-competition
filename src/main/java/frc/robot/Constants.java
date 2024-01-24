@@ -73,8 +73,14 @@ public final class Constants extends A05Constants
     };
 
     public static void setAprilTagSetDictionary() {
-        aprilTagSetDictionary.put("example", new AprilTagSet(new int[] {1, 2}, new AngleD(AngleUnit.DEGREES, 0), 1.0));
-        aprilTagSetDictionary.put("example 2", new AprilTagSet(new int[] {3, 4}, 1.0));
+        aprilTagSetDictionary.put("amp", new AprilTagSet(new int[] {5}, new int[] {6},1.355725, new AngleD(AngleUnit.DEGREES, 90.0), new AngleD(AngleUnit.DEGREES, 270.0)));
+        aprilTagSetDictionary.put("speaker center", new AprilTagSet(new int[] {4}, new int[] {7}, 1.450975));
+        aprilTagSetDictionary.put("speaker offset", new AprilTagSet(new int[] {3},  new int[] {8}, 1.450975));
+        aprilTagSetDictionary.put("source close", new AprilTagSet(new int[] {10}, new int[] {1}, 1.355725, new AngleD(AngleUnit.DEGREES, 300.0), new AngleD(AngleUnit.DEGREES, 60.0)));
+        aprilTagSetDictionary.put("source far", new AprilTagSet(new int[] {9}, new int[] {2}, 1.355725, new AngleD(AngleUnit.DEGREES, 300.0), new AngleD(AngleUnit.DEGREES, 60.0)));
+        aprilTagSetDictionary.put("stage far", new AprilTagSet(new int[] {13}, new int[] {14}, 1.3208, new AngleD(AngleUnit.DEGREES, 180.0)));
+        aprilTagSetDictionary.put("stage left", new AprilTagSet(new int[] {11}, new int[] {15}, 1.3208, new AngleD(AngleUnit.DEGREES, 60.0)));
+        aprilTagSetDictionary.put("stage right", new AprilTagSet(new int[] {12}, new int[] {16}, 1.3208, new AngleD(AngleUnit.DEGREES, 300.0)));
     }
 
 
