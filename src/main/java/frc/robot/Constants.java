@@ -25,7 +25,8 @@ public final class Constants extends A05Constants
     public static final class CAN_Devices {
         public static final int
             // Non-Drive Motors
-            SAMPLE_MOTOR = 14;
+                FORWARD_MOTOR = 14,
+                BACKWARD_MOTOR = 13;
     }
 
     public static final boolean HAS_USB_CAMERA = false;
