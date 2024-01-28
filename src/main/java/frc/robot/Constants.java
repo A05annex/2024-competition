@@ -5,12 +5,15 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.ArmSubsystem;
 import org.a05annex.frc.A05Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.a05annex.frc.subsystems.PhotonCameraWrapper;
 import org.a05annex.util.AngleD;
 import org.a05annex.util.AngleUnit;
 import org.photonvision.PhotonCamera;
+
+import javax.sound.sampled.Line;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -27,6 +30,63 @@ public final class Constants extends A05Constants
             // Non-Drive Motors
                 FORWARD_MOTOR = 14,
                 BACKWARD_MOTOR = 13;
+    }
+
+
+    public static final class LinearInterpolation {
+        public final double distance;
+        public final double arm;
+        public final double rpm;
+
+        private static final LinearInterpolation[] calibratedPoints = {
+                new LinearInterpolation(1.0, 100, 5000),
+                new LinearInterpolation(2.0, 150, 5100)
+        };
+
+        LinearInterpolation(double distance, double arm, double rpm) {
+            this.distance = distance;
+            this.arm = arm;
+            this.rpm = rpm;
+        }
+
+        public void goToArm() {
+            ArmSubsystem.getInstance().goToSmartMotionPosition(this.arm);
+        }
+
+        public static LinearInterpolation interpolate(double distance) {
+            int highIndex = 0; // Index of the first calibrated point the distance parameter is less than
+
+
+            // Find which two calibrated points the current robot distance is between
+            for(LinearInterpolation calibratedPoint : calibratedPoints) {
+                if(distance < calibratedPoint.distance) {
+                    break;
+                }
+                highIndex++;
+            }
+
+            // The distance parameter was less than the first point, so just return the first point
+            if(highIndex == 0) {
+                return calibratedPoints[highIndex];
+            }
+
+            // The distance parameter was greater than the last point, so just return the last point
+            if(highIndex == calibratedPoints.length) {
+                return calibratedPoints[calibratedPoints.length - 1];
+            }
+
+            int lowIndex = highIndex - 1; // Index of the last calibrated point the distance parameter is greater than
+
+            double arm = calibratedPoints[lowIndex].arm // Value to find change from
+                    + ((distance - calibratedPoints[lowIndex].distance) / (calibratedPoints[highIndex].distance - calibratedPoints[lowIndex].distance)) // Percent change formula
+                    * (calibratedPoints[highIndex].arm - calibratedPoints[lowIndex].arm); // Change in arm
+
+            double rpm = calibratedPoints[lowIndex].rpm // Value to find change from
+                    + ((distance - calibratedPoints[lowIndex].distance) / (calibratedPoints[highIndex].distance - calibratedPoints[lowIndex].distance)) // Percent change formula
+                    * (calibratedPoints[highIndex].rpm - calibratedPoints[lowIndex].rpm); // Change in rpm
+
+            return new LinearInterpolation(distance, arm, rpm);
+        }
     }
 
     public static final boolean HAS_USB_CAMERA = false;
@@ -85,7 +145,7 @@ public final class Constants extends A05Constants
     }
 
 
-    // Connect values to SmartDashboard, if you change the value in smart dashboard it changes the const
+    // Connect values to SmartDashboard, if you change the value in smart dashboard it changes the constant
     // (speed adjusting etc.) By having two methods, you can optionally add the bounds
     /**
      * Initialize value on SmartDashboard for user input, or if already present, return current value.
