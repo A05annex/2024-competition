@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+
 import org.a05annex.frc.A05Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.a05annex.frc.subsystems.PhotonCameraWrapper;
@@ -25,7 +26,12 @@ public final class Constants extends A05Constants
     public static final class CAN_Devices {
         public static final int
             // Non-Drive Motors
-            SAMPLE_MOTOR = 14;
+                FORWARD_ARM_MOTOR = 14,
+                BACKWARD_ARM_MOTOR = 13,
+                LEFT_SHOOTER_MOTOR = 12,
+                RIGHT_SHOOTER_MOTOR = 11,
+                COLLECTOR_MOTOR = 10,
+                CLIMBER_MOTOR = 9;
     }
 
     public static final boolean HAS_USB_CAMERA = false;
@@ -84,7 +90,7 @@ public final class Constants extends A05Constants
     }
 
 
-    // Connect values to SmartDashboard, if you change the value in smart dashboard it changes the const
+    // Connect values to SmartDashboard, if you change the value in smart dashboard it changes the constant
     // (speed adjusting etc.) By having two methods, you can optionally add the bounds
     /**
      * Initialize value on SmartDashboard for user input, or if already present, return current value.
