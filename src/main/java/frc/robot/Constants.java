@@ -28,8 +28,8 @@ public final class Constants extends A05Constants
     public static final class CAN_Devices {
         public static final int
             // Non-Drive Motors
-                FORWARD_MOTOR = 14,
-                BACKWARD_MOTOR = 13;
+                FORWARD_ARM_MOTOR = 14,
+                BACKWARD_ARM_MOTOR = 13;
     }
 
 

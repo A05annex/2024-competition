@@ -9,8 +9,8 @@ import org.a05annex.util.Utl;
 
 public class ArmSubsystem extends SubsystemBase {
 
-    private final SparkNeo forwardMotor = SparkNeo.factory(Constants.CAN_Devices.FORWARD_MOTOR);
-    private final SparkNeo backwardMotor = SparkNeo.factory(Constants.CAN_Devices.BACKWARD_MOTOR);
+    private final SparkNeo forwardMotor = SparkNeo.factory(Constants.CAN_Devices.FORWARD_ARM_MOTOR);
+    private final SparkNeo backwardMotor = SparkNeo.factory(Constants.CAN_Devices.BACKWARD_ARM_MOTOR);
 
     // Declare PID constants for smart motion control
     private final double smKp = 0.00005, smKi = 0.000, smKiZone = 0.0, smKff = 0.000156, smMaxRPM = 3000.0,
@@ -25,8 +25,10 @@ public class ArmSubsystem extends SubsystemBase {
     // Declare min and max soft limits and where the motor thinks it starts
     private final Double minPosition = null, maxPosition = 5000.0, startPosition = 100.0;
 
+    // Tolerance to decide if in position
     private final double IN_POSITION_DEADBAND = 0.5;
 
+    // Position most recently requested of the arm
     private static double requestedPosition = getInstance().startPosition;
 
     private final static ArmSubsystem INSTANCE = new ArmSubsystem();
@@ -85,17 +87,25 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
 
-
+    // Go to position with smart motion
     public void goToSmartMotionPosition(double position) {
         forwardMotor.setSmartMotionTarget(position);
         backwardMotor.setSmartMotionTarget(position);
+        requestedPosition = position;
     }
 
+    // Go to position without smart motion
     public void goToPosition(double position) {
         forwardMotor.setTargetPosition(position);
         backwardMotor.setTargetPosition(position);
+        requestedPosition = position;
     }
 
+    public void goToInterpolatedPosition(Constants.LinearInterpolation linearInterpolation) {
+        goToSmartMotionPosition(linearInterpolation.arm);
+    }
+
+    // Stop motors (brake mode)
     public void stop() {
         forwardMotor.stopMotor();
         backwardMotor.stopMotor();
@@ -105,11 +115,13 @@ public class ArmSubsystem extends SubsystemBase {
         return forwardMotor.getEncoderPosition();
     }
 
+    // Returns if the arm is in the position the most recent requested position
     public boolean isInPosition() {
         return Utl.inTolerance(forwardMotor.getEncoderPosition(), requestedPosition, IN_POSITION_DEADBAND) &&
                 Utl.inTolerance(backwardMotor.getEncoderPosition(), requestedPosition, IN_POSITION_DEADBAND);
     }
 
+    // Returns if the arm is in the position passed in
     public boolean isInPosition(double position) {
         return Utl.inTolerance(forwardMotor.getEncoderPosition(), position, IN_POSITION_DEADBAND) &&
                 Utl.inTolerance(backwardMotor.getEncoderPosition(), position, IN_POSITION_DEADBAND);
