@@ -9,7 +9,7 @@ import org.a05annex.frc.subsystems.SparkNeo550;
 
 public class SampleMotorSubsystem extends SubsystemBase {
 
-    private final SparkNeo550 motor = SparkNeo550.factory(Constants.CAN_Devices.SAMPLE_MOTOR);
+    private final SparkNeo550 motor = SparkNeo550.factory(Constants.CAN_Devices.FORWARD_ARM_MOTOR);
 
     // Declare PID constants for smart motion control
     private final double smKp = 0.00005, smKi = 0.000, smKiZone = 0.0, smKff = 0.000156, smMaxRPM = 3000.0,

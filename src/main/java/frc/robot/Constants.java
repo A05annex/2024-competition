@@ -13,8 +13,6 @@ import org.a05annex.util.AngleD;
 import org.a05annex.util.AngleUnit;
 import org.photonvision.PhotonCamera;
 
-import javax.sound.sampled.Line;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -29,7 +27,11 @@ public final class Constants extends A05Constants
         public static final int
             // Non-Drive Motors
                 FORWARD_ARM_MOTOR = 14,
-                BACKWARD_ARM_MOTOR = 13;
+                BACKWARD_ARM_MOTOR = 13,
+                LEFT_SHOOTER_MOTOR = 12,
+                RIGHT_SHOOTER_MOTOR = 11,
+                COLLECTOR_MOTOR = 10,
+                CLIMBER_MOTOR = 9;
     }
 
 
@@ -145,7 +147,7 @@ public final class Constants extends A05Constants
     }
 
 
-    // Connect values to SmartDashboard, if you change the value in smart dashboard it changes the constant
+    // Connect values to SmartDashboard, if you change the value in smart dashboard it changes the const
     // (speed adjusting etc.) By having two methods, you can optionally add the bounds
     /**
      * Initialize value on SmartDashboard for user input, or if already present, return current value.
