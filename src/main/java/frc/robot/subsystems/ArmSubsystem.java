@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.subsystems.SparkNeo;
 import org.a05annex.util.Utl;
 
@@ -33,6 +34,8 @@ public class ArmSubsystem extends SubsystemBase {
     private static double requestedPosition = ArmPosition.START.position;
 
     private boolean enableInit = false;
+
+    private boolean manualControl = false;
 
     private final static ArmSubsystem INSTANCE = new ArmSubsystem();
     public static ArmSubsystem getInstance() {
@@ -67,6 +70,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public enum ArmPosition {
         GROUND(0.0),
+        PROTECTED(50), // We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
         START(100),
         SOURCE(200.0),
         AMP(300.0);
@@ -163,6 +167,10 @@ public class ArmSubsystem extends SubsystemBase {
         requestedPosition = position;
     }
 
+    public void goToDeltaPosition(double delta) {
+        goToPosition(getPosition() + delta);
+    }
+
     public void goToInterpolatedPosition(Constants.LinearInterpolation linearInterpolation) {
         goToSmartMotionPosition(linearInterpolation.arm);
     }
@@ -187,6 +195,14 @@ public class ArmSubsystem extends SubsystemBase {
     public boolean isInPosition(double position) {
         return Utl.inTolerance(forwardMotor.getEncoderPosition(), position, IN_POSITION_DEADBAND) &&
                 Utl.inTolerance(backwardMotor.getEncoderPosition(), position, IN_POSITION_DEADBAND);
+    }
+
+    public boolean manualControl() {
+        return manualControl;
+    }
+
+    public void toggleManualControl() {
+        manualControl = !manualControl;
     }
 }
 

@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.ManualArmCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05RobotContainer;
 import org.a05annex.frc.subsystems.SpeedCachedSwerve;
@@ -45,6 +47,8 @@ public class RobotContainer extends A05RobotContainer
 
         driveSubsystem.setDefaultCommand(driveCommand);
 
+        ArmSubsystem.getInstance().setDefaultCommand(new ManualArmCommand());
+
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -62,5 +66,7 @@ public class RobotContainer extends A05RobotContainer
         // See https://docs.wpilib.org/en/stable/docs/software/commandbased/binding-commands-to-triggers.html
 
         driveBack.onTrue(new InstantCommand(navx::initializeHeadingAndNav)); // Reset the NavX field relativity
+
+        altB.onTrue(new InstantCommand(ArmSubsystem.getInstance()::toggleManualControl));
     }
 }
