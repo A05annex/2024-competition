@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import org.a05annex.frc.subsystems.SparkNeo;
@@ -23,13 +24,15 @@ public class ArmSubsystem extends SubsystemBase {
     private final double rpmKp = 0.5, rpmKi = 0.0, rpmKiZone = 0.0, rpmKff = 0.0;
 
     // Declare min and max soft limits and where the motor thinks it starts
-    private final Double minPosition = null, maxPosition = 5000.0, startPosition = 100.0;
+    private final Double minPosition = null, maxPosition = 5000.0;
 
     // Tolerance to decide if in position
     private final double IN_POSITION_DEADBAND = 0.5;
 
     // Position most recently requested of the arm
-    private static double requestedPosition = getInstance().startPosition;
+    private static double requestedPosition = ArmPosition.START.position;
+
+    private boolean enableInit = false;
 
     private final static ArmSubsystem INSTANCE = new ArmSubsystem();
     public static ArmSubsystem getInstance() {
@@ -46,7 +49,7 @@ public class ArmSubsystem extends SubsystemBase {
         forwardMotor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
         forwardMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
         forwardMotor.endConfig();
-        forwardMotor.setEncoderPosition(startPosition);
+        forwardMotor.setEncoderPosition(ArmPosition.START.position);
 
         backwardMotor.startConfig();
         backwardMotor.setCurrentLimit(SparkNeo.UseType.POSITION, SparkNeo.BreakerAmps.Amps40);
@@ -57,14 +60,14 @@ public class ArmSubsystem extends SubsystemBase {
         backwardMotor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
         backwardMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
         backwardMotor.endConfig();
-        backwardMotor.setEncoderPosition(startPosition);
+        backwardMotor.setEncoderPosition(ArmPosition.START.position);
     }
 
     //public void double backwardMotor.SampleMotorSubsystem null (0.0);:
 
     public enum ArmPosition {
         GROUND(0.0),
-        START(getInstance().startPosition),
+        START(100),
         SOURCE(200.0),
         AMP(300.0);
 
@@ -84,6 +87,65 @@ public class ArmSubsystem extends SubsystemBase {
         public boolean isInPosition() {
             return armSubsystem.isInPosition(this.position);
         }
+    }
+
+
+    public void enableInit() {
+        if(enableInit) {
+            return;
+        }
+
+        double startTime = Timer.getFPGATimestamp();
+        System.out.println("****************************************************************");
+        System.out.println("ENABLE INIT STARTED: " + startTime);
+        System.out.println("****************************************************************");
+
+        forwardMotor.setEncoderPosition(ArmPosition.START.position);
+        backwardMotor.setEncoderPosition(ArmPosition.START.position);
+
+        // Lock the forward (supporting) motor to start pos.
+        forwardMotor.setTargetPosition(ArmPosition.START.position);
+        System.out.println("****************************************************************");
+        System.out.printf("TIME: %f; support = %f; tension = %f%n",
+                Timer.getFPGATimestamp() - startTime, forwardMotor.getEncoderPosition(), backwardMotor.getEncoderPosition());
+
+        // 0.5 amps, just enough to tension
+        backwardMotor.sparkMaxPID.setReference(1.2, CANSparkMax.ControlType.kVoltage);
+
+        while(true) {
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                continue;
+            }
+
+            double currentPos = forwardMotor.getEncoderPosition();
+
+            System.out.printf("TIME: %f; support = %f; tension = %f;",
+                    Timer.getFPGATimestamp() - startTime, currentPos, backwardMotor.getEncoderPosition());
+
+
+            // Repeat until the voltage motor moves the position motor
+            if(currentPos > 0.0) {
+                break;
+            }
+        }
+
+        //Removed play and resetting the backward encoder, so the tension can be kept
+        backwardMotor.setEncoderPosition(forwardMotor.getEncoderPosition());
+
+        System.out.printf("END TIME: %f; support = %f; tension = %f%n",
+                Timer.getFPGATimestamp() - startTime, forwardMotor.getEncoderPosition(), backwardMotor.getEncoderPosition());
+        System.out.println("****************************************************************");
+        System.out.println("****************************************************************");
+        System.out.println("****************************************************************");
+
+        // Hold the arms at the start position
+        forwardMotor.setSmartMotionTarget(ArmPosition.START.position);
+        forwardMotor.setSmartMotionTarget(ArmPosition.START.position);
+
+        requestedPosition = ArmPosition.START.position;
+        enableInit = true;
     }
 
 

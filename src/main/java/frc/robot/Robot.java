@@ -7,6 +7,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SampleMotorSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05Robot;
@@ -74,6 +75,7 @@ public class Robot extends A05Robot
     @Override
     public void autonomousInit()
     {
+        ArmSubsystem.getInstance().enableInit();
         // Sets up autonomous command
         super.autonomousInit();
     }
@@ -87,6 +89,7 @@ public class Robot extends A05Robot
     @Override
     public void teleopInit()
     {
+        ArmSubsystem.getInstance().enableInit();
         // Cancels autonomous command
         super.teleopInit();
     }
