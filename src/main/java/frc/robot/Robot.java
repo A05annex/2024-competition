@@ -7,7 +7,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.SampleMotorSubsystem;
+import frc.robot.subsystems.CollectorSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05Robot;
 import org.a05annex.frc.subsystems.DriveSubsystem;
@@ -97,7 +97,6 @@ public class Robot extends A05Robot
     public void teleopPeriodic() {
         super.teleopPeriodic();
 
-        SmartDashboard.putNumber("sampleMotorPosition", SampleMotorSubsystem.getInstance().getPosition());
     }
     
     @Override

@@ -7,9 +7,9 @@ import frc.robot.Constants;
 import org.a05annex.frc.subsystems.SparkNeo;
 import org.a05annex.frc.subsystems.SparkNeo550;
 
-public class SampleMotorSubsystem extends SubsystemBase {
+public class CollectorSubsystem extends SubsystemBase {
 
-    private final SparkNeo550 motor = SparkNeo550.factory(Constants.CAN_Devices.FORWARD_ARM_MOTOR);
+    private final SparkNeo550 motor = SparkNeo550.factory(Constants.CAN_Devices.COLLECTOR_MOTOR);
 
     // Declare PID constants for smart motion control
     private final double smKp = 0.00005, smKi = 0.000, smKiZone = 0.0, smKff = 0.000156, smMaxRPM = 3000.0,
@@ -22,18 +22,20 @@ public class SampleMotorSubsystem extends SubsystemBase {
     private final double rpmKp = 0.5, rpmKi = 0.0, rpmKiZone = 0.0, rpmKff = 0.0;
 
     // Declare min and max soft limits and where the motor thinks it starts
-    private final Double minPosition = null, maxPosition = 1000.0, startPosition = 500.0;
+    private final Double minPosition = null, maxPosition = null, startPosition = 500.0;
 
-    private final static SampleMotorSubsystem INSTANCE = new SampleMotorSubsystem();
-    public static SampleMotorSubsystem getInstance() {
+    private final double intakeRPM = 3000, ejectRPM = 1000, feedRPM = 1000;
+
+    private final static CollectorSubsystem INSTANCE = new CollectorSubsystem();
+    public static CollectorSubsystem getInstance() {
         return INSTANCE;
     }
 
-    private SampleMotorSubsystem() {
+    private CollectorSubsystem() {
         motor.startConfig();
         motor.setCurrentLimit(SparkNeo.UseType.RPM_OCCASIONAL_STALL, SparkNeo.BreakerAmps.Amps40);
         motor.setSoftLimits(minPosition, maxPosition);
-        motor.setDirection(SparkNeo.Direction.REVERSE);
+        motor.setDirection(SparkNeo.Direction.DEFAULT);
         motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         motor.setPositionPID(posKp, posKi, posKiZone, posKff);
         motor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
@@ -54,16 +56,20 @@ public class SampleMotorSubsystem extends SubsystemBase {
         motor.setTargetRPM(rpm);
     }
 
-    public void resetEncoder() {
-        motor.setEncoderPosition(0.0);
-    }
-
     public void stop() {
         motor.stopMotor();
     }
 
-    public double getPosition() {
-        return motor.getEncoderPosition();
+    public void intake() {
+        setVelocity(intakeRPM);
+    }
+
+    public void eject() {
+        setVelocity(-ejectRPM);
+    }
+
+    public void feed() {
+        setVelocity(feedRPM);
     }
 }
 
