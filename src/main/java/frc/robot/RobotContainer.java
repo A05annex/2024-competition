@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.ManualClimberCommand;
+import frc.robot.subsystems.ClimberSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05RobotContainer;
 import org.a05annex.frc.subsystems.SpeedCachedSwerve;
@@ -44,6 +46,7 @@ public class RobotContainer extends A05RobotContainer
                 robotSettings.maxSpeedCalibration);
 
         driveSubsystem.setDefaultCommand(driveCommand);
+        ClimberSubsystem.getInstance().setDefaultCommand(new ManualClimberCommand());
 
         // Configure the button bindings
         configureButtonBindings();

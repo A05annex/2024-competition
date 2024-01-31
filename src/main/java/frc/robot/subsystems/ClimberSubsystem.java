@@ -5,11 +5,10 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import org.a05annex.frc.subsystems.SparkNeo;
-import org.a05annex.frc.subsystems.SparkNeo550;
 
-public class SampleMotorSubsystem extends SubsystemBase {
+public class ClimberSubsystem extends SubsystemBase {
 
-    private final SparkNeo550 motor = SparkNeo550.factory(Constants.CAN_Devices.FORWARD_ARM_MOTOR);
+    private final SparkNeo motor = SparkNeo.factory(Constants.CAN_Devices.CLIMBER_MOTOR);
 
     // Declare PID constants for smart motion control
     private final double smKp = 0.00005, smKi = 0.000, smKiZone = 0.0, smKff = 0.000156, smMaxRPM = 3000.0,
@@ -24,12 +23,12 @@ public class SampleMotorSubsystem extends SubsystemBase {
     // Declare min and max soft limits and where the motor thinks it starts
     private final Double minPosition = null, maxPosition = 1000.0, startPosition = 500.0;
 
-    private final static SampleMotorSubsystem INSTANCE = new SampleMotorSubsystem();
-    public static SampleMotorSubsystem getInstance() {
+    private final static ClimberSubsystem INSTANCE = new ClimberSubsystem();
+    public static ClimberSubsystem getInstance() {
         return INSTANCE;
     }
 
-    private SampleMotorSubsystem() {
+    private ClimberSubsystem() {
         motor.startConfig();
         motor.setCurrentLimit(SparkNeo.UseType.RPM_OCCASIONAL_STALL, SparkNeo.BreakerAmps.Amps40);
         motor.setSoftLimits(minPosition, maxPosition);
@@ -64,6 +63,10 @@ public class SampleMotorSubsystem extends SubsystemBase {
 
     public double getPosition() {
         return motor.getEncoderPosition();
+    }
+
+    public void goToDeltaPosition(double delta) {
+        goToSmartMotionPosition(getPosition() + delta);
     }
 }
 
