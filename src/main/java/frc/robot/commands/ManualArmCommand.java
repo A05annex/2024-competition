@@ -9,7 +9,7 @@ import org.a05annex.util.Utl;
 public class ManualArmCommand extends Command {
     private final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
 
-    private final double stick = A05Constants.DRIVE_XBOX.getLeftX();
+    private final double stick = A05Constants.ALT_XBOX.getRightY();
 
     private boolean wasSpinning;
 
