@@ -21,7 +21,7 @@ public class ClimberSubsystem extends SubsystemBase {
     private final double rpmKp = 0.5, rpmKi = 0.0, rpmKiZone = 0.0, rpmKff = 0.0;
 
     // Declare min and max soft limits and where the motor thinks it starts
-    private final Double minPosition = null, maxPosition = 1000.0, startPosition = 500.0;
+    private final Double minPosition = 0.0, maxPosition = 1000.0, startPosition = 500.0;
 
     private final static ClimberSubsystem INSTANCE = new ClimberSubsystem();
     public static ClimberSubsystem getInstance() {
@@ -43,14 +43,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public void goToSmartMotionPosition(double position) {
         motor.setSmartMotionTarget(position);
-    }
-
-    public void goToPosition(double position) {
-        motor.setTargetPosition(position);
-    }
-
-    public void setVelocity(double rpm) {
-        motor.setTargetRPM(rpm);
     }
 
     public void resetEncoder() {
