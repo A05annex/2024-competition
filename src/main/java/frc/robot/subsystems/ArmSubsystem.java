@@ -70,8 +70,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     public enum ArmPosition {
         GROUND(0.0),
-        PROTECTED(50), // We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
-        START(100),
+        PROTECTED(50.0), // We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
+        START(100.0),
         SOURCE(200.0),
         AMP(300.0);
 
@@ -98,6 +98,8 @@ public class ArmSubsystem extends SubsystemBase {
         if(enableInit) {
             return;
         }
+
+        ArmPosition.START.goTo();
 
         double startTime = Timer.getFPGATimestamp();
         System.out.println("****************************************************************");
