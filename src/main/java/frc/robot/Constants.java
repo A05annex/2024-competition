@@ -7,6 +7,7 @@ package frc.robot;
 
 
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import org.a05annex.frc.A05Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.a05annex.frc.subsystems.PhotonCameraWrapper;
@@ -35,6 +36,7 @@ public final class Constants extends A05Constants
                 CLIMBER_MOTOR = 9;
     }
 
+
     public static final class LinearInterpolation {
         public final double distance;
         public final double arm;
@@ -49,6 +51,10 @@ public final class Constants extends A05Constants
             this.distance = distance;
             this.arm = arm;
             this.rpm = rpm;
+        }
+
+        public void goToArm() {
+            ArmSubsystem.getInstance().goToSmartMotionPosition(this.arm);
         }
 
         public void goToRpm() {

@@ -7,6 +7,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05Robot;
@@ -87,6 +89,7 @@ public class Robot extends A05Robot
     @Override
     public void teleopInit()
     {
+        ArmSubsystem.getInstance().enableInit();
         // Cancels autonomous command
         super.teleopInit();
     }
@@ -97,6 +100,7 @@ public class Robot extends A05Robot
     public void teleopPeriodic() {
         super.teleopPeriodic();
 
+        SmartDashboard.putNumber("sampleMotorPosition", ClimberSubsystem.getInstance().getPosition());
     }
     
     @Override
