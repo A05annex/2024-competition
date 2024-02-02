@@ -8,8 +8,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.*;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ManualArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -23,16 +25,16 @@ import org.a05annex.frc.subsystems.SpeedCachedSwerve;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
-public class RobotContainer extends A05RobotContainer
-{
+public class RobotContainer extends A05RobotContainer {
     // The robot's subsystems and commands are defined here...
     // NavX, DriveSubsystem, DriveXbox have already been made in A05RobotContainer
     SpeedCachedSwerve speedCachedSwerve = SpeedCachedSwerve.getInstance();
 
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
-    public RobotContainer()
-    {
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
         super();
         // finish swerve drive initialization for this specific robt.
         driveCommand = new DriveCommand(driveSubsystem);
@@ -46,27 +48,45 @@ public class RobotContainer extends A05RobotContainer
                 robotSettings.maxSpeedCalibration);
 
         driveSubsystem.setDefaultCommand(driveCommand);
+        ClimberSubsystem.getInstance().setDefaultCommand(new ManualClimberCommand());
 
         ArmSubsystem.getInstance().setDefaultCommand(new ManualArmCommand());
 
         // Configure the button bindings
         configureButtonBindings();
     }
-    
-    
+
+
     /**
      * Use this method to define your button->command mappings. Buttons can be created by
      * instantiating a {@link GenericHID} or one of its subclasses ({@link
      * Joystick} or {@link XboxController}), and then passing it to a {@link
      * JoystickButton}.
      */
-    private void configureButtonBindings()
-    {
+    private void configureButtonBindings() {
         // Add button to command mappings here.
         // See https://docs.wpilib.org/en/stable/docs/software/commandbased/binding-commands-to-triggers.html
 
         driveBack.onTrue(new InstantCommand(navx::initializeHeadingAndNav)); // Reset the NavX field relativity
 
-        altB.onTrue(new InstantCommand(ArmSubsystem.getInstance()::toggleManualControl));
+        altBack.onTrue(new InstantCommand(ArmSubsystem.getInstance()::toggleManualControl));
+
+        //driveY.whileTrue(new InstantCommand(ArmSubsystem.ArmPositions.SAFE::goTo));
+
+        // All heading commands finish if the driver moves the rotate stick
+        driveB.onTrue(new DynamicFaceRightCommand()); // Adjusts for color, faces amp or source, whichever is to the right
+        driveA.onTrue(new FaceSpeakerCommand()); // Faces up-field, at speaker
+        driveX.onTrue(new DynamicFaceLeftCommand()); // Adjusts for color, faces amp or source, whichever is to the left
+
+        //driveRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop);
+        //altRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop);
+
+        //altY.whileTrue(new InstantCommand(ArmSubsystem.ArmPositions.SAFE::goTo));
+        //altB.whileTrue(new DynamicTargetRightCommand());
+        //altA.whileTrue(new SpeakerShootCommand());
+        //altX.whileTrue(new DynamicTargetLeftCommand());
+
+        altLeftBumper.whileTrue(new ClimberRetractCommand());
+        driveLeftBumper.whileTrue(new ClimberRetractCommand());
     }
 }
