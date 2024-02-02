@@ -190,8 +190,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Returns if the arm is in the position the most recent requested position
     public boolean isInPosition() {
-        return Utl.inTolerance(forwardMotor.getEncoderPosition(), requestedPosition, IN_POSITION_DEADBAND) &&
-                Utl.inTolerance(backwardMotor.getEncoderPosition(), requestedPosition, IN_POSITION_DEADBAND);
+        return isInPosition(requestedPosition);
     }
 
     // Returns if the arm is in the position passed in

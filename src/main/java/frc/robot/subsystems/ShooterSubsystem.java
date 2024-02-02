@@ -5,6 +5,7 @@ import  com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import org.a05annex.frc.subsystems.SparkNeo;
+import org.a05annex.util.Utl;
 
 public class ShooterSubsystem extends SubsystemBase {
 
@@ -23,6 +24,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // Declare min and max soft limits and where the leftMotor thinks it starts
     private final Double minPosition = null, maxPosition = null, startPosition = 0.0;
+
+    private double requestedRpm;
 
     private final static ShooterSubsystem INSTANCE = new ShooterSubsystem();
     public static ShooterSubsystem getInstance() {
@@ -51,21 +54,34 @@ public class ShooterSubsystem extends SubsystemBase {
         rightMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
         rightMotor.endConfig();
         rightMotor.setEncoderPosition(startPosition);
+
+        requestedRpm = 0;
     }
 
 
     public void setVelocity(double rpm) {
         leftMotor.setTargetRPM(rpm);
         rightMotor.setTargetRPM(rpm);
+        requestedRpm = rpm;
     }
 
     public void setLinearInterpolation(Constants.LinearInterpolation linearInterpolation) {
         setVelocity(linearInterpolation.rpm);
     }
 
+    public boolean isAtRpm() {
+        return isAtRpm(requestedRpm);
+    }
+
+    public boolean isAtRpm(double rpm) {
+        return Utl.inTolerance(getVelocity(), rpm, 100.0);
+    }
+
     public void stop() {
         leftMotor.stopMotor();
         rightMotor.stopMotor();
+
+        requestedRpm = 0.0;
     }
 
     public double getPosition() {

@@ -42,24 +42,35 @@ public final class Constants extends A05Constants
         public final double distance;
         public final double arm;
         public final double rpm;
+        public final boolean goodData; // used to declare if the linear interpolation data is calcualated or jsut returned because it was out of zone
 
         private static final LinearInterpolation[] calibratedPoints = {
                 new LinearInterpolation(1.0, 100, 5000),
                 new LinearInterpolation(2.0, 150, 5100)
         };
 
+        LinearInterpolation(double distance, double arm, double rpm, boolean goodData) {
+            this.distance = distance;
+            this.arm = arm;
+            this.rpm = rpm;
+            this.goodData = goodData;
+        }
+
         LinearInterpolation(double distance, double arm, double rpm) {
             this.distance = distance;
             this.arm = arm;
             this.rpm = rpm;
+            this.goodData = false;
         }
 
-        public void goToArm() {
+        public LinearInterpolation goToArm() {
             ArmSubsystem.getInstance().goToSmartMotionPosition(this.arm);
+            return this;
         }
 
-        public void goToRpm() {
+        public LinearInterpolation goToRpm() {
             ShooterSubsystem.getInstance().setVelocity(this.rpm);
+            return this;
         }
 
         public static LinearInterpolation interpolate(double distance) {
@@ -94,7 +105,7 @@ public final class Constants extends A05Constants
                     + ((distance - calibratedPoints[lowIndex].distance) / (calibratedPoints[highIndex].distance - calibratedPoints[lowIndex].distance)) // Percent change formula
                     * (calibratedPoints[highIndex].rpm - calibratedPoints[lowIndex].rpm); // Change in rpm
 
-            return new LinearInterpolation(distance, arm, rpm);
+            return new LinearInterpolation(distance, arm, rpm, true);
         }
     }
 
