@@ -15,6 +15,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ManualArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.CollectorSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05RobotContainer;
 import org.a05annex.frc.subsystems.SpeedCachedSwerve;
@@ -78,8 +79,8 @@ public class RobotContainer extends A05RobotContainer {
         driveA.onTrue(new FaceSpeakerCommand()); // Faces up-field, at speaker
         driveX.onTrue(new DynamicFaceLeftCommand()); // Adjusts for color, faces amp or source, whichever is to the left
 
-        //driveRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop);
-        //altRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop);
+        driveRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
+        altRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
 
         //altY.whileTrue(new InstantCommand(ArmSubsystem.ArmPositions.SAFE::goTo));
         //altB.whileTrue(new DynamicTargetRightCommand());

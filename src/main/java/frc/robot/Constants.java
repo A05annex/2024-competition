@@ -6,6 +6,7 @@
 package frc.robot;
 
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import org.a05annex.frc.A05Constants;
@@ -102,6 +103,9 @@ public final class Constants extends A05Constants
 
 
     public static final PhotonCameraWrapper CAMERA = new PhotonCameraWrapper(new PhotonCamera("IMX219"), 0.127, new AngleD(AngleUnit.DEGREES, 45));
+
+    //TODO: set correct channel ID
+    public static final DigitalInput NOTE_SENSOR = new DigitalInput(8);
 
     // kP for keeping drive at the same orientation
     public static double DRIVE_ORIENTATION_kP = 1.2;
