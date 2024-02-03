@@ -72,7 +72,8 @@ public class RobotContainer extends A05RobotContainer {
 
         altBack.onTrue(new InstantCommand(ArmSubsystem.getInstance()::toggleManualControl));
 
-        //driveY.whileTrue(new InstantCommand(ArmSubsystem.ArmPositions.SAFE::goTo));
+        driveY.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo));
+        altY.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo));
 
         // All heading commands finish if the driver moves the rotate stick
         driveB.onTrue(new DynamicFaceRightCommand()); // Adjusts for color, faces amp or source, whichever is to the right
@@ -82,10 +83,9 @@ public class RobotContainer extends A05RobotContainer {
         driveRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
         altRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
 
-        //altY.whileTrue(new InstantCommand(ArmSubsystem.ArmPositions.SAFE::goTo));
-        //altB.whileTrue(new DynamicTargetRightCommand());
-        //altA.whileTrue(new SpeakerShootCommand());
-        //altX.whileTrue(new DynamicTargetLeftCommand());
+        altB.whileTrue(new DynamicTargetRightCommandGroup()); // Adjusts for color, targets amp or source, whichever is to the right
+        altA.whileTrue(new SpeakerShootCommand()); // Scores at the speaker
+        altX.whileTrue(new DynamicTargetLeftCommandGroup()); // Adjusts for color, targets amp or source, whichever is to the left
 
         altLeftBumper.whileTrue(new ClimberRetractCommand());
         driveLeftBumper.whileTrue(new ClimberRetractCommand());
