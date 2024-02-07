@@ -149,7 +149,7 @@ public final class Constants extends A05Constants
     };
 
     public static final A05Constants.AutonomousPath[] AUTONOMOUS_PATHS = {
-            new A05Constants.AutonomousPath("Sample Path", 0, "samplePath.json")
+            new A05Constants.AutonomousPath("One note and park (source side)", 0, "sourceOneAndPark.json")
     };
 
     public static final A05Constants.DriverSettings[] DRIVER_SETTINGS = {
