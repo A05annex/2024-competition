@@ -34,7 +34,7 @@ public class DynamicFaceLeftCommand extends A05DriveCommand {
 
     @Override
     public boolean isFinished() {
-        return Utl.inTolerance(driveXbox.getRightX(), 0.0, 0.05); // Finish if the user inputs a rotation
+        return !Utl.inTolerance(driveXbox.getRightX(), 0.0, 0.05); // Finish if the user inputs a rotation
     }
 
     @Override
