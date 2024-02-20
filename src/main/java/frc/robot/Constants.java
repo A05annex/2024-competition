@@ -44,7 +44,7 @@ public final class Constants extends A05Constants
         public final double rpm;
         public final boolean goodData; // used to declare if the linear interpolation data is calcualated or jsut returned because it was out of zone
 
-        private static final LinearInterpolation[] calibratedPoints = {
+        static final LinearInterpolation[] calibratedPoints = {
                 new LinearInterpolation(1.0, 100, 5000),
                 new LinearInterpolation(2.0, 150, 5100)
         };
