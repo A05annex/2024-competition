@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05Robot;
 import org.a05annex.frc.subsystems.DriveSubsystem;
@@ -41,7 +42,7 @@ public class Robot extends A05Robot
         // Some drive geometry is passed in RobotContainer's constructor
         Constants.setDriveOrientationkp(Constants.DRIVE_ORIENTATION_kP);
 
-        Constants.setPrintDebug(true);
+        Constants.setPrintDebug(false);
 
         // update dictionary with all needed values
         Constants.setAprilTagSetDictionary();
@@ -62,13 +63,23 @@ public class Robot extends A05Robot
     
     /** This method is called once each time the robot enters Disabled mode. */
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+        ArmSubsystem.getInstance().stop();
+    }
     
     
     @Override
     public void disabledPeriodic() {
         //SmartDashboard.putNumber("Heading", NavX.getInstance().getHeadingInfo().expectedHeading.getDegrees());
         DriveSubsystem.getInstance().printAllAngles();
+
+        SmartDashboard.putNumber("analog encoder", Constants.ARM_ANALOG_ENCODER.getAbsolutePosition());
+        SmartDashboard.putNumber("start pos", ArmSubsystem.ArmPosition.START.position);
+        SmartDashboard.putBoolean("Note Sensor", Constants.NOTE_SENSOR.get());
+
+        SmartDashboard.putNumber("collector rpm", CollectorSubsystem.getInstance().getRpm());
+        SmartDashboard.putNumber("Shooter rpm", ShooterSubsystem.getInstance().getVelocity());
+        SmartDashboard.putNumber("arm encoder", ArmSubsystem.getInstance().getPosition());
     }
     
     
@@ -100,7 +111,13 @@ public class Robot extends A05Robot
     public void teleopPeriodic() {
         super.teleopPeriodic();
 
-        SmartDashboard.putNumber("sampleMotorPosition", ClimberSubsystem.getInstance().getPosition());
+        SmartDashboard.putNumber("analog encoder", Constants.ARM_ANALOG_ENCODER.getAbsolutePosition());
+        SmartDashboard.putNumber("start pos", ArmSubsystem.ArmPosition.START.position);
+        SmartDashboard.putBoolean("Note Sensor", Constants.NOTE_SENSOR.get());
+
+        SmartDashboard.putNumber("collector rpm", CollectorSubsystem.getInstance().getRpm());
+        SmartDashboard.putNumber("Shooter rpm", ShooterSubsystem.getInstance().getVelocity());
+        SmartDashboard.putNumber("arm encoder", ArmSubsystem.getInstance().getPosition());
     }
     
     @Override

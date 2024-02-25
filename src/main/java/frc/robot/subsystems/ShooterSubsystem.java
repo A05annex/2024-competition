@@ -20,7 +20,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final double posKp = 0.22, posKi = 0.0, posKiZone = 0.0, posKff = 0.0;
 
     // Declare PID constants for speed (rpm) control
-    private final double rpmKp = 0.5, rpmKi = 0.0, rpmKiZone = 0.0, rpmKff = 0.0;
+    private final double rpmKp = 0.0006, rpmKi = 0.000001, rpmKiZone = 200.0, rpmKff = 0.000156;
 
     // Declare min and max soft limits and where the leftMotor thinks it starts
     private final Double minPosition = null, maxPosition = null, startPosition = 0.0;
@@ -36,7 +36,7 @@ public class ShooterSubsystem extends SubsystemBase {
         leftMotor.startConfig();
         leftMotor.setCurrentLimit(SparkNeo.UseType.FREE_SPINNING, SparkNeo.BreakerAmps.Amps40);
         leftMotor.setSoftLimits(minPosition, maxPosition);
-        leftMotor.setDirection(SparkNeo.Direction.DEFAULT);
+        leftMotor.setDirection(SparkNeo.Direction.REVERSE);
         leftMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         leftMotor.setPositionPID(posKp, posKi, posKiZone, posKff);
         leftMotor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
@@ -84,8 +84,8 @@ public class ShooterSubsystem extends SubsystemBase {
         requestedRpm = 0.0;
     }
 
-    public double getPosition() {
-        return leftMotor.getEncoderPosition();
+    public void shoot() {
+        setVelocity(5000.0);
     }
 
     public double getVelocity() {

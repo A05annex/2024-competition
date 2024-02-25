@@ -16,6 +16,7 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ManualArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05RobotContainer;
 import org.a05annex.frc.subsystems.SpeedCachedSwerve;
@@ -80,14 +81,16 @@ public class RobotContainer extends A05RobotContainer {
         driveA.onTrue(new FaceSpeakerCommand()); // Faces up-field, at speaker
         driveX.onTrue(new DynamicFaceLeftCommand()); // Adjusts for color, faces amp or source, whichever is to the left
 
-        driveRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
-        altRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
+        //driveRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
+        driveRightBumper.onTrue(new InstantCommand(ShooterSubsystem.getInstance()::shoot)).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));
+        altRightBumper.whileTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
 
         altB.whileTrue(new DynamicTargetRightCommandGroup()); // Adjusts for color, targets amp or source, whichever is to the right
         altA.whileTrue(new SpeakerShootCommand()); // Scores at the speaker
         altX.whileTrue(new DynamicTargetLeftCommandGroup()); // Adjusts for color, targets amp or source, whichever is to the left
 
-        altLeftBumper.whileTrue(new ClimberRetractCommand());
-        driveLeftBumper.whileTrue(new ClimberRetractCommand());
+        //altLeftBumper.whileTrue(new ClimberRetractCommand());
+        //driveLeftBumper.whileTrue(new ClimberRetractCommand());
+        driveLeftBumper.onTrue(new InstantCommand(CollectorSubsystem.getInstance()::intake)).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
     }
 }

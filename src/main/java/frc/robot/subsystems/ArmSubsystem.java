@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,17 +16,20 @@ public class ArmSubsystem extends SubsystemBase {
     private final SparkNeo backwardMotor = SparkNeo.factory(Constants.CAN_Devices.BACKWARD_ARM_MOTOR);
 
     // Declare PID constants for smart motion control
-    private final double smKp = 0.00005, smKi = 0.000, smKiZone = 0.0, smKff = 0.000156, smMaxRPM = 3000.0,
+    private final double
+            //smKp = 0.00005,
+            smKp = 0.000025,
+            smKi = 0.000, smKiZone = 0.0, smKff = 0.000156, smMaxRPM = 3000.0,
             smMaxDeltaRPMSec = 3000.0, smMinRPM = 0.0, smError = 0.1;
 
     // Declare PID constants for position control
-    private final double posKp = 0.22, posKi = 0.0, posKiZone = 0.0, posKff = 0.0;
+    private final double posKp = 0.00005, posKi = 0.0, posKiZone = 0.0, posKff = 0.0;
 
     // Declare PID constants for speed (rpm) control
     private final double rpmKp = 0.5, rpmKi = 0.0, rpmKiZone = 0.0, rpmKff = 0.0;
 
     // Declare min and max soft limits and where the motor thinks it starts
-    private final Double minPosition = null, maxPosition = 5000.0;
+    private final Double minPosition = 0.0, maxPosition = 33.5;
 
     // Tolerance to decide if in position
     private final double IN_POSITION_DEADBAND = 0.5;
@@ -52,7 +56,7 @@ public class ArmSubsystem extends SubsystemBase {
         forwardMotor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
         forwardMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
         forwardMotor.endConfig();
-        forwardMotor.setEncoderPosition(ArmPosition.START.position);
+        forwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
 
         backwardMotor.startConfig();
         backwardMotor.setCurrentLimit(SparkNeo.UseType.POSITION, SparkNeo.BreakerAmps.Amps40);
@@ -63,20 +67,26 @@ public class ArmSubsystem extends SubsystemBase {
         backwardMotor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
         backwardMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
         backwardMotor.endConfig();
-        backwardMotor.setEncoderPosition(ArmPosition.START.position);
+        backwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
+
+        //forwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
+        //backwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
     }
 
     //public void double backwardMotor.SampleMotorSubsystem null (0.0);:
 
     public enum ArmPosition {
         GROUND(0.0),
-        PROTECTED(50.0),
-        CLIMB(75.0),// We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
-        START(100.0),
-        SOURCE(200.0),
-        AMP(300.0);
+        CLIMB(0.0),// We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
+        PROTECTED(10.0),
+        START((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100),
+        SOURCE(27.5),
+        AMP(32.5);
 
-        private final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+        // 90 = 24.9522
+        //Analog = 0.6381
+
+        private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
 
         public final double position;
 
@@ -85,7 +95,7 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         public void goTo() {
-            armSubsystem.goToSmartMotionPosition(this.position);
+            ArmSubsystem.getInstance().goToSmartMotionPosition(this.position);
             requestedPosition = this.position;
         }
 
@@ -100,18 +110,18 @@ public class ArmSubsystem extends SubsystemBase {
             return;
         }
 
-        ArmPosition.START.goTo();
+        //ArmPosition.START.goTo();
 
         double startTime = Timer.getFPGATimestamp();
         System.out.println("****************************************************************");
         System.out.println("ENABLE INIT STARTED: " + startTime);
         System.out.println("****************************************************************");
 
-        forwardMotor.setEncoderPosition(ArmPosition.START.position);
-        backwardMotor.setEncoderPosition(ArmPosition.START.position);
+        //forwardMotor.setEncoderPosition(ArmPosition.START.position);
+        //backwardMotor.setEncoderPosition(ArmPosition.START.position);
 
         // Lock the forward (supporting) motor to start pos.
-        forwardMotor.setTargetPosition(ArmPosition.START.position);
+        forwardMotor.setTargetPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
         System.out.println("****************************************************************");
         System.out.printf("TIME: %f; support = %f; tension = %f%n",
                 Timer.getFPGATimestamp() - startTime, forwardMotor.getEncoderPosition(), backwardMotor.getEncoderPosition());
@@ -148,10 +158,10 @@ public class ArmSubsystem extends SubsystemBase {
         System.out.println("****************************************************************");
 
         // Hold the arms at the start position
-        forwardMotor.setSmartMotionTarget(ArmPosition.START.position);
-        forwardMotor.setSmartMotionTarget(ArmPosition.START.position);
+        forwardMotor.setSmartMotionTarget((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
+        forwardMotor.setSmartMotionTarget((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
 
-        requestedPosition = ArmPosition.START.position;
+        requestedPosition = (Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100;
         enableInit = true;
     }
 

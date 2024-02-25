@@ -7,6 +7,7 @@ package frc.robot;
 
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import org.a05annex.frc.A05Constants;
@@ -29,12 +30,13 @@ public final class Constants extends A05Constants
     public static final class CAN_Devices {
         public static final int
             // Non-Drive Motors
-                FORWARD_ARM_MOTOR = 14,
-                BACKWARD_ARM_MOTOR = 13,
-                LEFT_SHOOTER_MOTOR = 12,
-                RIGHT_SHOOTER_MOTOR = 11,
-                COLLECTOR_MOTOR = 10,
-                CLIMBER_MOTOR = 9;
+                // Left and right based on front, looking back
+                FORWARD_ARM_MOTOR = 11, // left
+                BACKWARD_ARM_MOTOR = 13, // right
+                LEFT_SHOOTER_MOTOR = 9,
+                RIGHT_SHOOTER_MOTOR = 12,
+                COLLECTOR_MOTOR = 14,
+                CLIMBER_MOTOR = 10;
     }
 
 
@@ -116,7 +118,9 @@ public final class Constants extends A05Constants
     public static final PhotonCameraWrapper CAMERA = new PhotonCameraWrapper(new PhotonCamera("IMX219"), 0.127, new AngleD(AngleUnit.DEGREES, 45));
 
     //TODO: set correct channel ID
-    public static final DigitalInput NOTE_SENSOR = new DigitalInput(8);
+    public static final DigitalInput NOTE_SENSOR = new DigitalInput(6);
+
+    public static final DutyCycleEncoder ARM_ANALOG_ENCODER = new DutyCycleEncoder(7);
 
     // kP for keeping drive at the same orientation
     public static double DRIVE_ORIENTATION_kP = 1.2;
