@@ -9,8 +9,6 @@ import org.a05annex.util.Utl;
 public class ManualArmCommand extends Command {
     private final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
 
-    private final double stick = A05Constants.ALT_XBOX.getRightY();
-
     private boolean wasSpinning;
 
     private final double DEADBAND = 0.05;
@@ -35,13 +33,15 @@ public class ManualArmCommand extends Command {
      */
     @Override
     public void execute() {
-       if(!armSubsystem.manualControl()) {
+        double stick = A05Constants.ALT_XBOX.getRightY();
+
+        if(!armSubsystem.manualControl()) {
           wasSpinning = false;
           return;
        }
 
        if(!Utl.inTolerance(stick, 0.0, DEADBAND)) {
-          armSubsystem.goToDeltaPosition(stick * 10.0); // Distance far enough that the motor will do smart motion accel
+          armSubsystem.goToDeltaPosition(stick * 4.0); // Distance far enough that the motor will do smart motion accel
           wasSpinning = true;
           return;
        }

@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
 
+
+import com.revrobotics.CANSparkBase;
 import  com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import org.a05annex.frc.subsystems.SparkNeo;
@@ -20,7 +23,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final double posKp = 0.22, posKi = 0.0, posKiZone = 0.0, posKff = 0.0;
 
     // Declare PID constants for speed (rpm) control
-    private final double rpmKp = 0.5, rpmKi = 0.0, rpmKiZone = 0.0, rpmKff = 0.0;
+    private final double rpmKp = 0.000005, rpmKi = 0.0, rpmKiZone = 200.0, rpmKff = 0.000156, rpmKd = 0.0001;
 
     // Declare min and max soft limits and where the leftMotor thinks it starts
     private final Double minPosition = null, maxPosition = null, startPosition = 0.0;
@@ -36,11 +39,11 @@ public class ShooterSubsystem extends SubsystemBase {
         leftMotor.startConfig();
         leftMotor.setCurrentLimit(SparkNeo.UseType.FREE_SPINNING, SparkNeo.BreakerAmps.Amps40);
         leftMotor.setSoftLimits(minPosition, maxPosition);
-        leftMotor.setDirection(SparkNeo.Direction.DEFAULT);
+        leftMotor.setDirection(SparkNeo.Direction.REVERSE);
         leftMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         leftMotor.setPositionPID(posKp, posKi, posKiZone, posKff);
         leftMotor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
-        leftMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
+        leftMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff, rpmKd, -1.0, 1.0);
         leftMotor.endConfig();
         leftMotor.setEncoderPosition(startPosition);
 
@@ -51,7 +54,7 @@ public class ShooterSubsystem extends SubsystemBase {
         rightMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
         rightMotor.setPositionPID(posKp, posKi, posKiZone, posKff);
         rightMotor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
-        rightMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
+        rightMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff, rpmKd, -1.0, 1.0);
         rightMotor.endConfig();
         rightMotor.setEncoderPosition(startPosition);
 
@@ -74,7 +77,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public boolean isAtRpm(double rpm) {
-        return Utl.inTolerance(getVelocity(), rpm, 100.0);
+        return Utl.inTolerance(getVelocity(), rpm, 1000.0);
     }
 
     public void stop() {
@@ -84,8 +87,17 @@ public class ShooterSubsystem extends SubsystemBase {
         requestedRpm = 0.0;
     }
 
-    public double getPosition() {
-        return leftMotor.getEncoderPosition();
+    public void speaker() {
+        leftMotor.sparkMaxPID.setReference(12.0, CANSparkBase.ControlType.kVoltage);
+        rightMotor.sparkMaxPID.setReference(12.0, CANSparkBase.ControlType.kVoltage);
+    }
+
+    public void shoot() {
+        setVelocity(1000);
+    }
+
+    public void intake() {
+        setVelocity(-5000.0);
     }
 
     public double getVelocity() {

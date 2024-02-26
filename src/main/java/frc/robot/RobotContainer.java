@@ -16,6 +16,7 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ManualArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05RobotContainer;
 import org.a05annex.frc.subsystems.SpeedCachedSwerve;
@@ -49,7 +50,7 @@ public class RobotContainer extends A05RobotContainer {
                 robotSettings.maxSpeedCalibration);
 
         driveSubsystem.setDefaultCommand(driveCommand);
-        ClimberSubsystem.getInstance().setDefaultCommand(new ManualClimberCommand());
+        //ClimberSubsystem.getInstance().setDefaultCommand(new ManualClimberCommand());
 
         ArmSubsystem.getInstance().setDefaultCommand(new ManualArmCommand());
 
@@ -74,20 +75,25 @@ public class RobotContainer extends A05RobotContainer {
 
         driveY.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo));
         altY.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo));
+        altStart.onTrue(new InstantCommand(ArmSubsystem.ArmPosition.SOURCE::goTo));
 
         // All heading commands finish if the driver moves the rotate stick
         driveB.onTrue(new DynamicFaceRightCommand()); // Adjusts for color, faces amp or source, whichever is to the right
         driveA.onTrue(new FaceSpeakerCommand()); // Faces up-field, at speaker
         driveX.onTrue(new DynamicFaceLeftCommand()); // Adjusts for color, faces amp or source, whichever is to the left
 
-        driveRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
-        altRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
+        //driveRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
+        driveRightBumper.onTrue(new InstantCommand(ShooterSubsystem.getInstance()::shoot)).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));
+        altRightBumper.toggleOnTrue(new GroundPickupCommand());
+                //.onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
 
         altB.whileTrue(new DynamicTargetRightCommandGroup()); // Adjusts for color, targets amp or source, whichever is to the right
         altA.whileTrue(new SpeakerShootCommand()); // Scores at the speaker
         altX.whileTrue(new DynamicTargetLeftCommandGroup()); // Adjusts for color, targets amp or source, whichever is to the left
 
-        altLeftBumper.whileTrue(new ClimberRetractCommand());
-        driveLeftBumper.whileTrue(new ClimberRetractCommand());
+        //altLeftBumper.whileTrue(new ClimberRetractCommand());
+        //driveLeftBumper.whileTrue(new ClimberRetractCommand());
+        driveLeftBumper.onTrue(new InstantCommand(CollectorSubsystem.getInstance()::intake)).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
+        altLeftBumper.onTrue(new InstantCommand(ShooterSubsystem.getInstance()::intake)).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));
     }
 }

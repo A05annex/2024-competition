@@ -30,6 +30,8 @@ public class ShooterFeedCommand extends Command {
     @Override
     public void execute() {
         currentTicks++;
+        System.out.println(currentTicks);
+
     }
 
     @Override

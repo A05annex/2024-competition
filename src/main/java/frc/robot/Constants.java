@@ -7,6 +7,7 @@ package frc.robot;
 
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import org.a05annex.frc.A05Constants;
@@ -29,12 +30,13 @@ public final class Constants extends A05Constants
     public static final class CAN_Devices {
         public static final int
             // Non-Drive Motors
-                FORWARD_ARM_MOTOR = 14,
-                BACKWARD_ARM_MOTOR = 13,
-                LEFT_SHOOTER_MOTOR = 12,
-                RIGHT_SHOOTER_MOTOR = 11,
-                COLLECTOR_MOTOR = 10,
-                CLIMBER_MOTOR = 9;
+                // Left and right based on front, looking back
+                FORWARD_ARM_MOTOR = 11, // left
+                BACKWARD_ARM_MOTOR = 13, // right
+                LEFT_SHOOTER_MOTOR = 9,
+                RIGHT_SHOOTER_MOTOR = 12,
+                COLLECTOR_MOTOR = 14,
+                CLIMBER_MOTOR = 10;
     }
 
 
@@ -44,9 +46,11 @@ public final class Constants extends A05Constants
         public final double rpm;
         public final boolean goodData; // used to declare if the linear interpolation data is calcualated or jsut returned because it was out of zone
 
-        static final LinearInterpolation[] calibratedPoints = {
-                new LinearInterpolation(1.0, 100, 5000),
-                new LinearInterpolation(2.0, 150, 5100)
+        private static final LinearInterpolation[] calibratedPoints = {
+                new LinearInterpolation(0.0, 14.937, 5000),
+                new LinearInterpolation(1.49, 14.937, 5000),
+                new LinearInterpolation(2.13, 17.227, 5000),
+                new LinearInterpolation(2.71, 17.092, 5000)
         };
 
         LinearInterpolation(double distance, double arm, double rpm, boolean goodData) {
@@ -113,10 +117,12 @@ public final class Constants extends A05Constants
     public static final boolean HAS_LIMELIGHT = false;
 
 
-    public static final PhotonCameraWrapper CAMERA = new PhotonCameraWrapper(new PhotonCamera("IMX219"), 0.127, new AngleD(AngleUnit.DEGREES, 45));
+    public static final PhotonCameraWrapper CAMERA = new PhotonCameraWrapper(new PhotonCamera("Arducam_OV9281_USB_Camera"), 0.32, new AngleD(AngleUnit.DEGREES, 24.5));
 
     //TODO: set correct channel ID
-    public static final DigitalInput NOTE_SENSOR = new DigitalInput(8);
+    public static final DigitalInput NOTE_SENSOR = new DigitalInput(6);
+
+    public static final DutyCycleEncoder ARM_ANALOG_ENCODER = new DutyCycleEncoder(7);
 
     // kP for keeping drive at the same orientation
     public static double DRIVE_ORIENTATION_kP = 1.2;
@@ -160,8 +166,8 @@ public final class Constants extends A05Constants
         aprilTagSetDictionary.put("amp", new AprilTagSet(new int[] {5}, new int[] {6},1.355725, new AngleD(AngleUnit.DEGREES, 90.0), new AngleD(AngleUnit.DEGREES, 270.0)));
         aprilTagSetDictionary.put("speaker center", new AprilTagSet(new int[] {4}, new int[] {7}, 1.450975));
         aprilTagSetDictionary.put("speaker offset", new AprilTagSet(new int[] {3},  new int[] {8}, 1.450975));
-        aprilTagSetDictionary.put("source close", new AprilTagSet(new int[] {10}, new int[] {1}, 1.355725, new AngleD(AngleUnit.DEGREES, 300.0), new AngleD(AngleUnit.DEGREES, 60.0)));
-        aprilTagSetDictionary.put("source far", new AprilTagSet(new int[] {9}, new int[] {2}, 1.355725, new AngleD(AngleUnit.DEGREES, 300.0), new AngleD(AngleUnit.DEGREES, 60.0)));
+        aprilTagSetDictionary.put("source close", new AprilTagSet(new int[] {10}, new int[] {1}, 1.355725, new AngleD(AngleUnit.DEGREES, 330.0), new AngleD(AngleUnit.DEGREES, 30.0)));
+        aprilTagSetDictionary.put("source far", new AprilTagSet(new int[] {9}, new int[] {2}, 1.355725, new AngleD(AngleUnit.DEGREES, 330.0), new AngleD(AngleUnit.DEGREES, 30.0)));
         aprilTagSetDictionary.put("stage far", new AprilTagSet(new int[] {13}, new int[] {14}, 1.3208, new AngleD(AngleUnit.DEGREES, 180.0)));
         aprilTagSetDictionary.put("stage left", new AprilTagSet(new int[] {11}, new int[] {15}, 1.3208, new AngleD(AngleUnit.DEGREES, 60.0)));
         aprilTagSetDictionary.put("stage right", new AprilTagSet(new int[] {12}, new int[] {16}, 1.3208, new AngleD(AngleUnit.DEGREES, 300.0)));
