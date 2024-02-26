@@ -23,7 +23,7 @@ public class DynamicFaceLeftCommand extends A05DriveCommand {
     public void execute() {
         conditionStick();
 
-        double heading = NetworkTableInstance.getDefault().getTable("FMSInfo").getEntry("IsRedAlliance").getBoolean(true) ? 300 : 270;
+        double heading = NetworkTableInstance.getDefault().getTable("FMSInfo").getEntry("IsRedAlliance").getBoolean(true) ? 330 : 270;
                                                                                                                        // 90 = red amp, 300 = blue source
         navX.setExpectedHeading(navX.getHeadingInfo().getClosestHeading(new AngleD(AngleUnit.DEGREES, heading)));
         conditionedRotate = new AngleD(navX.getHeadingInfo().expectedHeading).subtract(new AngleD(navX.getHeadingInfo().heading))

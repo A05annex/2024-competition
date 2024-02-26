@@ -30,7 +30,8 @@ public class GroundPickupCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return Constants.NOTE_SENSOR.get();
+        return !Constants.NOTE_SENSOR.get(); // !.get() because true = clear.
+        //return false;
     }
 
     @Override

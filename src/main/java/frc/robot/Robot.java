@@ -14,6 +14,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05Robot;
 import org.a05annex.frc.subsystems.DriveSubsystem;
+import org.a05annex.frc.subsystems.PhotonCameraWrapper;
 
 import java.util.Collections;
 
@@ -74,12 +75,20 @@ public class Robot extends A05Robot
         DriveSubsystem.getInstance().printAllAngles();
 
         SmartDashboard.putNumber("analog encoder", Constants.ARM_ANALOG_ENCODER.getAbsolutePosition());
-        SmartDashboard.putNumber("start pos", ArmSubsystem.ArmPosition.START.position);
         SmartDashboard.putBoolean("Note Sensor", Constants.NOTE_SENSOR.get());
 
         SmartDashboard.putNumber("collector rpm", CollectorSubsystem.getInstance().getRpm());
         SmartDashboard.putNumber("Shooter rpm", ShooterSubsystem.getInstance().getVelocity());
-        SmartDashboard.putNumber("arm encoder", ArmSubsystem.getInstance().getPosition());
+        SmartDashboard.putNumber("forward arm encoder", ArmSubsystem.getInstance().getFrontPos());
+        SmartDashboard.putNumber("backward arm encoder", ArmSubsystem.getInstance().getBackPos());
+
+        SmartDashboard.putData(CommandScheduler.getInstance());
+
+        SmartDashboard.putBoolean("manual", ArmSubsystem.getInstance().manualControl());
+        SmartDashboard.putNumber("stick", A05Constants.ALT_XBOX.getRightY());
+        Constants.CAMERA.updateTrackingData();
+        //SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("speaker center")));
+        SmartDashboard.putBoolean("newest frame targs", Constants.CAMERA.getNewestFrame().hasTargets());
     }
     
     
@@ -112,12 +121,20 @@ public class Robot extends A05Robot
         super.teleopPeriodic();
 
         SmartDashboard.putNumber("analog encoder", Constants.ARM_ANALOG_ENCODER.getAbsolutePosition());
-        SmartDashboard.putNumber("start pos", ArmSubsystem.ArmPosition.START.position);
         SmartDashboard.putBoolean("Note Sensor", Constants.NOTE_SENSOR.get());
 
         SmartDashboard.putNumber("collector rpm", CollectorSubsystem.getInstance().getRpm());
         SmartDashboard.putNumber("Shooter rpm", ShooterSubsystem.getInstance().getVelocity());
-        SmartDashboard.putNumber("arm encoder", ArmSubsystem.getInstance().getPosition());
+        SmartDashboard.putNumber("forward arm encoder", ArmSubsystem.getInstance().getFrontPos());
+        SmartDashboard.putNumber("backward arm encoder", ArmSubsystem.getInstance().getBackPos());
+
+        SmartDashboard.putData(CommandScheduler.getInstance());
+
+        SmartDashboard.putBoolean("manual", ArmSubsystem.getInstance().manualControl());
+        SmartDashboard.putNumber("stick", A05Constants.ALT_XBOX.getRightY());
+        Constants.CAMERA.updateTrackingData();
+        //SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("speaker center")));
+        SmartDashboard.putBoolean("newest frame targs", Constants.CAMERA.getNewestFrame().hasTargets());
     }
     
     @Override

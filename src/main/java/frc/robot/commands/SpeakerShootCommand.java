@@ -18,12 +18,14 @@ public class SpeakerShootCommand extends DriveCommand {
     private final PhotonCameraWrapper camera = Constants.CAMERA;
 
     private final ShooterFeedCommand shooterFeedCommand = new ShooterFeedCommand();
-    private boolean feedStarted;
+    private boolean feedStarted = false;
 
     //TODO: test this value, may need to change
     private final double TARGET_ROTATION_KP = 0.9;
 
     private final A05Constants.AprilTagSet tagSet = Constants.aprilTagSetDictionary.get("speaker center");
+
+    private int isFinishedDelay = 0;
 
     public SpeakerShootCommand() {
         super(SpeedCachedSwerve.getInstance());
@@ -34,6 +36,9 @@ public class SpeakerShootCommand extends DriveCommand {
 
     @Override
     public void initialize() {
+        feedStarted = false;
+        isFinishedDelay = 0;
+        System.out.println("***************** STARTED *******************");
     }
 
     @Override
@@ -71,26 +76,32 @@ public class SpeakerShootCommand extends DriveCommand {
 
         conditionedSpeed = 0.0;
 
-        linearInterpolation.goToArm().goToRpm();
+        linearInterpolation.goToArm();
+        ShooterSubsystem.getInstance().speaker();
 
         iSwerveDrive.swerveDrive(conditionedDirection, conditionedSpeed, conditionedRotate);
 
         // Is this the first tick that the arm and shooter are at the correct values?
-        if(armSubsystem.isInPosition() && shooterSubsystem.isAtRpm() && feedStarted) {
+        if(armSubsystem.isInPosition() && shooterSubsystem.getVelocity() > 5300.0) {
             // Feed in the note and mark feedStarted as true so we don't create infinite feed commands
-            shooterFeedCommand.execute();
+            if(!feedStarted) {
+                shooterFeedCommand.schedule();
+            }
             feedStarted = true;
+            isFinishedDelay++;
         }
     }
 
     @Override
     public boolean isFinished() {
-        return feedStarted && shooterFeedCommand.isFinished();
+        System.out.println(shooterFeedCommand.isScheduled());
+        return feedStarted && !shooterFeedCommand.isScheduled() && isFinishedDelay >= 150;
     }
 
     @Override
     public void end(boolean interrupted) {
         shooterSubsystem.stop();
+        CollectorSubsystem.getInstance().stop();
         if(!interrupted) {
             ArmSubsystem.ArmPosition.PROTECTED.goTo();
         }

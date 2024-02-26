@@ -36,7 +36,7 @@ public class CollectorSubsystem extends SubsystemBase {
         motor.setCurrentLimit(SparkNeo.UseType.RPM_OCCASIONAL_STALL, SparkNeo.BreakerAmps.Amps40);
         motor.setSoftLimits(minPosition, maxPosition);
         motor.setDirection(SparkNeo.Direction.REVERSE);
-        motor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         motor.setPositionPID(posKp, posKi, posKiZone, posKff);
         motor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
         motor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);

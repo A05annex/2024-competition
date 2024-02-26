@@ -17,10 +17,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Declare PID constants for smart motion control
     private final double
-            //smKp = 0.00005,
-            smKp = 0.000025,
-            smKi = 0.000, smKiZone = 0.0, smKff = 0.000156, smMaxRPM = 3000.0,
-            smMaxDeltaRPMSec = 3000.0, smMinRPM = 0.0, smError = 0.1;
+            smKp = 0.00005,
+            //smKp = 0.000025,
+            smKi = 0.0, smKiZone = 0.0, smKff = 0.000156, smMaxRPM = 3000.0,
+            smMaxDeltaRPMSec = 3000.0, smMinRPM = 0.0, smError = 0.1, smKd = 0.0;
 
     // Declare PID constants for position control
     private final double posKp = 0.00005, posKi = 0.0, posKiZone = 0.0, posKff = 0.0;
@@ -29,17 +29,21 @@ public class ArmSubsystem extends SubsystemBase {
     private final double rpmKp = 0.5, rpmKi = 0.0, rpmKiZone = 0.0, rpmKff = 0.0;
 
     // Declare min and max soft limits and where the motor thinks it starts
-    private final Double minPosition = 0.0, maxPosition = 33.5;
+    private final Double minPosition = -1.0, maxPosition = 34.0;
 
     // Tolerance to decide if in position
-    private final double IN_POSITION_DEADBAND = 0.5;
+    private final double IN_POSITION_DEADBAND = 5;
 
     // Position most recently requested of the arm
-    private static double requestedPosition = ArmPosition.START.position;
+    private static double requestedPosition = 0.0;
 
     private boolean enableInit = false;
 
     private boolean manualControl = false;
+
+    private final double ANALOG_ENCODER_ZERO = 0.4050;
+
+    private final int gearRatio = 100;
 
     private final static ArmSubsystem INSTANCE = new ArmSubsystem();
     public static ArmSubsystem getInstance() {
@@ -56,7 +60,7 @@ public class ArmSubsystem extends SubsystemBase {
         forwardMotor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
         forwardMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
         forwardMotor.endConfig();
-        forwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
+        forwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio);
 
         backwardMotor.startConfig();
         backwardMotor.setCurrentLimit(SparkNeo.UseType.POSITION, SparkNeo.BreakerAmps.Amps40);
@@ -67,10 +71,10 @@ public class ArmSubsystem extends SubsystemBase {
         backwardMotor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
         backwardMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
         backwardMotor.endConfig();
-        backwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
+        backwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio);
 
-        //forwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
-        //backwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
+        //forwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio);
+        //backwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio);
     }
 
     //public void double backwardMotor.SampleMotorSubsystem null (0.0);:
@@ -78,10 +82,10 @@ public class ArmSubsystem extends SubsystemBase {
     public enum ArmPosition {
         GROUND(0.0),
         CLIMB(0.0),// We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
-        PROTECTED(10.0),
-        START((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100),
-        SOURCE(27.5),
-        AMP(32.5);
+        PROTECTED(5.0),
+        //START((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio),
+        SOURCE(25.6),
+        AMP(31.3);
 
         // 90 = 24.9522
         //Analog = 0.6381
@@ -117,11 +121,11 @@ public class ArmSubsystem extends SubsystemBase {
         System.out.println("ENABLE INIT STARTED: " + startTime);
         System.out.println("****************************************************************");
 
-        //forwardMotor.setEncoderPosition(ArmPosition.START.position);
-        //backwardMotor.setEncoderPosition(ArmPosition.START.position);
+        forwardMotor.setEncoderPosition(0.0);
+        backwardMotor.setEncoderPosition(0.0);
 
         // Lock the forward (supporting) motor to start pos.
-        forwardMotor.setTargetPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
+        forwardMotor.setTargetPosition(0.0);
         System.out.println("****************************************************************");
         System.out.printf("TIME: %f; support = %f; tension = %f%n",
                 Timer.getFPGATimestamp() - startTime, forwardMotor.getEncoderPosition(), backwardMotor.getEncoderPosition());
@@ -133,7 +137,7 @@ public class ArmSubsystem extends SubsystemBase {
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
-                continue;
+                break;
             }
 
             double currentPos = forwardMotor.getEncoderPosition();
@@ -149,7 +153,8 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         //Removed play and resetting the backward encoder, so the tension can be kept
-        backwardMotor.setEncoderPosition(forwardMotor.getEncoderPosition());
+        forwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio);
+        backwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio);
 
         System.out.printf("END TIME: %f; support = %f; tension = %f%n",
                 Timer.getFPGATimestamp() - startTime, forwardMotor.getEncoderPosition(), backwardMotor.getEncoderPosition());
@@ -158,16 +163,19 @@ public class ArmSubsystem extends SubsystemBase {
         System.out.println("****************************************************************");
 
         // Hold the arms at the start position
-        forwardMotor.setSmartMotionTarget((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
-        forwardMotor.setSmartMotionTarget((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100);
+        forwardMotor.setSmartMotionTarget((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio);
+        backwardMotor.setSmartMotionTarget((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio);
 
-        requestedPosition = (Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - 0.3961) * 100;
+        requestedPosition = (Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio;
         enableInit = true;
     }
 
 
     // Go to position with smart motion
     public void goToSmartMotionPosition(double position) {
+
+        //goToPosition(position);
+
         forwardMotor.setSmartMotionTarget(position);
         backwardMotor.setSmartMotionTarget(position);
         requestedPosition = position;
@@ -181,7 +189,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void goToDeltaPosition(double delta) {
-        goToPosition(getPosition() + delta);
+        goToSmartMotionPosition(getPosition() + delta);
     }
 
     public void goToInterpolatedPosition(Constants.LinearInterpolation linearInterpolation) {
@@ -196,6 +204,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     public double getPosition() {
         return forwardMotor.getEncoderPosition();
+    }
+
+    public double getFrontPos() {
+        return forwardMotor.getEncoderPosition();
+    }
+
+    public double getBackPos() {
+        return backwardMotor.getEncoderPosition();
     }
 
     // Returns if the arm is in the position the most recent requested position

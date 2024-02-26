@@ -47,8 +47,10 @@ public final class Constants extends A05Constants
         public final boolean goodData; // used to declare if the linear interpolation data is calcualated or jsut returned because it was out of zone
 
         private static final LinearInterpolation[] calibratedPoints = {
-                new LinearInterpolation(1.0, 100, 5000),
-                new LinearInterpolation(2.0, 150, 5100)
+                new LinearInterpolation(0.0, 14.937, 5000),
+                new LinearInterpolation(1.49, 14.937, 5000),
+                new LinearInterpolation(2.13, 17.227, 5000),
+                new LinearInterpolation(2.71, 17.092, 5000)
         };
 
         LinearInterpolation(double distance, double arm, double rpm, boolean goodData) {
@@ -115,7 +117,7 @@ public final class Constants extends A05Constants
     public static final boolean HAS_LIMELIGHT = false;
 
 
-    public static final PhotonCameraWrapper CAMERA = new PhotonCameraWrapper(new PhotonCamera("IMX219"), 0.127, new AngleD(AngleUnit.DEGREES, 45));
+    public static final PhotonCameraWrapper CAMERA = new PhotonCameraWrapper(new PhotonCamera("Arducam_OV9281_USB_Camera"), 0.32, new AngleD(AngleUnit.DEGREES, 24.5));
 
     //TODO: set correct channel ID
     public static final DigitalInput NOTE_SENSOR = new DigitalInput(6);
@@ -164,8 +166,8 @@ public final class Constants extends A05Constants
         aprilTagSetDictionary.put("amp", new AprilTagSet(new int[] {5}, new int[] {6},1.355725, new AngleD(AngleUnit.DEGREES, 90.0), new AngleD(AngleUnit.DEGREES, 270.0)));
         aprilTagSetDictionary.put("speaker center", new AprilTagSet(new int[] {4}, new int[] {7}, 1.450975));
         aprilTagSetDictionary.put("speaker offset", new AprilTagSet(new int[] {3},  new int[] {8}, 1.450975));
-        aprilTagSetDictionary.put("source close", new AprilTagSet(new int[] {10}, new int[] {1}, 1.355725, new AngleD(AngleUnit.DEGREES, 300.0), new AngleD(AngleUnit.DEGREES, 60.0)));
-        aprilTagSetDictionary.put("source far", new AprilTagSet(new int[] {9}, new int[] {2}, 1.355725, new AngleD(AngleUnit.DEGREES, 300.0), new AngleD(AngleUnit.DEGREES, 60.0)));
+        aprilTagSetDictionary.put("source close", new AprilTagSet(new int[] {10}, new int[] {1}, 1.355725, new AngleD(AngleUnit.DEGREES, 330.0), new AngleD(AngleUnit.DEGREES, 30.0)));
+        aprilTagSetDictionary.put("source far", new AprilTagSet(new int[] {9}, new int[] {2}, 1.355725, new AngleD(AngleUnit.DEGREES, 330.0), new AngleD(AngleUnit.DEGREES, 30.0)));
         aprilTagSetDictionary.put("stage far", new AprilTagSet(new int[] {13}, new int[] {14}, 1.3208, new AngleD(AngleUnit.DEGREES, 180.0)));
         aprilTagSetDictionary.put("stage left", new AprilTagSet(new int[] {11}, new int[] {15}, 1.3208, new AngleD(AngleUnit.DEGREES, 60.0)));
         aprilTagSetDictionary.put("stage right", new AprilTagSet(new int[] {12}, new int[] {16}, 1.3208, new AngleD(AngleUnit.DEGREES, 300.0)));
