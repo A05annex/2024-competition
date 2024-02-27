@@ -46,11 +46,15 @@ public final class Constants extends A05Constants
         public final double rpm;
         public final boolean goodData; // used to declare if the linear interpolation data is calcualated or jsut returned because it was out of zone
 
-        private static final LinearInterpolation[] calibratedPoints = {
-                new LinearInterpolation(0.0, 14.937, 5000),
-                new LinearInterpolation(1.49, 14.937, 5000),
-                new LinearInterpolation(2.13, 17.227, 5000),
-                new LinearInterpolation(2.71, 17.092, 5000)
+        static final LinearInterpolation[] calibratedPoints = {
+                new LinearInterpolation(0.0, 14.700, 5000),
+                new LinearInterpolation(1.49, 14.700, 5000),
+                new LinearInterpolation(1.55, 15.505, 5000),
+                new LinearInterpolation(1.66, 16.000, 5000),
+                new LinearInterpolation(1.82, 16.052, 5000),
+                new LinearInterpolation(2.03, 17.186, 5000),
+                new LinearInterpolation(2.34, 17.448, 5000),
+                new LinearInterpolation(2.71, 17.728, 5000)
         };
 
         LinearInterpolation(double distance, double arm, double rpm, boolean goodData) {
@@ -159,7 +163,7 @@ public final class Constants extends A05Constants
     };
 
     public static final A05Constants.DriverSettings[] DRIVER_SETTINGS = {
-            new DriverSettings("programmer", 0)
+            new DriverSettings("ocean", 0)
     };
 
     public static void setAprilTagSetDictionary() {

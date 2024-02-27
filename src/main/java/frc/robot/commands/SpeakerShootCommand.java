@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;
+import frc.robot.ShotLogger;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -79,6 +80,8 @@ public class SpeakerShootCommand extends DriveCommand {
         linearInterpolation.goToArm();
         ShooterSubsystem.getInstance().speaker();
 
+        ShotLogger.storeShotData(linearInterpolation);
+
         iSwerveDrive.swerveDrive(conditionedDirection, conditionedSpeed, conditionedRotate);
 
         // Is this the first tick that the arm and shooter are at the correct values?
@@ -102,8 +105,6 @@ public class SpeakerShootCommand extends DriveCommand {
     public void end(boolean interrupted) {
         shooterSubsystem.stop();
         CollectorSubsystem.getInstance().stop();
-        if(!interrupted) {
-            ArmSubsystem.ArmPosition.PROTECTED.goTo();
-        }
+        ArmSubsystem.ArmPosition.PROTECTED.goTo();
     }
 }

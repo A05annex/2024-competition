@@ -33,7 +33,7 @@ public class ManualArmCommand extends Command {
      */
     @Override
     public void execute() {
-        double stick = A05Constants.ALT_XBOX.getRightY();
+        double stick = -A05Constants.ALT_XBOX.getRightY();
 
         if(!armSubsystem.manualControl()) {
           wasSpinning = false;

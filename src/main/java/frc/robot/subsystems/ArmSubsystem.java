@@ -17,9 +17,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Declare PID constants for smart motion control
     private final double
-            smKp = 0.00005,
+            smKp = 0.00025,
             //smKp = 0.000025,
-            smKi = 0.0, smKiZone = 0.0, smKff = 0.000156, smMaxRPM = 3000.0,
+            smKi = 0.0001, smKiZone = 0.2, smKff = 0.000156, smMaxRPM = 3000.0,
             smMaxDeltaRPMSec = 3000.0, smMinRPM = 0.0, smError = 0.1, smKd = 0.0;
 
     // Declare PID constants for position control
@@ -32,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase {
     private final Double minPosition = -1.0, maxPosition = 34.0;
 
     // Tolerance to decide if in position
-    private final double IN_POSITION_DEADBAND = 5;
+    private final double IN_POSITION_DEADBAND = 0.5;
 
     // Position most recently requested of the arm
     private static double requestedPosition = 0.0;
@@ -68,7 +68,7 @@ public class ArmSubsystem extends SubsystemBase {
         backwardMotor.setDirection(SparkNeo.Direction.REVERSE);
         backwardMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         backwardMotor.setPositionPID(posKp, posKi, posKiZone, posKff);
-        backwardMotor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
+        backwardMotor.setSmartMotion(smKp, 0.0, 0.0, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError); // 0.0 kI because we don't want two motors with kI
         backwardMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
         backwardMotor.endConfig();
         backwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio);
@@ -80,11 +80,11 @@ public class ArmSubsystem extends SubsystemBase {
     //public void double backwardMotor.SampleMotorSubsystem null (0.0);:
 
     public enum ArmPosition {
-        GROUND(0.0),
+        GROUND(0.5),
         CLIMB(0.0),// We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
         PROTECTED(5.0),
         //START((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio),
-        SOURCE(25.6),
+        SOURCE(20.11),
         AMP(31.3);
 
         // 90 = 24.9522
@@ -221,8 +221,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Returns if the arm is in the position passed in
     public boolean isInPosition(double position) {
-        return Utl.inTolerance(forwardMotor.getEncoderPosition(), position, IN_POSITION_DEADBAND) &&
-                Utl.inTolerance(backwardMotor.getEncoderPosition(), position, IN_POSITION_DEADBAND);
+        return Utl.inTolerance(forwardMotor.getEncoderPosition(), position, IN_POSITION_DEADBAND);
     }
 
     public boolean manualControl() {
