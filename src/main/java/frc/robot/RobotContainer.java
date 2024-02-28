@@ -41,10 +41,14 @@ public class RobotContainer extends A05RobotContainer {
     public RobotContainer() {
         super();
         // finish swerve drive initialization for this specific robt.
-        driveCommand = new DriveCommand(driveSubsystem);
+
+        navx.setYawCalibrationFactor(robotSettings.navxYawCalibration);
+
 
         speedCachedSwerve.setDriveSubsystem(driveSubsystem);
         speedCachedSwerve.setCacheLength(1000);
+
+        driveCommand = new DriveCommand(speedCachedSwerve);
 
         speedCachedSwerve.setDriveGeometry(robotSettings.length, robotSettings.width,
                 robotSettings.rf, robotSettings.rr,
@@ -55,6 +59,10 @@ public class RobotContainer extends A05RobotContainer {
         //ClimberSubsystem.getInstance().setDefaultCommand(new ManualClimberCommand());
 
         ArmSubsystem.getInstance().setDefaultCommand(new ManualArmCommand());
+
+        if(autoCommand != null) {
+            autoCommand.setMirror(Constants.readMirrorSwitch());
+        }
 
         // Configure the button bindings
         configureButtonBindings();
@@ -82,6 +90,7 @@ public class RobotContainer extends A05RobotContainer {
 
         // All heading commands finish if the driver moves the rotate stick
         driveB.onTrue(new DynamicFaceRightCommand()); // Adjusts for color, faces amp or source, whichever is to the right
+        //driveB.onTrue(new AmpScoreCommandGroup());
         driveA.onTrue(new FaceSpeakerCommand()); // Faces up-field, at speaker
         driveX.onTrue(new DynamicFaceLeftCommand()); // Adjusts for color, faces amp or source, whichever is to the left
 
@@ -94,7 +103,7 @@ public class RobotContainer extends A05RobotContainer {
         altA.whileTrue(new SpeakerShootCommand()); // Scores at the speaker
         //altX.whileTrue(new DynamicTargetLeftCommandGroup()); // Adjusts for color, targets amp or source, whichever is to the left
 
-        altB.onTrue(new InstantCommand(ShotLogger::shotMissed));
+        altB.whileTrue(new AmpScoreCommandGroup());
         altX.onTrue(new InstantCommand(ShotLogger::shotScored));
 
         //altLeftBumper.whileTrue(new ClimberRetractCommand());

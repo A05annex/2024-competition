@@ -75,7 +75,10 @@ public class Robot extends A05Robot
     @Override
     public void disabledPeriodic() {
         //SmartDashboard.putNumber("Heading", NavX.getInstance().getHeadingInfo().expectedHeading.getDegrees());
-        DriveSubsystem.getInstance().printAllAngles();
+        //DriveSubsystem.getInstance().printAllAngles();
+        SmartDashboard.putNumber("auto id", Constants.readAutoID());
+        SmartDashboard.putNumber("driver id", Constants.readDriverID());
+        SmartDashboard.putString("mirror", Constants.readMirrorSwitch().toString());
 
         SmartDashboard.putNumber("analog encoder", Constants.ARM_ANALOG_ENCODER.getAbsolutePosition());
         SmartDashboard.putBoolean("Note Sensor", Constants.NOTE_SENSOR.get());

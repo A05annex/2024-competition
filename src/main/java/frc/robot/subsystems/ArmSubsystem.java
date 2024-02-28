@@ -85,7 +85,7 @@ public class ArmSubsystem extends SubsystemBase {
         PROTECTED(5.0),
         //START((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio),
         SOURCE(20.11),
-        AMP(31.3);
+        AMP(31.5);
 
         // 90 = 24.9522
         //Analog = 0.6381

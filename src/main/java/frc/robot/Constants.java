@@ -120,13 +120,18 @@ public final class Constants extends A05Constants
     public static final boolean HAS_USB_CAMERA = false;
     public static final boolean HAS_LIMELIGHT = false;
 
+    private static final DigitalInput switch6 = new DigitalInput(6);
+
+    public static Boolean readMirrorSwitch() {
+        return !switch6.get();
+    }
 
     public static final PhotonCameraWrapper CAMERA = new PhotonCameraWrapper(new PhotonCamera("Arducam_OV9281_USB_Camera"), 0.32, new AngleD(AngleUnit.DEGREES, 24.5));
 
     //TODO: set correct channel ID
-    public static final DigitalInput NOTE_SENSOR = new DigitalInput(6);
+    public static final DigitalInput NOTE_SENSOR = new DigitalInput(8);
 
-    public static final DutyCycleEncoder ARM_ANALOG_ENCODER = new DutyCycleEncoder(7);
+    public static final DutyCycleEncoder ARM_ANALOG_ENCODER = new DutyCycleEncoder(9);
 
     // kP for keeping drive at the same orientation
     public static double DRIVE_ORIENTATION_kP = 1.2;
@@ -159,7 +164,8 @@ public final class Constants extends A05Constants
     };
 
     public static final A05Constants.AutonomousPath[] AUTONOMOUS_PATHS = {
-            new A05Constants.AutonomousPath("One note and park (source side)", 0, "sourceOneAndPark.json")
+            new A05Constants.AutonomousPath("One note and park (source side)", 0, "sourceOneAndPark.json"),
+            new A05Constants.AutonomousPath("Two note and park (source side)", 1, "twoNoteSourceSide.json")
     };
 
     public static final A05Constants.DriverSettings[] DRIVER_SETTINGS = {
