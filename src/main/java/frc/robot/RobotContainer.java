@@ -92,7 +92,8 @@ public class RobotContainer extends A05RobotContainer {
         driveB.onTrue(new DynamicFaceRightCommand()); // Adjusts for color, faces amp or source, whichever is to the right
         //driveB.onTrue(new AmpScoreCommandGroup());
         driveA.onTrue(new FaceSpeakerCommand()); // Faces up-field, at speaker
-        driveX.onTrue(new DynamicFaceLeftCommand()); // Adjusts for color, faces amp or source, whichever is to the left
+        //driveX.onTrue(new DynamicFaceLeftCommand()); // Adjusts for color, faces amp or source, whichever is to the left
+        driveX.whileTrue(new AutoShootCommand());
 
         //driveRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
         driveRightBumper.onTrue(new InstantCommand(ShooterSubsystem.getInstance()::speaker)).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));

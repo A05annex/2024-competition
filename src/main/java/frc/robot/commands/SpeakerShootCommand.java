@@ -22,7 +22,7 @@ public class SpeakerShootCommand extends DriveCommand {
     private boolean feedStarted = false;
 
     //TODO: test this value, may need to change
-    private final double TARGET_ROTATION_KP = 0.9;
+    private final double TARGET_ROTATION_KP = 0.8;
 
     private final A05Constants.AprilTagSet tagSet = Constants.aprilTagSetDictionary.get("speaker center");
 
@@ -55,7 +55,7 @@ public class SpeakerShootCommand extends DriveCommand {
 
         conditionStick();
 
-        this.conditionedRotate = camera.getTarget(tagSet).getYaw() / 35.0 * TARGET_ROTATION_KP;
+        this.conditionedRotate = (camera.getTarget(tagSet).getYaw() - 4.6) / 35.0 * TARGET_ROTATION_KP;
 
         // lets linear interpolate to find arm and rpm numbers
 

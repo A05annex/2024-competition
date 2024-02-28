@@ -102,6 +102,7 @@ public class Robot extends A05Robot
     @Override
     public void autonomousInit()
     {
+        ArmSubsystem.getInstance().enableInit();
         // Sets up autonomous command
         super.autonomousInit();
     }
