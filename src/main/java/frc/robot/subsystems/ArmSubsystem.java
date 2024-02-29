@@ -41,7 +41,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     private boolean manualControl = false;
 
-    private final double ANALOG_ENCODER_ZERO = 0.4050;
+    private final double ANALOG_ENCODER_ZERO = 0.9261;
 
     private final int gearRatio = 100;
 
@@ -60,7 +60,7 @@ public class ArmSubsystem extends SubsystemBase {
         forwardMotor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
         forwardMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
         forwardMotor.endConfig();
-        forwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio);
+        forwardMotor.setEncoderPosition((Constants.getArmEncoder() - ANALOG_ENCODER_ZERO) * gearRatio);
 
         backwardMotor.startConfig();
         backwardMotor.setCurrentLimit(SparkNeo.UseType.POSITION, SparkNeo.BreakerAmps.Amps40);
@@ -71,10 +71,10 @@ public class ArmSubsystem extends SubsystemBase {
         backwardMotor.setSmartMotion(smKp, 0.0, 0.0, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError); // 0.0 kI because we don't want two motors with kI
         backwardMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
         backwardMotor.endConfig();
-        backwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio);
+        backwardMotor.setEncoderPosition((Constants.getArmEncoder() - ANALOG_ENCODER_ZERO) * gearRatio);
 
-        //forwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio);
-        //backwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio);
+        //forwardMotor.setEncoderPosition((Constants.getArmEncoder() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio);
+        //backwardMotor.setEncoderPosition((Constants.getArmEncoder() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio);
     }
 
     //public void double backwardMotor.SampleMotorSubsystem null (0.0);:
@@ -83,8 +83,8 @@ public class ArmSubsystem extends SubsystemBase {
         GROUND(0.5),
         CLIMB(0.0),// We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
         PROTECTED(5.0),
-        //START((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio),
-        SOURCE(20.11),
+        //START((Constants.getArmEncoder() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio),
+        SOURCE(19.539),
         AMP(31.5);
 
         // 90 = 24.9522
@@ -153,8 +153,8 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         //Removed play and resetting the backward encoder, so the tension can be kept
-        forwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio);
-        backwardMotor.setEncoderPosition((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio);
+        forwardMotor.setEncoderPosition((Constants.getArmEncoder() - ANALOG_ENCODER_ZERO) * gearRatio);
+        backwardMotor.setEncoderPosition((Constants.getArmEncoder() - ANALOG_ENCODER_ZERO) * gearRatio);
 
         System.out.printf("END TIME: %f; support = %f; tension = %f%n",
                 Timer.getFPGATimestamp() - startTime, forwardMotor.getEncoderPosition(), backwardMotor.getEncoderPosition());
@@ -163,10 +163,10 @@ public class ArmSubsystem extends SubsystemBase {
         System.out.println("****************************************************************");
 
         // Hold the arms at the start position
-        forwardMotor.setSmartMotionTarget((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio);
-        backwardMotor.setSmartMotionTarget((Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio);
+        forwardMotor.setSmartMotionTarget((Constants.getArmEncoder() - ANALOG_ENCODER_ZERO) * gearRatio);
+        backwardMotor.setSmartMotionTarget((Constants.getArmEncoder() - ANALOG_ENCODER_ZERO) * gearRatio);
 
-        requestedPosition = (Constants.ARM_ANALOG_ENCODER.getAbsolutePosition() - ANALOG_ENCODER_ZERO) * gearRatio;
+        requestedPosition = (Constants.getArmEncoder() - ANALOG_ENCODER_ZERO) * gearRatio;
         enableInit = true;
     }
 

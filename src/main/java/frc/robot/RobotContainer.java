@@ -80,20 +80,21 @@ public class RobotContainer extends A05RobotContainer {
         // See https://docs.wpilib.org/en/stable/docs/software/commandbased/binding-commands-to-triggers.html
 
         driveBack.onTrue(new InstantCommand(navx::initializeHeadingAndNav)); // Reset the NavX field relativity
-
         altBack.onTrue(new InstantCommand(ArmSubsystem.getInstance()::toggleManualControl));
 
-        driveY.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo)).whileTrue(new InstantCommand(CollectorSubsystem.getInstance()::stop));
-        altY.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo)).whileTrue(new InstantCommand(CollectorSubsystem.getInstance()::stop));
         altStart.onTrue(new SourceIntakeCommand());
         driveStart.onTrue(new InstantCommand(CollectorSubsystem.getInstance()::feed)).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
 
+        driveY.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo)).whileTrue(new InstantCommand(CollectorSubsystem.getInstance()::stop));
+        altY.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo)).whileTrue(new InstantCommand(CollectorSubsystem.getInstance()::stop));
+
+
         // All heading commands finish if the driver moves the rotate stick
         driveB.onTrue(new DynamicFaceRightCommand()); // Adjusts for color, faces amp or source, whichever is to the right
-        //driveB.onTrue(new AmpScoreCommandGroup());
         driveA.onTrue(new FaceSpeakerCommand()); // Faces up-field, at speaker
-        //driveX.onTrue(new DynamicFaceLeftCommand()); // Adjusts for color, faces amp or source, whichever is to the left
-        driveX.whileTrue(new AutoShootCommand());
+        driveX.onTrue(new DynamicFaceLeftCommand()); // Adjusts for color, faces amp or source, whichever is to the left
+
+        //driveX.whileTrue(new AutoShootCommand());
 
         //driveRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
         driveRightBumper.onTrue(new InstantCommand(ShooterSubsystem.getInstance()::speaker)).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));

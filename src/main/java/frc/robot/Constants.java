@@ -47,14 +47,16 @@ public final class Constants extends A05Constants
         public final boolean goodData; // used to declare if the linear interpolation data is calcualated or jsut returned because it was out of zone
 
         static final LinearInterpolation[] calibratedPoints = {
-                new LinearInterpolation(0.0, 14.700, 5000),
-                new LinearInterpolation(1.49, 14.700, 5000),
-                new LinearInterpolation(1.55, 15.505, 5000),
-                new LinearInterpolation(1.66, 16.000, 5000),
-                new LinearInterpolation(1.82, 16.052, 5000),
-                new LinearInterpolation(2.03, 17.186, 5000),
-                new LinearInterpolation(2.34, 17.448, 5000),
-                new LinearInterpolation(2.71, 17.728, 5000)
+                new LinearInterpolation(0.0, 14.015, 5000),
+                new LinearInterpolation(1.49, 14.015, 5000),
+                new LinearInterpolation(1.55, 14.82, 5000),
+                new LinearInterpolation(1.66, 15.315, 5000),
+                new LinearInterpolation(1.82, 15.367, 5000),
+                new LinearInterpolation(1.88, 16.149, 5000),
+                new LinearInterpolation(1.92, 16.244, 5000),
+                new LinearInterpolation(2.03, 16.501, 5000),
+                new LinearInterpolation(2.34, 16.763, 5000),
+                new LinearInterpolation(2.71, 17.043, 5000)
         };
 
         LinearInterpolation(double distance, double arm, double rpm, boolean goodData) {
@@ -132,6 +134,10 @@ public final class Constants extends A05Constants
     public static final DigitalInput NOTE_SENSOR = new DigitalInput(8);
 
     public static final DutyCycleEncoder ARM_ANALOG_ENCODER = new DutyCycleEncoder(9);
+
+    public static double getArmEncoder() {
+        return ARM_ANALOG_ENCODER.getAbsolutePosition() > 0.5 ? ARM_ANALOG_ENCODER.getAbsolutePosition() : ARM_ANALOG_ENCODER.getAbsolutePosition() + 1.0;
+    }
 
     // kP for keeping drive at the same orientation
     public static double DRIVE_ORIENTATION_kP = 1.2;
