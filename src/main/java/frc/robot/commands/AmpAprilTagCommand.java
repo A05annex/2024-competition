@@ -28,9 +28,11 @@ public class AmpAprilTagCommand extends A05AprilTagPositionCommand {
         // executeTargeting(). checkIfCanPerformTargeting will set this to true if the conditions in it are met
 
         camera.updateTrackingData();
+        checkIfCanPerformTargeting();
+
+
         positionAtFrame = swerveDrive.getRobotRelativePositionSince(camera.getLatestTargetTime());
 
-        checkIfCanPerformTargeting();
 
 
         executeTargeting();
