@@ -163,7 +163,7 @@ public final class Constants extends A05Constants
      * These settings are loaded into {@link #ROBOT_SETTINGS_LIST} during {@link Robot#robotInit()}
      */
     public static final A05Constants.RobotSettings[] ROBOT_SETTINGS = {
-            new A05Constants.RobotSettings(0, "Competition", 0.5461, 0.5461, 2.689, 0.313,
+            new A05Constants.RobotSettings(0, "Competition", 0.5461, 0.5461, 5.0974, 0.313,
                     2.735, 2.522, 1.026,0.9650),
             new A05Constants.RobotSettings(1, "Practice", 0.5969, 0.5969, 5.240, 5.654,
                     0.969, 5.039, 1.026, 0.9164)
@@ -171,7 +171,9 @@ public final class Constants extends A05Constants
 
     public static final A05Constants.AutonomousPath[] AUTONOMOUS_PATHS = {
             new A05Constants.AutonomousPath("One note and park (source side)", 0, "sourceOneAndPark.json"),
-            new A05Constants.AutonomousPath("Two note and park (source side)", 1, "twoNoteSourceSide.json")
+            new A05Constants.AutonomousPath("Two note and park (source side)", 1, "twoNoteSourceSide.json"),
+            new A05Constants.AutonomousPath("Two note and park (amp side)", 2, "twoNoteAmpSide.json"),
+            new A05Constants.AutonomousPath("One note and park (amp side)", 3, "ampOneAndPark.json")
     };
 
     public static final A05Constants.DriverSettings[] DRIVER_SETTINGS = {
@@ -179,7 +181,7 @@ public final class Constants extends A05Constants
     };
 
     public static void setAprilTagSetDictionary() {
-        aprilTagSetDictionary.put("amp", new AprilTagSet(new int[] {5}, new int[] {6},1.355725, new AngleD(AngleUnit.DEGREES, 90.0), new AngleD(AngleUnit.DEGREES, 270.0)));
+        aprilTagSetDictionary.put("amp", new AprilTagSet(new int[] {5}, new int[] {6},1.355725, new AngleD(AngleUnit.DEGREES, 90), new AngleD(AngleUnit.DEGREES, -90.0)));
         aprilTagSetDictionary.put("speaker center", new AprilTagSet(new int[] {4}, new int[] {7}, 1.450975));
         aprilTagSetDictionary.put("speaker offset", new AprilTagSet(new int[] {3},  new int[] {8}, 1.450975));
         aprilTagSetDictionary.put("source close", new AprilTagSet(new int[] {10}, new int[] {1}, 1.355725, new AngleD(AngleUnit.DEGREES, 330.0), new AngleD(AngleUnit.DEGREES, 30.0)));

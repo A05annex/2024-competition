@@ -41,7 +41,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     private boolean manualControl = false;
 
-    private final double ANALOG_ENCODER_ZERO = 0.9261;
+    private final double ANALOG_ENCODER_ZERO = 0.9307;
 
     private final int gearRatio = 100;
 
@@ -80,7 +80,7 @@ public class ArmSubsystem extends SubsystemBase {
     //public void double backwardMotor.SampleMotorSubsystem null (0.0);:
 
     public enum ArmPosition {
-        GROUND(0.5),
+        GROUND(0.65),
         CLIMB(0.0),// We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
         PROTECTED(5.0),
         //START((Constants.getArmEncoder() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio),

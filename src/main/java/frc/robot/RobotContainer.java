@@ -92,7 +92,8 @@ public class RobotContainer extends A05RobotContainer {
         // All heading commands finish if the driver moves the rotate stick
         driveB.onTrue(new DynamicFaceRightCommand()); // Adjusts for color, faces amp or source, whichever is to the right
         driveA.onTrue(new FaceSpeakerCommand()); // Faces up-field, at speaker
-        driveX.onTrue(new DynamicFaceLeftCommand()); // Adjusts for color, faces amp or source, whichever is to the left
+        //driveX.onTrue(new DynamicFaceLeftCommand()); // Adjusts for color, faces amp or source, whichever is to the left
+        driveX.whileTrue(new EjectCommand());
 
         //driveX.whileTrue(new AutoShootCommand());
 
@@ -105,8 +106,9 @@ public class RobotContainer extends A05RobotContainer {
         altA.whileTrue(new SpeakerShootCommand()); // Scores at the speaker
         //altX.whileTrue(new DynamicTargetLeftCommandGroup()); // Adjusts for color, targets amp or source, whichever is to the left
 
-        altB.whileTrue(new AmpScoreCommandGroup());
-        altX.onTrue(new InstantCommand(ShotLogger::shotScored));
+        altX.whileTrue(new EjectCommand());
+        //altB.whileTrue(new AmpScoreCommandGroup());
+        //altX.onTrue(new InstantCommand(ShotLogger::shotScored));
 
         //altLeftBumper.whileTrue(new ClimberRetractCommand());
         //driveLeftBumper.whileTrue(new ClimberRetractCommand());

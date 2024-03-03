@@ -14,6 +14,7 @@ import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05Robot;
+import org.a05annex.frc.A05RobotContainer;
 import org.a05annex.frc.subsystems.DriveSubsystem;
 import org.a05annex.frc.subsystems.PhotonCameraWrapper;
 
@@ -75,7 +76,7 @@ public class Robot extends A05Robot
     @Override
     public void disabledPeriodic() {
         //SmartDashboard.putNumber("Heading", NavX.getInstance().getHeadingInfo().expectedHeading.getDegrees());
-        //DriveSubsystem.getInstance().printAllAngles();
+        DriveSubsystem.getInstance().printAllAngles();
         SmartDashboard.putNumber("auto id", Constants.readAutoID());
         SmartDashboard.putNumber("driver id", Constants.readDriverID());
         SmartDashboard.putString("mirror", Constants.readMirrorSwitch().toString());
@@ -116,7 +117,9 @@ public class Robot extends A05Robot
     @Override
     public void teleopInit()
     {
-        ArmSubsystem.getInstance().enableInit();
+        if(!a05RobotContainer.driveRightStickPress.getAsBoolean()) {
+            ArmSubsystem.getInstance().enableInit();
+        }
         // Cancels autonomous command
         super.teleopInit();
     }
