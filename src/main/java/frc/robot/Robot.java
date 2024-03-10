@@ -15,6 +15,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05Robot;
 import org.a05annex.frc.A05RobotContainer;
+import org.a05annex.frc.NavX;
 import org.a05annex.frc.subsystems.DriveSubsystem;
 import org.a05annex.frc.subsystems.PhotonCameraWrapper;
 
@@ -76,10 +77,6 @@ public class Robot extends A05Robot
     @Override
     public void disabledPeriodic() {
         //SmartDashboard.putNumber("Heading", NavX.getInstance().getHeadingInfo().expectedHeading.getDegrees());
-        DriveSubsystem.getInstance().printAllAngles();
-        SmartDashboard.putNumber("auto id", Constants.readAutoID());
-        SmartDashboard.putNumber("driver id", Constants.readDriverID());
-        SmartDashboard.putString("mirror", Constants.readMirrorSwitch().toString());
 
         SmartDashboard.putNumber("analog encoder", Constants.ARM_ANALOG_ENCODER.getAbsolutePosition());
         SmartDashboard.putBoolean("Note Sensor", Constants.NOTE_SENSOR.get());

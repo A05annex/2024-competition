@@ -36,7 +36,8 @@ public final class Constants extends A05Constants
                 LEFT_SHOOTER_MOTOR = 9,
                 RIGHT_SHOOTER_MOTOR = 12,
                 COLLECTOR_MOTOR = 14,
-                CLIMBER_MOTOR = 10;
+                RIGHT_CLIMBER_MOTOR = 10,
+                LEFT_CLIMBER_MOTOR = 15;
     }
 
 
