@@ -35,6 +35,9 @@ public class ClimberSubsystem extends SubsystemBase {
 
     private final double inPositionTolerance = 0.5;
 
+    private boolean enableInit = false;
+    private int enableInitStartup = 0;
+
     private final static ClimberSubsystem INSTANCE = new ClimberSubsystem();
     public static ClimberSubsystem getInstance() {
         return INSTANCE;
@@ -62,6 +65,24 @@ public class ClimberSubsystem extends SubsystemBase {
         leftMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
         leftMotor.endConfig();
         leftMotor.setEncoderPosition(startPosition);
+
+        enableInit = false;
+        enableInitStartup = 0;
+    }
+
+    public void enableInit() {
+        // Have we already run enableInit()
+        if(enableInit) {
+            // Yes? let's not do it again
+            return;
+        }
+
+        enableInitStartup = 0;
+
+        double rpm = -2500.0;
+
+        leftMotor.setTargetRPM(rpm);
+        rightMotor.setTargetRPM(rpm);
     }
 
     public void goToSmartMotionPosition(double position) {
@@ -114,6 +135,26 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public boolean isInPosition() {
         return Utl.inTolerance(leftMotor.getEncoderPosition(), leftReqPos, inPositionTolerance) && Utl.inTolerance(rightMotor.getEncoderPosition(), rightReqPos, inPositionTolerance);
+    }
+
+    @Override
+    public void periodic() {
+        if(enableInit || enableInitStartup < 5) {
+            enableInitStartup++;
+            return;
+        }
+
+        double stallRpm = -2000.0;
+
+        if(leftMotor.getEncoderVelocity() < stallRpm) {
+            leftMotor.setEncoderPosition(startPosition);
+            leftMotorSmartMotionPosition(startPosition);
+        }
+
+        if(rightMotor.getEncoderVelocity() < stallRpm) {
+            rightMotor.setEncoderPosition(startPosition);
+            rightMotorSmartMotionPosition(startPosition);
+        }
     }
 }
 

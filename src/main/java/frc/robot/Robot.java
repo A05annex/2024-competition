@@ -14,10 +14,6 @@ import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05Robot;
-import org.a05annex.frc.A05RobotContainer;
-import org.a05annex.frc.NavX;
-import org.a05annex.frc.subsystems.DriveSubsystem;
-import org.a05annex.frc.subsystems.PhotonCameraWrapper;
 
 import java.util.Collections;
 
@@ -30,7 +26,42 @@ import java.util.Collections;
  */
 public class Robot extends A05Robot
 {
-    
+    public void permanentTelemetry() {
+        SmartDashboard.putNumber("analog encoder", Constants.ARM_ANALOG_ENCODER.getAbsolutePosition());
+        SmartDashboard.putBoolean("Note Sensor", Constants.NOTE_SENSOR.get());
+
+        SmartDashboard.putNumber("collector rpm", CollectorSubsystem.getInstance().getRpm());
+        SmartDashboard.putNumber("Shooter rpm", ShooterSubsystem.getInstance().getVelocity());
+        SmartDashboard.putNumber("forward arm encoder", ArmSubsystem.getInstance().getFrontPos());
+        SmartDashboard.putNumber("backward arm encoder", ArmSubsystem.getInstance().getBackPos());
+
+        SmartDashboard.putData(CommandScheduler.getInstance());
+
+        SmartDashboard.putBoolean("Manual Arm", ArmSubsystem.getInstance().manualControl());
+
+        if(Constants.CAMERA.camera.isConnected()) {
+            Constants.CAMERA.updateTrackingData();
+            SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("speaker center")));
+            SmartDashboard.putBoolean("newest frame targs", Constants.CAMERA.getNewestFrame().hasTargets());
+        } else {
+            SmartDashboard.putNumber("Distance", -1.0);
+            SmartDashboard.putBoolean("newest frame targs", false);
+        }
+    }
+
+    public void enabledTelemetry() {
+        permanentTelemetry();
+    }
+
+    public void disabledTelemetry() {
+        permanentTelemetry();
+    }
+
+    public void enableInit() {
+        ArmSubsystem.getInstance().enableInit();
+        ClimberSubsystem.getInstance().enableInit();
+    }
+
     /**
      * This method is run when the robot is first started up and should be used for any
      * initialization code.
@@ -76,23 +107,7 @@ public class Robot extends A05Robot
     
     @Override
     public void disabledPeriodic() {
-        //SmartDashboard.putNumber("Heading", NavX.getInstance().getHeadingInfo().expectedHeading.getDegrees());
-
-        SmartDashboard.putNumber("analog encoder", Constants.ARM_ANALOG_ENCODER.getAbsolutePosition());
-        SmartDashboard.putBoolean("Note Sensor", Constants.NOTE_SENSOR.get());
-
-        SmartDashboard.putNumber("collector rpm", CollectorSubsystem.getInstance().getRpm());
-        SmartDashboard.putNumber("Shooter rpm", ShooterSubsystem.getInstance().getVelocity());
-        SmartDashboard.putNumber("forward arm encoder", ArmSubsystem.getInstance().getFrontPos());
-        SmartDashboard.putNumber("backward arm encoder", ArmSubsystem.getInstance().getBackPos());
-
-        SmartDashboard.putData(CommandScheduler.getInstance());
-
-        SmartDashboard.putBoolean("manual", ArmSubsystem.getInstance().manualControl());
-        SmartDashboard.putNumber("stick", A05Constants.ALT_XBOX.getRightY());
-        Constants.CAMERA.updateTrackingData();
-        //SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("speaker center")));
-        SmartDashboard.putBoolean("newest frame targs", Constants.CAMERA.getNewestFrame().hasTargets());
+        disabledTelemetry();
     }
     
     
@@ -100,7 +115,7 @@ public class Robot extends A05Robot
     @Override
     public void autonomousInit()
     {
-        ArmSubsystem.getInstance().enableInit();
+        enableInit();
         // Sets up autonomous command
         super.autonomousInit();
     }
@@ -108,14 +123,16 @@ public class Robot extends A05Robot
     
     /** This method is called periodically during autonomous. */
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+        enabledTelemetry();
+    }
     
     
     @Override
     public void teleopInit()
     {
         if(!a05RobotContainer.driveRightStickPress.getAsBoolean()) {
-            ArmSubsystem.getInstance().enableInit();
+            enableInit();
         }
         // Cancels autonomous command
         super.teleopInit();
@@ -127,21 +144,7 @@ public class Robot extends A05Robot
     public void teleopPeriodic() {
         super.teleopPeriodic();
 
-        SmartDashboard.putNumber("analog encoder", Constants.ARM_ANALOG_ENCODER.getAbsolutePosition());
-        SmartDashboard.putBoolean("Note Sensor", Constants.NOTE_SENSOR.get());
-
-        SmartDashboard.putNumber("collector rpm", CollectorSubsystem.getInstance().getRpm());
-        SmartDashboard.putNumber("Shooter rpm", ShooterSubsystem.getInstance().getVelocity());
-        SmartDashboard.putNumber("forward arm encoder", ArmSubsystem.getInstance().getFrontPos());
-        SmartDashboard.putNumber("backward arm encoder", ArmSubsystem.getInstance().getBackPos());
-
-        SmartDashboard.putData(CommandScheduler.getInstance());
-
-        SmartDashboard.putBoolean("manual", ArmSubsystem.getInstance().manualControl());
-        SmartDashboard.putNumber("stick", A05Constants.ALT_XBOX.getRightY());
-        Constants.CAMERA.updateTrackingData();
-        //SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("speaker center")));
-        SmartDashboard.putBoolean("newest frame targs", Constants.CAMERA.getNewestFrame().hasTargets());
+        enabledTelemetry();
     }
     
     @Override
@@ -154,5 +157,7 @@ public class Robot extends A05Robot
     
     /** This method is called periodically during test mode. */
     @Override
-    public void testPeriodic() {}
+    public void testPeriodic() {
+        enabledTelemetry();
+    }
 }
