@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import org.a05annex.frc.NavX;
 import org.a05annex.util.Utl;
@@ -8,6 +9,7 @@ import org.a05annex.util.Utl;
 
 public class AutoClimbCommand extends Command {
     private final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
+    private final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
 
     private final double angleThreshold = 2.0;
     private final double settleTolerance = 0.01;
@@ -27,7 +29,7 @@ public class AutoClimbCommand extends Command {
     public AutoClimbCommand() {
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
-        addRequirements(this.climberSubsystem);
+        addRequirements(this.climberSubsystem, this.armSubsystem);
     }
 
     @Override
@@ -35,10 +37,16 @@ public class AutoClimbCommand extends Command {
         phase = CLIMBER_PHASE.RAISING;
         climberSubsystem.goToSmartMotionPosition(climberSubsystem.maxPos);
         lastRoll = 0.0;
+        ArmSubsystem.ArmPosition.CLIMB.goTo();
     }
 
     @Override
     public void execute() {
+        // The arm is not where we want it, return early
+        if(!armSubsystem.isInPosition(ArmSubsystem.ArmPosition.CLIMB.position)) {
+            return;
+        }
+
         switch(phase) {
             case RAISING:
                 if(climberSubsystem.isInPosition()) {

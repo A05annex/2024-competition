@@ -1,12 +1,11 @@
 package frc.robot.subsystems;
 
 
-import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import org.a05annex.frc.A05Constants;
+import frc.robot.Constants.CLIMBER_ARM_STATUS;
 import org.a05annex.frc.subsystems.SparkNeo;
 import org.a05annex.util.Utl;
 
@@ -170,11 +169,24 @@ public class ArmSubsystem extends SubsystemBase {
         enableInit = true;
     }
 
-
     // Go to position with smart motion
     public void goToSmartMotionPosition(double position) {
-
-        //goToPosition(position);
+        //Check to make sure the arm and climber are ok.
+        if(Constants.getClimberArmStatus() == CLIMBER_ARM_STATUS.COLLISION) {
+            /*
+            It's very possible that the arm and climber are actively touching, and we don't know how, so its safest
+            to just put the motors in brake mode.
+            */
+            stop();
+            return;
+        } else if(Constants.getClimberArmStatus() == CLIMBER_ARM_STATUS.DANGER) {
+            /*
+            The climber is higher than we want, and getting close to touching the arm. Move the arm to the protected
+            position, just to be safe.
+            */
+            ArmPosition.PROTECTED.goTo();
+            return;
+        }
 
         forwardMotor.setSmartMotionTarget(position);
         backwardMotor.setSmartMotionTarget(position);
@@ -230,6 +242,25 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void toggleManualControl() {
         manualControl = !manualControl;
+    }
+
+    @Override
+    public void periodic() {
+        if(Constants.getClimberArmStatus() == CLIMBER_ARM_STATUS.COLLISION) {
+            /*
+            It's very possible that the arm and climber are actively touching, and we don't know how, so its safest
+            to just put the motors in break.
+            */
+            stop();
+            return;
+        } else if(Constants.getClimberArmStatus() == CLIMBER_ARM_STATUS.DANGER) {
+            /*
+            The climber is higher than we want, and getting close to touching the arm. Move the arm to the protected
+            position, just to be safe.
+            */
+            ArmPosition.PROTECTED.goTo();
+            return;
+        }
     }
 }
 

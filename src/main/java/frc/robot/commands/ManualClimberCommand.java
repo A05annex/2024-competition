@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.NavX;
@@ -36,6 +38,22 @@ public class ManualClimberCommand extends Command {
      */
     @Override
     public void execute() {
+
+        if(Constants.getClimberArmStatus() == Constants.CLIMBER_ARM_STATUS.COLLISION) {
+            /*
+            It's very possible that the arm and climber are actively touching, and we don't know how, so its safest
+            to just put the motors in brake mode.
+            */
+            climberSubsystem.stop();
+            return;
+        } else if(Constants.getClimberArmStatus() == Constants.CLIMBER_ARM_STATUS.DANGER) {
+            /*
+            The climber is higher than we want, and getting close to touching the arm. Try moving the climber to zero
+            */
+            climberSubsystem.goToSmartMotionPosition(0.0);
+            return;
+        }
+
         if(!Utl.inTolerance(stick, 0.0, DEADBAND)) {
             climberSubsystem.goToDeltaPosition(stick * 10.0); // Distance far enough that the motor will do smart motion accel
             wasSpinning = true;

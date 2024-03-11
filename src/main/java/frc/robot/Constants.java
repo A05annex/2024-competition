@@ -8,6 +8,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import org.a05annex.frc.A05Constants;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.a05annex.frc.subsystems.PhotonCameraWrapper;
 import org.a05annex.util.AngleD;
 import org.a05annex.util.AngleUnit;
+import org.a05annex.util.Utl;
 import org.photonvision.PhotonCamera;
 
 /**
@@ -190,6 +192,28 @@ public final class Constants extends A05Constants
         aprilTagSetDictionary.put("stage far", new AprilTagSet(new int[] {13}, new int[] {14}, 1.3208, new AngleD(AngleUnit.DEGREES, 180.0)));
         aprilTagSetDictionary.put("stage left", new AprilTagSet(new int[] {11}, new int[] {15}, 1.3208, new AngleD(AngleUnit.DEGREES, 60.0)));
         aprilTagSetDictionary.put("stage right", new AprilTagSet(new int[] {12}, new int[] {16}, 1.3208, new AngleD(AngleUnit.DEGREES, 300.0)));
+    }
+
+
+    public enum CLIMBER_ARM_STATUS {
+        OKAY,
+        DANGER,
+        COLLISION
+    }
+
+
+    public static CLIMBER_ARM_STATUS getClimberArmStatus() {
+        final double collision = 5.0, danger = 3.0;
+
+        double climber = Utl.max(ClimberSubsystem.getInstance().getLeftPosition(), ClimberSubsystem.getInstance().getRightPosition());
+
+        if(climber > collision) {
+            return CLIMBER_ARM_STATUS.COLLISION;
+        } else if(climber > danger) {
+            return CLIMBER_ARM_STATUS.DANGER;
+        } else {
+            return CLIMBER_ARM_STATUS.OKAY;
+        }
     }
 
 
