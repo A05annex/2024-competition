@@ -9,39 +9,25 @@ import org.a05annex.util.Utl;
 
 public class ClimberSubsystem extends SubsystemBase {
 
+    private final static ClimberSubsystem INSTANCE = new ClimberSubsystem();
+    public final double maxPos = 1000.0;
     private final SparkNeo rightMotor = SparkNeo.factory(Constants.CAN_Devices.RIGHT_CLIMBER_MOTOR);
     private final SparkNeo leftMotor = SparkNeo.factory(Constants.CAN_Devices.LEFT_SHOOTER_MOTOR);
-
-
     // Declare PID constants for smart motion control
     private final double smKp = 0.00005, smKi = 0.000, smKiZone = 0.0, smKff = 0.000156, smMaxRPM = 3000.0,
             smMaxDeltaRPMSec = 3000.0, smMinRPM = 0.0, smError = 0.1;
-
     // Declare PID constants for position control
     private final double posKp = 0.22, posKi = 0.0, posKiZone = 0.0, posKff = 0.0;
-
     // Declare PID constants for speed (rpm) control
     private final double rpmKp = 0.5, rpmKi = 0.0, rpmKiZone = 0.0, rpmKff = 0.0;
-
-    public final double maxPos = 1000.0;
-
     // Declare min and max soft limits and where the motor thinks it starts
     private final Double minPosition = 0.0, maxPosition = maxPos, startPosition = 0.0;
-
+    private final double inPositionTolerance = 0.5;
     private double offset = 0.0;
-
     private double leftReqPos = 0.0;
     private double rightReqPos = 0.0;
-
-    private final double inPositionTolerance = 0.5;
-
     private boolean enableInit = false;
     private int enableInitStartup = 0;
-
-    private final static ClimberSubsystem INSTANCE = new ClimberSubsystem();
-    public static ClimberSubsystem getInstance() {
-        return INSTANCE;
-    }
 
     private ClimberSubsystem() {
         rightMotor.startConfig();
@@ -68,6 +54,10 @@ public class ClimberSubsystem extends SubsystemBase {
 
         enableInit = false;
         enableInitStartup = 0;
+    }
+
+    public static ClimberSubsystem getInstance() {
+        return INSTANCE;
     }
 
     public void enableInit() {
@@ -104,6 +94,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public double getRightPosition() {
         return rightMotor.getEncoderPosition();
     }
+
     public double getLeftPosition() {
         return leftMotor.getEncoderPosition();
     }
@@ -116,6 +107,7 @@ public class ClimberSubsystem extends SubsystemBase {
         leftMotor.setSmartMotionTarget(position);
         leftReqPos = position;
     }
+
     public void rightMotorSmartMotionPosition(double position) {
         rightMotor.setSmartMotionTarget(position);
         rightReqPos = position;

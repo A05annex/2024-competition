@@ -15,13 +15,11 @@ public class AutoShootCommand extends DriveCommand {
     private final PhotonCameraWrapper camera = Constants.CAMERA;
 
     private final ShooterFeedCommand shooterFeedCommand = new ShooterFeedCommand();
-    private boolean feedStarted;
-    private int isFinishedDelay = 0;
-
     //TODO: test this value, may need to change
     private final double TARGET_ROTATION_KP = 0.8;
-
     private final A05Constants.AprilTagSet tagSet = Constants.aprilTagSetDictionary.get("speaker center");
+    private boolean feedStarted;
+    private int isFinishedDelay = 0;
 
     public AutoShootCommand() {
         super(SpeedCachedSwerve.getInstance());
@@ -42,7 +40,7 @@ public class AutoShootCommand extends DriveCommand {
         if(!camera.isTargetDataNew(tagSet)) {
             return; // Wait till next tick
         }
-        
+
         this.conditionedRotate = (camera.getTarget(tagSet).getYaw() - 4.60) / 35.0 * TARGET_ROTATION_KP;
 
         // lets linear interpolate to find arm and rpm numbers

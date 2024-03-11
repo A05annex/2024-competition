@@ -8,10 +8,8 @@ import org.a05annex.util.Utl;
 
 public class ManualArmCommand extends Command {
     private final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-
-    private boolean wasSpinning;
-
     private final double DEADBAND = 0.05;
+    private boolean wasSpinning;
 
     public ManualArmCommand() {
         // each subsystem used by the command must be passed into the
@@ -24,7 +22,7 @@ public class ManualArmCommand extends Command {
      */
     @Override
     public void initialize() {
-       wasSpinning = false;
+        wasSpinning = false;
     }
 
     /**
@@ -36,20 +34,20 @@ public class ManualArmCommand extends Command {
         double stick = -A05Constants.ALT_XBOX.getRightY();
 
         if(!armSubsystem.manualControl()) {
-          wasSpinning = false;
-          return;
-       }
+            wasSpinning = false;
+            return;
+        }
 
-       if(!Utl.inTolerance(stick, 0.0, DEADBAND)) {
-          armSubsystem.goToDeltaPosition(stick * 4.0); // Distance far enough that the motor will do smart motion accel
-          wasSpinning = true;
-          return;
-       }
+        if(!Utl.inTolerance(stick, 0.0, DEADBAND)) {
+            armSubsystem.goToDeltaPosition(stick * 4.0); // Distance far enough that the motor will do smart motion accel
+            wasSpinning = true;
+            return;
+        }
 
-       if(wasSpinning) {
-          armSubsystem.goToDeltaPosition(0.0);
-          wasSpinning = false;
-       }
+        if(wasSpinning) {
+            armSubsystem.goToDeltaPosition(0.0);
+            wasSpinning = false;
+        }
     }
 
     // No isFinished() or end() because this command should only be canceled when another command is run

@@ -24,8 +24,7 @@ import java.util.Collections;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends A05Robot
-{
+public class Robot extends A05Robot {
     public void permanentTelemetry() {
         SmartDashboard.putNumber("analog encoder", Constants.ARM_ANALOG_ENCODER.getAbsolutePosition());
         SmartDashboard.putBoolean("Note Sensor", Constants.NOTE_SENSOR.get());
@@ -67,11 +66,10 @@ public class Robot extends A05Robot
      * initialization code.
      */
     @Override
-    public void robotInit()
-    {
+    public void robotInit() {
         super.robotInit();
 
-        Constants.setSparkConfig(true,false);
+        Constants.setSparkConfig(true, false);
 
         DataLogManager.start();
 
@@ -85,77 +83,83 @@ public class Robot extends A05Robot
         Constants.setAprilTagSetDictionary();
 
         // Load the robot settings list
-        Collections.addAll(A05Constants.ROBOT_SETTINGS_LIST,Constants.ROBOT_SETTINGS);
+        Collections.addAll(A05Constants.ROBOT_SETTINGS_LIST, Constants.ROBOT_SETTINGS);
         // Load the autonomous path list
-        Collections.addAll(A05Constants.AUTONOMOUS_PATH_LIST,Constants.AUTONOMOUS_PATHS);
+        Collections.addAll(A05Constants.AUTONOMOUS_PATH_LIST, Constants.AUTONOMOUS_PATHS);
         // Load the driver list
-        Collections.addAll(A05Constants.DRIVER_SETTINGS_LIST,Constants.DRIVER_SETTINGS);
+        Collections.addAll(A05Constants.DRIVER_SETTINGS_LIST, Constants.DRIVER_SETTINGS);
 
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         setRobotContainer(new RobotContainer());
     }
-    
 
-    
-    /** This method is called once each time the robot enters Disabled mode. */
+
+    /**
+     * This method is called once each time the robot enters Disabled mode.
+     */
     @Override
     public void disabledInit() {
         ArmSubsystem.getInstance().stop();
     }
-    
-    
+
+
     @Override
     public void disabledPeriodic() {
         disabledTelemetry();
     }
-    
-    
-    /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+
+
+    /**
+     * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
+     */
     @Override
-    public void autonomousInit()
-    {
+    public void autonomousInit() {
         enableInit();
         // Sets up autonomous command
         super.autonomousInit();
     }
-    
-    
-    /** This method is called periodically during autonomous. */
+
+
+    /**
+     * This method is called periodically during autonomous.
+     */
     @Override
     public void autonomousPeriodic() {
         enabledTelemetry();
     }
-    
-    
+
+
     @Override
-    public void teleopInit()
-    {
+    public void teleopInit() {
         if(!a05RobotContainer.driveRightStickPress.getAsBoolean()) {
             enableInit();
         }
         // Cancels autonomous command
         super.teleopInit();
     }
-    
-    
-    /** This method is called periodically during operator control. */
+
+
+    /**
+     * This method is called periodically during operator control.
+     */
     @Override
     public void teleopPeriodic() {
         super.teleopPeriodic();
 
         enabledTelemetry();
     }
-    
+
     @Override
-    public void testInit()
-    {
+    public void testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
     }
-    
-    
-    /** This method is called periodically during test mode. */
+
+
+    /**
+     * This method is called periodically during test mode.
+     */
     @Override
     public void testPeriodic() {
         enabledTelemetry();

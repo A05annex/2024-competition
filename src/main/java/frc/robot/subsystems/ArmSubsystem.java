@@ -11,43 +11,29 @@ import org.a05annex.util.Utl;
 
 public class ArmSubsystem extends SubsystemBase {
 
+    private final static ArmSubsystem INSTANCE = new ArmSubsystem();
+    // Position most recently requested of the arm
+    private static double requestedPosition = 0.0;
     private final SparkNeo forwardMotor = SparkNeo.factory(Constants.CAN_Devices.FORWARD_ARM_MOTOR);
     private final SparkNeo backwardMotor = SparkNeo.factory(Constants.CAN_Devices.BACKWARD_ARM_MOTOR);
-
     // Declare PID constants for smart motion control
     private final double
             smKp = 0.00025,
-            //smKp = 0.000025,
-            smKi = 0.0001, smKiZone = 0.2, smKff = 0.000156, smMaxRPM = 3000.0,
+    //smKp = 0.000025,
+    smKi = 0.0001, smKiZone = 0.2, smKff = 0.000156, smMaxRPM = 3000.0,
             smMaxDeltaRPMSec = 3000.0, smMinRPM = 0.0, smError = 0.1, smKd = 0.0;
-
     // Declare PID constants for position control
     private final double posKp = 0.00005, posKi = 0.0, posKiZone = 0.0, posKff = 0.0;
-
     // Declare PID constants for speed (rpm) control
     private final double rpmKp = 0.5, rpmKi = 0.0, rpmKiZone = 0.0, rpmKff = 0.0;
-
     // Declare min and max soft limits and where the motor thinks it starts
     private final Double minPosition = -1.0, maxPosition = 34.0;
-
     // Tolerance to decide if in position
     private final double IN_POSITION_DEADBAND = 0.5;
-
-    // Position most recently requested of the arm
-    private static double requestedPosition = 0.0;
-
-    private boolean enableInit = false;
-
-    private boolean manualControl = false;
-
     private final double ANALOG_ENCODER_ZERO = 0.9307;
-
     private final int gearRatio = 100;
-
-    private final static ArmSubsystem INSTANCE = new ArmSubsystem();
-    public static ArmSubsystem getInstance() {
-        return INSTANCE;
-    }
+    private boolean enableInit = false;
+    private boolean manualControl = false;
 
     private ArmSubsystem() {
         forwardMotor.startConfig();
@@ -76,37 +62,11 @@ public class ArmSubsystem extends SubsystemBase {
         //backwardMotor.setEncoderPosition((Constants.getArmEncoder() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio);
     }
 
-    //public void double backwardMotor.SampleMotorSubsystem null (0.0);:
-
-    public enum ArmPosition {
-        GROUND(0.65),
-        CLIMB(0.0),// We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
-        PROTECTED(5.0),
-        //START((Constants.getArmEncoder() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio),
-        SOURCE(19.539),
-        AMP(31.5);
-
-        // 90 = 24.9522
-        //Analog = 0.6381
-
-        private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-
-        public final double position;
-
-        ArmPosition(double position) {
-            this.position = position;
-        }
-
-        public void goTo() {
-            ArmSubsystem.getInstance().goToSmartMotionPosition(this.position);
-            requestedPosition = this.position;
-        }
-
-        public boolean isInPosition() {
-            return armSubsystem.isInPosition(this.position);
-        }
+    public static ArmSubsystem getInstance() {
+        return INSTANCE;
     }
 
+    //public void double backwardMotor.SampleMotorSubsystem null (0.0);:
 
     public void enableInit() {
         if(enableInit) {
@@ -260,6 +220,35 @@ public class ArmSubsystem extends SubsystemBase {
             */
             ArmPosition.PROTECTED.goTo();
             return;
+        }
+    }
+
+    public enum ArmPosition {
+        GROUND(0.65),
+        CLIMB(0.0),// We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
+        PROTECTED(5.0),
+        //START((Constants.getArmEncoder() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio),
+        SOURCE(19.539),
+        AMP(31.5);
+
+        // 90 = 24.9522
+        //Analog = 0.6381
+
+        private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+
+        public final double position;
+
+        ArmPosition(double position) {
+            this.position = position;
+        }
+
+        public void goTo() {
+            ArmSubsystem.getInstance().goToSmartMotionPosition(this.position);
+            requestedPosition = this.position;
+        }
+
+        public boolean isInPosition() {
+            return armSubsystem.isInPosition(this.position);
         }
     }
 }

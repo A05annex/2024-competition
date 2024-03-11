@@ -15,15 +15,6 @@ public class AutoClimbCommand extends Command {
     private final double settleTolerance = 0.01;
 
     private double lastRoll = 0.0;
-
-    enum CLIMBER_PHASE {
-        RAISING,
-        LEFT_TENSION,
-        RIGHT_TENSION,
-        SETTLE,
-        LIFT
-    }
-
     private CLIMBER_PHASE phase = CLIMBER_PHASE.RAISING;
 
     public AutoClimbCommand() {
@@ -96,5 +87,13 @@ public class AutoClimbCommand extends Command {
     @Override
     public void end(boolean interrupted) {
 
+    }
+
+    enum CLIMBER_PHASE {
+        RAISING,
+        LEFT_TENSION,
+        RIGHT_TENSION,
+        SETTLE,
+        LIFT
     }
 }

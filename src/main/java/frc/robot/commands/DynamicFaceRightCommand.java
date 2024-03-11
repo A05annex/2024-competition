@@ -17,7 +17,8 @@ public class DynamicFaceRightCommand extends A05DriveCommand {
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     @Override
     public void execute() {

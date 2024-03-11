@@ -37,7 +37,6 @@ public class AmpAprilTagCommand extends A05AprilTagPositionCommand {
         positionAtFrame = swerveDrive.getRobotRelativePositionSince(camera.getLatestTargetTime());
 
 
-
         executeTargeting();
     }
 

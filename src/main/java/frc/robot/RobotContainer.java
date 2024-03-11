@@ -11,17 +11,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.commands.DriveCommand;
-import frc.robot.commands.ManualArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05RobotContainer;
 import org.a05annex.frc.subsystems.SpeedCachedSwerve;
-
-import java.util.logging.Logger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -100,7 +94,7 @@ public class RobotContainer extends A05RobotContainer {
         //driveRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
         driveRightBumper.onTrue(new InstantCommand(ShooterSubsystem.getInstance()::speaker)).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));
         altRightBumper.toggleOnTrue(new GroundPickupCommand());
-                //.onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
+        //.onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
 
         //altB.whileTrue(new DynamicTargetRightCommandGroup()); // Adjusts for color, targets amp or source, whichever is to the right
         altA.whileTrue(new SpeakerShootCommand()); // Scores at the speaker

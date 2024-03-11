@@ -6,17 +6,14 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 
 public class EjectCommand extends Command {
+    /**
+     * {@value #isFinishedTicks} * 20ms = time in sec
+     */
+    private static final int isFinishedTicks = 100;
     private final CollectorSubsystem collectorSubsystem = CollectorSubsystem.getInstance();
     private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
-
     private final double shooterEjectRpm = 1000;
-
     private int ticksElapsed;
-
-   /**
-    * {@value #isFinishedTicks} * 20ms = time in sec
-    */
-   private static final int isFinishedTicks = 100;
 
     public EjectCommand() {
         // each subsystem used by the command must be passed into the

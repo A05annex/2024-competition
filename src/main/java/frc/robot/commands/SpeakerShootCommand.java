@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants;
 import frc.robot.ShotLogger;
 import frc.robot.subsystems.ArmSubsystem;
@@ -9,7 +8,6 @@ import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.subsystems.PhotonCameraWrapper;
 import org.a05annex.frc.subsystems.SpeedCachedSwerve;
-import org.opencv.photo.Photo;
 
 
 public class SpeakerShootCommand extends DriveCommand {
@@ -19,13 +17,10 @@ public class SpeakerShootCommand extends DriveCommand {
     private final PhotonCameraWrapper camera = Constants.CAMERA;
 
     private final ShooterFeedCommand shooterFeedCommand = new ShooterFeedCommand();
-    private boolean feedStarted = false;
-
     //TODO: test this value, may need to change
     private final double TARGET_ROTATION_KP = 0.8;
-
     private final A05Constants.AprilTagSet tagSet = Constants.aprilTagSetDictionary.get("speaker center");
-
+    private boolean feedStarted = false;
     private int isFinishedDelay = 0;
 
     public SpeakerShootCommand() {

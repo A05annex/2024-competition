@@ -9,15 +9,15 @@ import frc.robot.Constants;
 public class DynamicTargetRightCommandGroup extends ConditionalCommand {
     public DynamicTargetRightCommandGroup() {
         super(
-            new ConditionalCommand(
-                new SequentialCommandGroup(new AprilTagPositionCommand(Constants.CAMERA, 0.1, 0.0, "source far")),
                 new ConditionalCommand(
-                    new SequentialCommandGroup(new AprilTagPositionCommand(Constants.CAMERA, 0.1, 0.0, "source close")),
-                    new SequentialCommandGroup(new AprilTagPositionCommand(Constants.CAMERA, 0.1, 0.5, "source far")),
-                    DynamicTargetRightCommandGroup::isSourceRight),
-                DynamicTargetRightCommandGroup::isSourceLeft),
-            new SequentialCommandGroup(new AprilTagPositionCommand(Constants.CAMERA, 0.33, 0.0, "amp")),
-            DynamicTargetRightCommandGroup::isBlueAlliance);
+                        new SequentialCommandGroup(new AprilTagPositionCommand(Constants.CAMERA, 0.1, 0.0, "source far")),
+                        new ConditionalCommand(
+                                new SequentialCommandGroup(new AprilTagPositionCommand(Constants.CAMERA, 0.1, 0.0, "source close")),
+                                new SequentialCommandGroup(new AprilTagPositionCommand(Constants.CAMERA, 0.1, 0.5, "source far")),
+                                DynamicTargetRightCommandGroup::isSourceRight),
+                        DynamicTargetRightCommandGroup::isSourceLeft),
+                new SequentialCommandGroup(new AprilTagPositionCommand(Constants.CAMERA, 0.33, 0.0, "amp")),
+                DynamicTargetRightCommandGroup::isBlueAlliance);
 
         /*
         Using multiple levels of logic in the command composition style is not very readable, below is a logic flow tree (Left is true, right is false)

@@ -2,10 +2,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import org.a05annex.frc.A05Constants;
-import org.a05annex.frc.NavX;
 import org.a05annex.util.Utl;
 
 
@@ -13,10 +11,8 @@ public class ManualClimberCommand extends Command {
     private final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
 
     private final double stick = A05Constants.DRIVE_XBOX.getLeftY();
-
-    private boolean wasSpinning;
-
     private final double DEADBAND = 0.05;
+    private boolean wasSpinning;
 
     public ManualClimberCommand() {
         // each subsystem used by the command must be passed into the
