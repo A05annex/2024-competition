@@ -20,6 +20,10 @@ public class ClimberTensionCommand extends Command {
 
     @Override
     public void initialize() {
+        if(climberSubsystem.isInitialized()) {
+            return;
+        }
+
         double rpm = -250.0;
 
         climberSubsystem.leftMotorRpm(rpm);
@@ -61,6 +65,8 @@ public class ClimberTensionCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-
+        if(!interrupted) {
+            climberSubsystem.initialize();
+        }
     }
 }
