@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05RobotContainer;
@@ -50,7 +51,7 @@ public class RobotContainer extends A05RobotContainer {
                 robotSettings.maxSpeedCalibration);
 
         driveSubsystem.setDefaultCommand(driveCommand);
-        //ClimberSubsystem.getInstance().setDefaultCommand(new ManualClimberCommand());
+        ClimberSubsystem.getInstance().setDefaultCommand(new ManualClimberCommand());
 
         ArmSubsystem.getInstance().setDefaultCommand(new ManualArmCommand());
 

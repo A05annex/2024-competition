@@ -19,7 +19,7 @@ public class CollectorSubsystem extends SubsystemBase {
     private final double rpmKp = 0.0004, rpmKi = 0.000001, rpmKiZone = 200.0, rpmKff = 0.000156;
     // Declare min and max soft limits and where the motor thinks it starts
     private final Double minPosition = null, maxPosition = null, startPosition = 500.0;
-    private final double intakeRPM = 5000, ejectRPM = 2000, feedRPM = 3000;
+    private final double intakeRPM = 5000, ejectRPM = 2000, feedRPM = 5000;
 
     private CollectorSubsystem() {
         motor.startConfig();

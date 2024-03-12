@@ -94,7 +94,7 @@ public final class Constants extends A05Constants {
     }
 
     public static CLIMBER_ARM_STATUS getClimberArmStatus() {
-        final double collision = 5.0, danger = 3.0;
+        final double collision = 50.0, danger = 30.0;
 
         double climber = Utl.max(ClimberSubsystem.getInstance().getLeftPosition(), ClimberSubsystem.getInstance().getRightPosition());
 
@@ -176,17 +176,18 @@ public final class Constants extends A05Constants {
     }
 
     public static final class LinearInterpolation {
+        public static final double offset = -0.65;
         static final LinearInterpolation[] calibratedPoints = {
-                new LinearInterpolation(0.0, 14.015, 5000),
-                new LinearInterpolation(1.49, 14.015, 5000),
-                new LinearInterpolation(1.55, 14.82, 5000),
-                new LinearInterpolation(1.66, 15.315, 5000),
-                new LinearInterpolation(1.82, 15.367, 5000),
-                new LinearInterpolation(1.88, 16.149, 5000),
-                new LinearInterpolation(1.92, 16.244, 5000),
-                new LinearInterpolation(2.03, 16.501, 5000),
-                new LinearInterpolation(2.34, 16.763, 5000),
-                new LinearInterpolation(2.71, 17.043, 5000)
+                new LinearInterpolation(0.01, 14.015 + offset, 5000),
+                new LinearInterpolation(1.49, 14.015 + offset, 5000),
+                new LinearInterpolation(1.55, 14.820 + offset, 5000),
+                new LinearInterpolation(1.66, 15.315 + offset, 5000),
+                new LinearInterpolation(1.82, 15.367 + offset, 5000),
+                new LinearInterpolation(1.88, 16.149 + offset, 5000),
+                new LinearInterpolation(1.92, 16.244 + offset, 5000),
+                new LinearInterpolation(2.03, 16.501 + offset, 5000),
+                new LinearInterpolation(2.34, 16.763 + offset, 5000),
+                new LinearInterpolation(2.71, 17.043 + offset, 5000)
         };
         public final double distance;
         public final double arm;

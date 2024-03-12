@@ -18,7 +18,7 @@ public class ArmSubsystem extends SubsystemBase {
     private final SparkNeo backwardMotor = SparkNeo.factory(Constants.CAN_Devices.BACKWARD_ARM_MOTOR);
     // Declare PID constants for smart motion control
     private final double
-            smKp = 0.00025,
+            smKp = 0.0003,
     //smKp = 0.000025,
     smKi = 0.0001, smKiZone = 0.2, smKff = 0.000156, smMaxRPM = 3000.0,
             smMaxDeltaRPMSec = 3000.0, smMinRPM = 0.0, smError = 0.1, smKd = 0.0;
@@ -144,7 +144,8 @@ public class ArmSubsystem extends SubsystemBase {
             The climber is higher than we want, and getting close to touching the arm. Move the arm to the protected
             position, just to be safe.
             */
-            ArmPosition.PROTECTED.goTo();
+            //forwardMotor.setSmartMotionTarget(ArmPosition.PROTECTED.position);
+            //backwardMotor.setSmartMotionTarget(ArmPosition.PROTECTED.position);
             return;
         }
 
@@ -212,19 +213,17 @@ public class ArmSubsystem extends SubsystemBase {
             to just put the motors in break.
             */
             stop();
-            return;
         } else if(Constants.getClimberArmStatus() == CLIMBER_ARM_STATUS.DANGER) {
             /*
             The climber is higher than we want, and getting close to touching the arm. Move the arm to the protected
             position, just to be safe.
             */
             ArmPosition.PROTECTED.goTo();
-            return;
         }
     }
 
     public enum ArmPosition {
-        GROUND(0.65),
+        GROUND(0.0),
         CLIMB(0.0),// We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
         PROTECTED(5.0),
         //START((Constants.getArmEncoder() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio),

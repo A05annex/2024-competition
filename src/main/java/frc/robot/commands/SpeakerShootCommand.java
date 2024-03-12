@@ -92,7 +92,6 @@ public class SpeakerShootCommand extends DriveCommand {
 
     @Override
     public boolean isFinished() {
-        System.out.println(shooterFeedCommand.isScheduled());
         return feedStarted && !shooterFeedCommand.isScheduled() && isFinishedDelay >= 150;
     }
 
