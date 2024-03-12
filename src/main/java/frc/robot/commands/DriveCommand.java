@@ -28,8 +28,5 @@ public class DriveCommand extends A05DriveCommand {
     public void execute() {
         //This runs the default swerve calculations for xbox control
         super.execute();
-
-        conditionStick();
-        iSwerveDrive.swerveDrive(conditionedDirection, conditionedSpeed, conditionedRotate);
     }
 }
