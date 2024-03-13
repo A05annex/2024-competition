@@ -74,7 +74,7 @@ public class Robot extends A05Robot {
     public void robotInit() {
         super.robotInit();
 
-        Constants.setSparkConfig(true, false);
+        Constants.setSparkConfig(true, true);
 
         // Set the drive constants that are specific to this swerve geometry.
         // Some drive geometry is passed in RobotContainer's constructor

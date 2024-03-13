@@ -176,7 +176,7 @@ public final class Constants extends A05Constants {
     }
 
     public static final class LinearInterpolation {
-        public static final double offset = -0.65;
+        public static final double offset = -1.05;
         static final LinearInterpolation[] calibratedPoints = {
                 new LinearInterpolation(0.01, 14.015 + offset, 5000),
                 new LinearInterpolation(1.49, 14.015 + offset, 5000),

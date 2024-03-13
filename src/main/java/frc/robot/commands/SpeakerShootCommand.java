@@ -80,7 +80,7 @@ public class SpeakerShootCommand extends DriveCommand {
         iSwerveDrive.swerveDrive(conditionedDirection, conditionedSpeed, conditionedRotate);
 
         // Is this the first tick that the arm and shooter are at the correct values?
-        if(armSubsystem.isInPosition() && shooterSubsystem.getVelocity() > 5300.0) {
+        if(armSubsystem.isInPosition() && shooterSubsystem.getVelocity() > 5350.0) {
             // Feed in the note and mark feedStarted as true so we don't create infinite feed commands
             if(!feedStarted) {
                 shooterFeedCommand.schedule();
@@ -92,7 +92,7 @@ public class SpeakerShootCommand extends DriveCommand {
 
     @Override
     public boolean isFinished() {
-        return feedStarted && !shooterFeedCommand.isScheduled() && isFinishedDelay >= 150;
+        return feedStarted && !shooterFeedCommand.isScheduled() && isFinishedDelay >= 25;
     }
 
     @Override

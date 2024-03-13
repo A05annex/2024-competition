@@ -18,7 +18,7 @@ public class ArmSubsystem extends SubsystemBase {
     private final SparkNeo backwardMotor = SparkNeo.factory(Constants.CAN_Devices.BACKWARD_ARM_MOTOR);
     // Declare PID constants for smart motion control
     private final double
-            smKp = 0.0003,
+            smKp = 0.0005,
     //smKp = 0.000025,
     smKi = 0.0001, smKiZone = 0.2, smKff = 0.000156, smMaxRPM = 3000.0,
             smMaxDeltaRPMSec = 3000.0, smMinRPM = 0.0, smError = 0.1, smKd = 0.0;
@@ -30,7 +30,7 @@ public class ArmSubsystem extends SubsystemBase {
     private final Double minPosition = -1.0, maxPosition = 34.0;
     // Tolerance to decide if in position
     private final double IN_POSITION_DEADBAND = 0.5;
-    private final double ANALOG_ENCODER_ZERO = 0.9307;
+    private final double ANALOG_ENCODER_ZERO = 0.9287;
     private final int gearRatio = 100;
     private boolean enableInit = false;
     private boolean manualControl = false;
@@ -101,9 +101,10 @@ public class ArmSubsystem extends SubsystemBase {
 
             double currentPos = forwardMotor.getEncoderPosition();
 
-            System.out.printf("TIME: %f; support = %f; tension = %f;",
-                    Timer.getFPGATimestamp() - startTime, currentPos, backwardMotor.getEncoderPosition());
+            System.out.println(String.format("TIME: %f; support = %f; tension = %f;",
+                    Timer.getFPGATimestamp() - startTime, currentPos, backwardMotor.getEncoderPosition()));
 
+            System.out.flush();
 
             // Repeat until the voltage motor moves the position motor
             if(currentPos > 0.0) {
@@ -203,23 +204,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void toggleManualControl() {
         manualControl = !manualControl;
-    }
-
-    @Override
-    public void periodic() {
-        if(Constants.getClimberArmStatus() == CLIMBER_ARM_STATUS.COLLISION) {
-            /*
-            It's very possible that the arm and climber are actively touching, and we don't know how, so its safest
-            to just put the motors in break.
-            */
-            stop();
-        } else if(Constants.getClimberArmStatus() == CLIMBER_ARM_STATUS.DANGER) {
-            /*
-            The climber is higher than we want, and getting close to touching the arm. Move the arm to the protected
-            position, just to be safe.
-            */
-            ArmPosition.PROTECTED.goTo();
-        }
     }
 
     public enum ArmPosition {

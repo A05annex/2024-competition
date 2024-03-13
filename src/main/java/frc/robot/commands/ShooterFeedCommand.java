@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.CollectorSubsystem;
 
 
@@ -9,6 +10,7 @@ public class ShooterFeedCommand extends Command {
 
     private final int endTicks;
     private int currentTicks;
+    private int noteTimeout = 0;
 
     public ShooterFeedCommand(int endTicks) {
         // each subsystem used by the command must be passed into the
@@ -25,6 +27,7 @@ public class ShooterFeedCommand extends Command {
     public void initialize() {
         collectorSubsystem.feed();
         currentTicks = 0;
+        noteTimeout = 0;
     }
 
     @Override
@@ -32,11 +35,16 @@ public class ShooterFeedCommand extends Command {
         currentTicks++;
         System.out.println(currentTicks);
 
+        if(Constants.NOTE_SENSOR.get()) {
+            noteTimeout++;
+        } else {
+            noteTimeout = 0;
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return currentTicks >= endTicks;
+        return currentTicks >= endTicks || noteTimeout > 5;
     }
 
     @Override

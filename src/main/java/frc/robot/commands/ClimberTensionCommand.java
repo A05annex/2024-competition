@@ -20,11 +20,11 @@ public class ClimberTensionCommand extends Command {
 
     @Override
     public void initialize() {
-        if(climberSubsystem.isInitialized()) {
-            return;
-        }
+//        if(climberSubsystem.isInitialized()) {
+//            return;
+//        }
 
-        double rpm = -250.0;
+        double rpm = -1000.0;
 
         climberSubsystem.leftMotorRpm(rpm);
         climberSubsystem.rightMotorRpm(rpm);
@@ -39,11 +39,11 @@ public class ClimberTensionCommand extends Command {
             return;
         }
 
-        double stallRpm = -200.0;
+        double stallRpm = -900.0;
 
         if(!leftStopped) {
             if(climberSubsystem.getLeftRpm() > stallRpm) {
-                climberSubsystem.zeroLeftMotor();
+                //climberSubsystem.zeroLeftMotor();
                 climberSubsystem.leftMotorSmartMotionPosition(0.0);
                 leftStopped = true;
             }
@@ -51,7 +51,7 @@ public class ClimberTensionCommand extends Command {
 
         if(!rightStopped) {
             if(climberSubsystem.getRightRpm() > stallRpm) {
-                climberSubsystem.zeroRightMotor();
+                //climberSubsystem.zeroRightMotor();
                 climberSubsystem.rightMotorSmartMotionPosition(0.0);
                 rightStopped = true;
             }

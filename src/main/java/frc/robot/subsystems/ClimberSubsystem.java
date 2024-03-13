@@ -22,7 +22,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public final double maxPos = 190.0;
 
     // Declare min and max soft limits and where the motor thinks it starts
-    private final Double minPosition = 0.0, maxPosition = maxPos, startPosition = 0.0;
+    private final Double minPosition = -100.0, maxPosition = 190.0, startPosition = 0.0;
     private final double inPositionTolerance = 0.5;
     private double offset = 0.0;
     private double leftReqPos = 0.0;
@@ -32,25 +32,28 @@ public class ClimberSubsystem extends SubsystemBase {
     private ClimberSubsystem() {
         rightMotor.startConfig();
         rightMotor.setCurrentLimit(SparkNeo.UseType.RPM_OCCASIONAL_STALL, SparkNeo.BreakerAmps.Amps40);
-        rightMotor.setSoftLimits(minPosition, maxPosition);
+        //rightMotor.setSoftLimits(minPosition, maxPosition);
         rightMotor.setDirection(SparkNeo.Direction.REVERSE);
         rightMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         rightMotor.setPositionPID(posKp, posKi, posKiZone, posKff);
         rightMotor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
         rightMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
         rightMotor.endConfig();
-        rightMotor.setEncoderPosition(startPosition);
+        rightMotor.setEncoderPosition(50.0);
 
         leftMotor.startConfig();
         leftMotor.setCurrentLimit(SparkNeo.UseType.RPM_OCCASIONAL_STALL, SparkNeo.BreakerAmps.Amps40);
-        leftMotor.setSoftLimits(minPosition, maxPosition);
+        //leftMotor.setSoftLimits(minPosition, maxPosition);
         leftMotor.setDirection(SparkNeo.Direction.DEFAULT);
         leftMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         leftMotor.setPositionPID(posKp, posKi, posKiZone, posKff);
         leftMotor.setSmartMotion(smKp, smKi, smKiZone, smKff, smMaxRPM, smMaxDeltaRPMSec, smMinRPM, smError);
         leftMotor.setRpmPID(rpmKp, rpmKi, rpmKiZone, rpmKff);
         leftMotor.endConfig();
-        leftMotor.setEncoderPosition(startPosition);
+        leftMotor.setEncoderPosition(50.0);
+
+        System.out.println("****************** CLIMBER CONSTRUCTED **********************");
+        System.out.flush();
     }
 
     private final static ClimberSubsystem INSTANCE = new ClimberSubsystem();
@@ -63,10 +66,6 @@ public class ClimberSubsystem extends SubsystemBase {
         leftMotor.setSmartMotionTarget(position - offset);
         leftReqPos = position;
         rightReqPos = position;
-    }
-
-    public void resetEncoder() {
-        rightMotor.setEncoderPosition(0.0);
     }
 
     public void stop() {
