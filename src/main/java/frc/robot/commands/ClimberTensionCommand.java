@@ -27,7 +27,7 @@ public class ClimberTensionCommand extends Command {
         climberSubsystem.setLeftEncoderPosition(climberSubsystem.maxPos);
         climberSubsystem.setRightEncoderPosition(climberSubsystem.maxPos);
 
-        double rpm = -250.0;
+        double rpm = -300.0;
 
         climberSubsystem.leftMotorRpm(rpm);
         climberSubsystem.rightMotorRpm(rpm);

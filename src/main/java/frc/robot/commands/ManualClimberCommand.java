@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.util.Utl;
@@ -13,6 +14,8 @@ public class ManualClimberCommand extends Command {
     private double stick = -A05Constants.ALT_XBOX.getLeftY();
     private final double DEADBAND = 0.05;
     private boolean wasSpinning;
+
+    private boolean climbPos = false;
 
     public ManualClimberCommand() {
         // each subsystem used by the command must be passed into the
@@ -55,10 +58,7 @@ public class ManualClimberCommand extends Command {
         if(!Utl.inTolerance(stick, 0.0, DEADBAND)) {
             climberSubsystem.goToDeltaPosition(stick * 50.0); // Distance far enough that the motor will do smart motion accel
             wasSpinning = true;
-            return;
-        }
-
-        if(wasSpinning) {
+        } else if(wasSpinning) {
             climberSubsystem.goToDeltaPosition(0.0);
             wasSpinning = false;
         }

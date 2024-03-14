@@ -208,7 +208,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public enum ArmPosition {
         GROUND(0.0),
-        CLIMB(0.0),// We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
+        CLIMB(1.0),// We may use this position as somewhere above the ground to protect from bumper collision, but under the stage height
         PROTECTED(5.0),
         //START((Constants.getArmEncoder() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio),
         SOURCE(19.539),
