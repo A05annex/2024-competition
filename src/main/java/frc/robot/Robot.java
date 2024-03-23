@@ -6,6 +6,8 @@
 package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ClimberTensionCommand;
@@ -17,6 +19,7 @@ import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05Robot;
 import org.a05annex.frc.NavX;
 import org.a05annex.frc.subsystems.SpeedCachedSwerve;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import java.util.Collections;
 
@@ -94,6 +97,8 @@ public class Robot extends A05Robot {
         // update dictionary with all needed values
         Constants.setAprilTagSetDictionary();
 
+        SpeedCachedSwerve.getInstance().setLogging(true);
+
         // Load the robot settings list
         Collections.addAll(A05Constants.ROBOT_SETTINGS_LIST, Constants.ROBOT_SETTINGS);
         // Load the autonomous path list
@@ -121,6 +126,8 @@ public class Robot extends A05Robot {
         disabledTelemetry();
     }
 
+    PhotonTrackedTarget initTarg;
+    double time;
 
     /**
      * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
@@ -128,10 +135,15 @@ public class Robot extends A05Robot {
     @Override
     public void autonomousInit() {
         enableInit();
+
+        initTarg = Constants.CAMERA.getTarget(Constants.aprilTagSetDictionary.get("amp"));
+        time = Constants.CAMERA.getLatestTargetTime();
         // Sets up autonomous command
         super.autonomousInit();
     }
 
+    public static final String APRIL_TAG_LOG_NAME = "aprilTag";
+    private final StringLogEntry aprilTagLog = new StringLogEntry(DataLogManager.getLog(),APRIL_TAG_LOG_NAME);
 
     /**
      * This method is called periodically during autonomous.
@@ -139,6 +151,20 @@ public class Robot extends A05Robot {
     @Override
     public void autonomousPeriodic() {
         enabledTelemetry();
+
+        Constants.CAMERA.updateTrackingData();
+        if(Constants.CAMERA.camera.hasTargets()) {
+            SpeedCachedSwerve.RobotRelativePosition position = null;
+            try {
+                position = SpeedCachedSwerve.getInstance().getRobotRelativePositionSince(time);
+            } catch (Exception e) {
+            }
+
+            aprilTagLog.append(String.format("TRUE,%.4f,%.5f,%.5f,%.5f,%.5f",Constants.CAMERA.getLatestTargetTime(),
+                    Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("amp")), Constants.CAMERA.getYFromLastTarget(Constants.aprilTagSetDictionary.get("amp")),
+                    initTarg.getBestCameraToTarget().getX() - (position == null ? 0.0 : position.forward), initTarg.getBestCameraToTarget().getY() - (position == null ? 0.0 : position.strafe)));
+                    //0.0, 0.0));
+        }
     }
 
 
