@@ -56,7 +56,7 @@ public class ManualClimberCommand extends Command {
 //        }
 
         if(!Utl.inTolerance(stick, 0.0, DEADBAND)) {
-            climberSubsystem.goToDeltaPosition(stick * 50.0); // Distance far enough that the motor will do smart motion accel
+            climberSubsystem.goToDeltaPosition(stick * 75.0); // Distance far enough that the motor will do smart motion accel
             wasSpinning = true;
         } else if(wasSpinning) {
             climberSubsystem.goToDeltaPosition(0.0);

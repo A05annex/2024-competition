@@ -20,9 +20,9 @@ public class ClimberTensionCommand extends Command {
 
     @Override
     public void initialize() {
-        if(climberSubsystem.isInitialized()) {
-            return;
-        }
+//        if(climberSubsystem.isInitialized()) {
+//            return;
+//        }
 
         climberSubsystem.setLeftEncoderPosition(climberSubsystem.maxPos);
         climberSubsystem.setRightEncoderPosition(climberSubsystem.maxPos);

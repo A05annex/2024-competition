@@ -30,7 +30,8 @@ import org.photonvision.PhotonCamera;
 public final class Constants extends A05Constants {
     public static final boolean HAS_USB_CAMERA = false;
     public static final boolean HAS_LIMELIGHT = false;
-    public static final PhotonCameraWrapper CAMERA = new PhotonCameraWrapper(new PhotonCamera("Arducam_OV9281_USB_Camera"), 0.32, new AngleD(AngleUnit.DEGREES, 24.5));
+    public static final AngleD CAMERA_ANGLE = new AngleD(AngleUnit.DEGREES, 26.67);
+    public static final PhotonCameraWrapper CAMERA = new PhotonCameraWrapper(new PhotonCamera("Arducam_OV9281_USB_Camera"), 0.32, CAMERA_ANGLE.cloneAngleD());
     //TODO: set correct channel ID
     public static final DigitalInput NOTE_SENSOR = new DigitalInput(8);
     public static final DutyCycleEncoder ARM_ANALOG_ENCODER = new DutyCycleEncoder(9);
@@ -176,7 +177,7 @@ public final class Constants extends A05Constants {
     }
 
     public static final class LinearInterpolation {
-        public static final double offset = -1.05;
+        public static final double offset = 0.380;
         static final LinearInterpolation[] calibratedPoints = {
                 new LinearInterpolation(0.01, 14.015 + offset, 5000),
                 new LinearInterpolation(1.49, 14.015 + offset, 5000),

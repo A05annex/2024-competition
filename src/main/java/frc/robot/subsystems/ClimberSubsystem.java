@@ -23,7 +23,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public final double maxPos = 180.0;
 
     // Declare min and max soft limits and where the motor thinks it starts
-    private final Double minPosition = 0.0, maxPosition = 190.0, startPosition = 0.0;
+    private final Double minPosition = null, maxPosition = null, startPosition = 0.0;
     private final double inPositionTolerance = 0.5;
     private double offset = 0.0;
     private double leftReqPos = 0.0;

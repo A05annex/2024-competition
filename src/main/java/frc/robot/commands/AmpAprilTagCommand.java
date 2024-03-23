@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import org.a05annex.frc.commands.A05AprilTagPositionCommand;
 import org.a05annex.frc.subsystems.PhotonCameraWrapper;
+import org.a05annex.util.AngleD;
 import org.a05annex.util.Utl;
 
 
@@ -63,5 +64,13 @@ public class AmpAprilTagCommand extends A05AprilTagPositionCommand {
 
         // Clip robot speed to stay below max speed
         return Utl.clip(speed, 0.0, MAX_SPEED);
+    }
+
+    @Override
+    protected double calcRotationFieldHeading() {
+        AngleD fieldHeading = navX.getHeadingInfo().getClosestHeading(HEADING);
+        navX.setExpectedHeading(fieldHeading);
+        return new AngleD(navX.getHeadingInfo().expectedHeading).
+                subtract(new AngleD(navX.getHeadingInfo().heading)).getRadians() * HEADING_ROTATION_KP;
     }
 }

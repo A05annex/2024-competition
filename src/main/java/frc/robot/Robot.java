@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ClimberTensionCommand;
@@ -14,6 +15,8 @@ import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05Robot;
+import org.a05annex.frc.NavX;
+import org.a05annex.frc.subsystems.SpeedCachedSwerve;
 
 import java.util.Collections;
 
@@ -26,11 +29,14 @@ import java.util.Collections;
  */
 public class Robot extends A05Robot {
     public void permanentTelemetry() {
+        SmartDashboard.putNumber("heading", NavX.getInstance().getHeading().getDegrees());
+        SmartDashboard.putBoolean("red?", NetworkTableInstance.getDefault().getTable("FMSInfo").getEntry("IsRedAlliance").getBoolean(true));
         SmartDashboard.putNumber("analog encoder", Constants.ARM_ANALOG_ENCODER.getAbsolutePosition());
         SmartDashboard.putBoolean("Note Sensor", Constants.NOTE_SENSOR.get());
 
         SmartDashboard.putNumber("collector rpm", CollectorSubsystem.getInstance().getRpm());
         SmartDashboard.putNumber("Shooter rpm", ShooterSubsystem.getInstance().getVelocity());
+        SmartDashboard.putNumber("rihtShooter", ShooterSubsystem.getInstance().getRightVelocity());
         SmartDashboard.putNumber("forward arm encoder", ArmSubsystem.getInstance().getFrontPos());
         SmartDashboard.putNumber("backward arm encoder", ArmSubsystem.getInstance().getBackPos());
 
@@ -47,6 +53,9 @@ public class Robot extends A05Robot {
             Constants.CAMERA.updateTrackingData();
             //SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("speaker center")));
             SmartDashboard.putBoolean("newest frame targs", Constants.CAMERA.getNewestFrame().hasTargets());
+            if(Constants.CAMERA.camera.hasTargets()) {
+                SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("amp")) * Constants.CAMERA_ANGLE.cos());
+            }
         } else {
             //SmartDashboard.putNumber("Distance", -1.0);
             SmartDashboard.putBoolean("newest frame targs", false);

@@ -23,14 +23,14 @@ public class ArmSubsystem extends SubsystemBase {
     smKi = 0.0001, smKiZone = 0.2, smKff = 0.000156, smMaxRPM = 3000.0,
             smMaxDeltaRPMSec = 3000.0, smMinRPM = 0.0, smError = 0.1, smKd = 0.0;
     // Declare PID constants for position control
-    private final double posKp = 0.00005, posKi = 0.0, posKiZone = 0.0, posKff = 0.0;
+    private final double posKp = 0.05, posKi = 0.0, posKiZone = 0.0, posKff = 0.0;
     // Declare PID constants for speed (rpm) control
     private final double rpmKp = 0.5, rpmKi = 0.0, rpmKiZone = 0.0, rpmKff = 0.0;
     // Declare min and max soft limits and where the motor thinks it starts
     private final Double minPosition = -1.0, maxPosition = 34.0;
     // Tolerance to decide if in position
     private final double IN_POSITION_DEADBAND = 0.5;
-    private final double ANALOG_ENCODER_ZERO = 0.9287;
+    private final double ANALOG_ENCODER_ZERO = 0.9003;
     private final int gearRatio = 100;
     private boolean enableInit = false;
     private boolean manualControl = false;
@@ -80,17 +80,17 @@ public class ArmSubsystem extends SubsystemBase {
         System.out.println("ENABLE INIT STARTED: " + startTime);
         System.out.println("****************************************************************");
 
-        forwardMotor.setEncoderPosition(0.0);
-        backwardMotor.setEncoderPosition(0.0);
+        forwardMotor.setEncoderPosition(30.0);
+        backwardMotor.setEncoderPosition(30.0);
 
         // Lock the forward (supporting) motor to start pos.
-        forwardMotor.setTargetPosition(0.0);
+        forwardMotor.setTargetPosition(30.0);
         System.out.println("****************************************************************");
         System.out.printf("TIME: %f; support = %f; tension = %f%n",
                 Timer.getFPGATimestamp() - startTime, forwardMotor.getEncoderPosition(), backwardMotor.getEncoderPosition());
 
         // 0.5 amps, just enough to tension
-        backwardMotor.sparkMaxPID.setReference(1.2, CANSparkMax.ControlType.kVoltage);
+        backwardMotor.sparkMaxPID.setReference(-1.2, CANSparkMax.ControlType.kVoltage);
 
         while(true) {
             try {
@@ -107,14 +107,22 @@ public class ArmSubsystem extends SubsystemBase {
             System.out.flush();
 
             // Repeat until the voltage motor moves the position motor
-            if(currentPos > 0.0) {
+            if(currentPos < 30.0) {
                 break;
             }
         }
 
         //Removed play and resetting the backward encoder, so the tension can be kept
         forwardMotor.setEncoderPosition((Constants.getArmEncoder() - ANALOG_ENCODER_ZERO) * gearRatio);
+        forwardMotor.stopMotor();
         backwardMotor.setEncoderPosition((Constants.getArmEncoder() - ANALOG_ENCODER_ZERO) * gearRatio);
+        backwardMotor.stopMotor();
+
+        try {
+            Thread.sleep(20);
+        } catch (InterruptedException e) {
+
+        }
 
         System.out.printf("END TIME: %f; support = %f; tension = %f%n",
                 Timer.getFPGATimestamp() - startTime, forwardMotor.getEncoderPosition(), backwardMotor.getEncoderPosition());

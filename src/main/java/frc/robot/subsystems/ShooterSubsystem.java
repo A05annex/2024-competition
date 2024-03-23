@@ -89,6 +89,9 @@ public class ShooterSubsystem extends SubsystemBase {
     public double getVelocity() {
         return leftMotor.getEncoderVelocity();
     }
+    public double getRightVelocity() {
+        return rightMotor.getEncoderVelocity();
+    }
 
     public void setVelocity(double rpm) {
         leftMotor.setTargetRPM(rpm);
