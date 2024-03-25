@@ -30,7 +30,7 @@ public class ArmSubsystem extends SubsystemBase {
     private final Double minPosition = -1.0, maxPosition = 34.0;
     // Tolerance to decide if in position
     private final double IN_POSITION_DEADBAND = 0.5;
-    private final double ANALOG_ENCODER_ZERO = 0.9003;
+    private final double ANALOG_ENCODER_ZERO = 0.894;
     private final int gearRatio = 100;
     private boolean enableInit = false;
     private boolean manualControl = false;
@@ -220,7 +220,7 @@ public class ArmSubsystem extends SubsystemBase {
         PROTECTED(5.0),
         //START((Constants.getArmEncoder() - armSubsystem.ANALOG_ENCODER_ZERO) * gearRatio),
         SOURCE(19.539),
-        AMP(31.5);
+        AMP(29.787);
 
         // 90 = 24.9522
         //Analog = 0.6381
