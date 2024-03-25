@@ -78,8 +78,8 @@ public class ShooterSubsystem extends SubsystemBase {
         rightMotor.sparkMaxPID.setReference(12.0, CANSparkBase.ControlType.kVoltage);
     }
 
-    public void shoot() {
-        setVelocity(1000);
+    public void amp() {
+        setVelocity(3000);
     }
 
     public void intake() {

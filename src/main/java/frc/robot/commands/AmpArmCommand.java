@@ -20,7 +20,7 @@ public class AmpArmCommand extends Command {
     @Override
     public void initialize() {
         ArmSubsystem.ArmPosition.AMP.goTo();
-        shooterSubsystem.setVelocity(3000);
+        shooterSubsystem.amp();
         isFinishedTimeout = -1;
     }
 
