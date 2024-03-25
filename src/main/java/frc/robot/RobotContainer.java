@@ -8,6 +8,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
@@ -15,8 +16,12 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05RobotContainer;
+import org.a05annex.frc.commands.AutonomousPathCommand;
 import org.a05annex.frc.subsystems.SpeedCachedSwerve;
+
+import java.io.FileNotFoundException;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -42,6 +47,7 @@ public class RobotContainer extends A05RobotContainer {
 
         speedCachedSwerve.setDriveSubsystem(driveSubsystem);
         speedCachedSwerve.setCacheLength(1000);
+        speedCachedSwerve.setLatencyOffset(0.125);
 
         driveCommand = new DriveCommand(speedCachedSwerve);
 
@@ -54,6 +60,21 @@ public class RobotContainer extends A05RobotContainer {
         ClimberSubsystem.getInstance().setDefaultCommand(new ManualClimberCommand());
 
         ArmSubsystem.getInstance().setDefaultCommand(new ManualArmCommand());
+
+        // setup the chosen autonomous path
+        int autoId = A05Constants.readAutoID();
+        A05Constants.AutonomousPath autonomousPath = null;
+        try {
+            autonomousPath = A05Constants.AUTONOMOUS_PATH_LIST.get(autoId);
+            autonomousPath.load();
+            autoCommand = new AutonomousPathCommand(autonomousPath, speedCachedSwerve);
+            SmartDashboard.putString("Autonomous", autonomousPath.getName());
+        } catch (IndexOutOfBoundsException e) {
+            SmartDashboard.putString("Autonomous", String.format("Path ID %d does not exist", autoId));
+        } catch (FileNotFoundException e) {
+            SmartDashboard.putString("Autonomous",
+                    String.format("Could not load path: '%s'", autonomousPath.getName()));
+        }
 
         if(autoCommand != null) {
             autoCommand.setMirror(Constants.readMirrorSwitch());
