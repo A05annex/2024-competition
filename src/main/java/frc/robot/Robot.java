@@ -65,6 +65,7 @@ public class Robot extends A05Robot {
         }
 
         SpeedCachedSwerve.getInstance().setLatencyOffset(SmartDashboard.getNumber("latency", SpeedCachedSwerve.getInstance().getLatencyOffset()));
+        SmartDashboard.putNumber("real latency", SpeedCachedSwerve.getInstance().getLatencyOffset());
     }
 
     public void enabledTelemetry() {

@@ -47,6 +47,7 @@ public class RobotContainer extends A05RobotContainer {
 
         speedCachedSwerve.setDriveSubsystem(driveSubsystem);
         speedCachedSwerve.setCacheLength(1000);
+        speedCachedSwerve.setLatencyOffset(0.125);
 
         driveCommand = new DriveCommand(speedCachedSwerve);
 
