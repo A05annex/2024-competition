@@ -63,6 +63,8 @@ public class Robot extends A05Robot {
             //SmartDashboard.putNumber("Distance", -1.0);
             SmartDashboard.putBoolean("newest frame targs", false);
         }
+
+        SpeedCachedSwerve.getInstance().setLatencyOffset(SmartDashboard.getNumber("latency", SpeedCachedSwerve.getInstance().getLatencyOffset()));
     }
 
     public void enabledTelemetry() {
