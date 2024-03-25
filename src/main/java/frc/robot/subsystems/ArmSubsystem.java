@@ -18,12 +18,10 @@ public class ArmSubsystem extends SubsystemBase {
     private final SparkNeo backwardMotor = SparkNeo.factory(Constants.CAN_Devices.BACKWARD_ARM_MOTOR);
     // Declare PID constants for smart motion control
     private final double
-            smKp = 0.0005,
-    //smKp = 0.000025,
-    smKi = 0.0001, smKiZone = 0.2, smKff = 0.000156, smMaxRPM = 3000.0,
+            smKp = 0.0005, smKi = 0.0001, smKiZone = 0.2, smKff = 0.000156, smMaxRPM = 3000.0,
             smMaxDeltaRPMSec = 3000.0, smMinRPM = 0.0, smError = 0.1, smKd = 0.0;
     // Declare PID constants for position control
-    private final double posKp = 0.05, posKi = 0.0, posKiZone = 0.0, posKff = 0.0;
+    private final double posKp = 0.1, posKi = 0.0, posKiZone = 0.0, posKff = 0.0;
     // Declare PID constants for speed (rpm) control
     private final double rpmKp = 0.5, rpmKi = 0.0, rpmKiZone = 0.0, rpmKff = 0.0;
     // Declare min and max soft limits and where the motor thinks it starts
@@ -107,7 +105,7 @@ public class ArmSubsystem extends SubsystemBase {
             System.out.flush();
 
             // Repeat until the voltage motor moves the position motor
-            if(currentPos < 30.0) {
+            if(currentPos < 29.75) {
                 break;
             }
         }
