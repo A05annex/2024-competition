@@ -63,7 +63,7 @@ public class AutoShootCommand extends DriveCommand {
 
         conditionedSpeed = 0.0;
 
-        armSubsystem.goToSmartMotionPosition(16.269+ Constants.LinearInterpolation.offset);
+        armSubsystem.goToSmartMotionPosition(16.269 + Constants.LinearInterpolation.offset);
         shooterSubsystem.speaker();
 
         iSwerveDrive.swerveDrive(conditionedDirection, conditionedSpeed, conditionedRotate);
