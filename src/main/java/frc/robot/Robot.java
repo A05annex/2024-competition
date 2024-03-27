@@ -54,7 +54,7 @@ public class Robot extends A05Robot {
             //SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("speaker center")));
             SmartDashboard.putBoolean("newest frame targs", Constants.CAMERA.getNewestFrame().hasTargets());
             if(Constants.CAMERA.camera.hasTargets()) {
-                SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("amp")) * Constants.CAMERA_ANGLE.cos());
+                //SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("amp")) * Constants.CAMERA_ANGLE.cos());
             }
         } else {
             //SmartDashboard.putNumber("Distance", -1.0);

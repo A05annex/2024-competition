@@ -50,7 +50,7 @@ public class SpeakerShootCommand extends DriveCommand {
 
         conditionStick();
 
-        this.conditionedRotate = (camera.getTarget(tagSet).getYaw() - 4.6) / 35.0 * TARGET_ROTATION_KP;
+        this.conditionedRotate = -(camera.getTarget(tagSet).getYaw() - 4.6) / 35.0 * TARGET_ROTATION_KP;
 
         // lets linear interpolate to find arm and rpm numbers
 

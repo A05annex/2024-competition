@@ -114,7 +114,7 @@ public class RobotContainer extends A05RobotContainer {
         //driveX.whileTrue(new AutoShootCommand());
 
         //driveRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
-        driveRightBumper.onTrue(new InstantCommand(ShooterSubsystem.getInstance()::amp)).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));
+        driveRightBumper.onTrue(new InstantCommand(ShooterSubsystem.getInstance()::speaker)).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));
         altRightBumper.toggleOnTrue(new GroundPickupCommand());
         //.onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
 

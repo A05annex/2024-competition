@@ -17,6 +17,7 @@ import org.a05annex.frc.subsystems.PhotonCameraWrapper;
 import org.a05annex.util.AngleD;
 import org.a05annex.util.AngleUnit;
 import org.a05annex.util.Utl;
+import org.opencv.core.Mat;
 import org.photonvision.PhotonCamera;
 
 /**
@@ -209,7 +210,35 @@ public final class Constants extends A05Constants {
             this.goodData = false;
         }
 
+        private static double nthPolynomial(double distance, double... coefficients) {
+            double sum = 0;
+
+            for(int i = coefficients.length - 1; i >= 0; i--) {
+                sum += coefficients[coefficients.length - 1 - i] * Math.pow(distance, i);
+            }
+
+            return sum;
+        }
+
+        private static double fifth(double distance) {
+            return nthPolynomial(distance,-11.7175, 110.705, -400.389, 679.433, -517.733, 135.302);
+        }
+
+        private static double fourth(double distance) {
+            return nthPolynomial(distance,-14.0874, 125.826, -418.443, 15.409, -327.517);
+        }
+
+        private static double fourthAsymptote(double distance) {
+            return nthPolynomial(distance, -31.9656, 417.055, -1450.43, -1226.21) / Math.pow(distance, 4.0);
+        }
+
+        private static double third(double distance) {
+            return nthPolynomial( distance, 5.2726, -36.7143, 85.6234, -55.7124);
+        }
+
         public static LinearInterpolation interpolate(double distance) {
+            return new LinearInterpolation(distance, fourthAsymptote(distance), 5000, true);
+            /*
             int highIndex = 0; // Index of the first calibrated point the distance parameter is less than
 
 
@@ -242,6 +271,7 @@ public final class Constants extends A05Constants {
                     * (calibratedPoints[highIndex].rpm - calibratedPoints[lowIndex].rpm); // Change in rpm
 
             return new LinearInterpolation(distance, arm, rpm, true);
+            //*/
         }
 
         public LinearInterpolation goToArm() {
