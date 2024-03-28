@@ -34,6 +34,8 @@ public class RobotContainer extends A05RobotContainer {
     // NavX, DriveSubsystem, DriveXbox have already been made in A05RobotContainer
     SpeedCachedSwerve speedCachedSwerve = SpeedCachedSwerve.getInstance();
 
+    NoteCenterCommand noteCenterCommand = new NoteCenterCommand();
+
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -60,6 +62,8 @@ public class RobotContainer extends A05RobotContainer {
         ClimberSubsystem.getInstance().setDefaultCommand(new ManualClimberCommand());
 
         ArmSubsystem.getInstance().setDefaultCommand(new ManualArmCommand());
+
+        CollectorSubsystem.getInstance().setDefaultCommand(noteCenterCommand);
 
         // setup the chosen autonomous path
         int autoId = A05Constants.readAutoID();
@@ -99,7 +103,7 @@ public class RobotContainer extends A05RobotContainer {
         altBack.onTrue(new InstantCommand(ArmSubsystem.getInstance()::toggleManualControl));
 
         altStart.onTrue(new SourceIntakeCommand());
-        driveStart.onTrue(new InstantCommand(CollectorSubsystem.getInstance()::feed)).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
+        //driveStart.onTrue(new InstantCommand(CollectorSubsystem.getInstance()::feed)).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
 
         driveY.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo)).whileTrue(new InstantCommand(CollectorSubsystem.getInstance()::stop));
         altY.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo)).whileTrue(new InstantCommand(CollectorSubsystem.getInstance()::stop));

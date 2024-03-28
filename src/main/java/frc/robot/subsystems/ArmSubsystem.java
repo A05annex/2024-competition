@@ -27,7 +27,7 @@ public class ArmSubsystem extends SubsystemBase {
     // Declare min and max soft limits and where the motor thinks it starts
     private final Double minPosition = -1.0, maxPosition = 34.0;
     // Tolerance to decide if in position
-    private final double IN_POSITION_DEADBAND = 0.5;
+    private final double IN_POSITION_DEADBAND = 0.1;
     private final double ANALOG_ENCODER_ZERO = 0.894;
     private final int gearRatio = 100;
     private boolean enableInit = false;

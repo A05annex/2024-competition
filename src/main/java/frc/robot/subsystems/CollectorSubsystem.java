@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import org.a05annex.frc.subsystems.SparkNeo;
+import org.a05annex.util.Utl;
 
 public class CollectorSubsystem extends SubsystemBase {
 
@@ -68,6 +69,10 @@ public class CollectorSubsystem extends SubsystemBase {
 
     public double getRpm() {
         return motor.getEncoderVelocity();
+    }
+
+    public void setPower(double power) {
+        motor.sparkMax.set(Utl.clip(power, -1.0, 1.0));
     }
 }
 

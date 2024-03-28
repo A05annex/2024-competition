@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import org.a05annex.frc.subsystems.SparkNeo;
 import org.a05annex.util.Utl;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 public class ShooterSubsystem extends SubsystemBase {
 
@@ -23,6 +24,8 @@ public class ShooterSubsystem extends SubsystemBase {
     // Declare min and max soft limits and where the leftMotor thinks it starts
     private final Double minPosition = null, maxPosition = null, startPosition = 0.0;
     private double requestedRpm;
+
+    public PhotonPipelineResult lastTag = null;
 
     private ShooterSubsystem() {
         leftMotor.startConfig();
@@ -97,6 +100,19 @@ public class ShooterSubsystem extends SubsystemBase {
         leftMotor.setTargetRPM(rpm);
         rightMotor.setTargetRPM(rpm);
         requestedRpm = rpm;
+    }
+
+    public void setBrakeMode(CANSparkBase.IdleMode mode) {
+        leftMotor.setIdleMode(mode);
+        rightMotor.setIdleMode(mode);
+    }
+
+    @Override
+    public void periodic() {
+        Constants.CAMERA.updateTrackingData();
+        if(Constants.CAMERA.camera.isConnected() && Constants.CAMERA.isTargetDataNew(Constants.aprilTagSetDictionary.get("speaker center"))) {
+            lastTag = Constants.CAMERA.getNewestFrameWithTarget();
+        }
     }
 }
 

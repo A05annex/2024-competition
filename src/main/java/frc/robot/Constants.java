@@ -57,10 +57,10 @@ public final class Constants extends A05Constants {
                     0.969, 5.039, 1.026, 0.9164)
     };
     public static final A05Constants.AutonomousPath[] AUTONOMOUS_PATHS = {
-            new A05Constants.AutonomousPath("One note and park (source side)", 0, "sourceOneAndPark.json"),
+            new A05Constants.AutonomousPath("One note and park (source side)", 0, "oneNoteSourceSide.json"),
             new A05Constants.AutonomousPath("Two note and park (source side)", 1, "twoNoteSourceSide.json"),
             new A05Constants.AutonomousPath("Two note and park (amp side)", 2, "twoNoteAmpSide.json"),
-            new A05Constants.AutonomousPath("One note and park (amp side)", 3, "ampOneAndPark.json")
+            new A05Constants.AutonomousPath("One note and park (amp side)", 3, "oneNoteAmpSide.json")
     };
     public static final A05Constants.DriverSettings[] DRIVER_SETTINGS = {
             new DriverSettings("ocean", 0)
@@ -225,11 +225,11 @@ public final class Constants extends A05Constants {
         }
 
         private static double fourth(double distance) {
-            return nthPolynomial(distance,-14.0874, 125.826, -418.443, 15.409, -327.517);
+            return nthPolynomial(distance,-21.3804, 188.382, -615.548, 885.839, -464.149);
         }
 
         private static double fourthAsymptote(double distance) {
-            return nthPolynomial(distance, -31.9656, 417.055, -1450.43, -1226.21) / Math.pow(distance, 4.0);
+            return nthPolynomial(distance,-124.305, 1268.08, -4286.07, 6250.49, -3348.62) / Math.pow(distance, 4.0);
         }
 
         private static double third(double distance) {
@@ -237,7 +237,8 @@ public final class Constants extends A05Constants {
         }
 
         public static LinearInterpolation interpolate(double distance) {
-            return new LinearInterpolation(distance, fourthAsymptote(distance), 5000, true);
+            distance = Utl.clip(distance, 1.53, 3.5);
+            return new LinearInterpolation(distance, third(distance), 5000, true);
             /*
             int highIndex = 0; // Index of the first calibrated point the distance parameter is less than
 
