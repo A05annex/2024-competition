@@ -5,6 +5,10 @@
     {
       "robotActionCommand": "GroundPickupCommand",
       "robotScheduledActionTime": 0.3999999999999999
+    },
+    {
+      "robotActionCommand": "GroundPickupCommand",
+      "robotScheduledActionTime": 5.7
     }
   ],
   "title": "untitled",
@@ -122,6 +126,41 @@
       "time": 6.7,
       "field_dHeading": 0.0,
       "derivativesEdited": true
+    },
+    {
+      "headingDerivativeEdited": true,
+      "field_dX": -1.2880718336483952,
+      "fieldY": -1.7817296786389407,
+      "field_dY": -2.826068052930057,
+      "fieldX": 3.1144423440453686,
+      "fieldHeading": -3.14159,
+      "time": 7.1,
+      "field_dHeading": 0.0,
+      "derivativesEdited": true
+    },
+    {
+      "headingDerivativeEdited": false,
+      "field_dX": -1.4995463137996232,
+      "fieldY": -6.35726843100189,
+      "field_dY": -2.153194706994329,
+      "fieldX": 0.845897920604914,
+      "fieldHeading": -2.5794450787948815,
+      "time": 8.9,
+      "field_dHeading": 0.545227807198203,
+      "derivativesEdited": true
+    },
+    {
+      "robotActionCommand": "AutoShootCommand",
+      "headingDerivativeEdited": true,
+      "field_dX": 0.0,
+      "fieldY": -7.232003780718335,
+      "field_dY": 0.0,
+      "fieldX": 0.17302457466918675,
+      "fieldHeading": -2.1502667141850855,
+      "time": 9.55,
+      "field_dHeading": 0.0,
+      "derivativesEdited": true,
+      "robotActionDuration": 1.5
     }
   ]
 }
