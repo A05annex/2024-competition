@@ -51,7 +51,7 @@ public class ManualArmCommand extends Command {
         }
 
         if(!Utl.inTolerance(stick, 0.0, DEADBAND)) {
-            armSubsystem.goToDeltaPosition(stick * 1.0); // Distance far enough that the motor will do smart motion accel
+            armSubsystem.goToDeltaPosition(stick * 2.0); // Distance far enough that the motor will do smart motion accel
             wasSpinning = true;
             return;
         }

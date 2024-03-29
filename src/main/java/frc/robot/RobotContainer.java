@@ -127,12 +127,12 @@ public class RobotContainer extends A05RobotContainer {
         //altX.whileTrue(new DynamicTargetLeftCommandGroup()); // Adjusts for color, targets amp or source, whichever is to the left
 
         altX.whileTrue(new EjectCommand());
-        altB.whileTrue(new AmpScoreCommandGroup());
+        altB.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.AMP::goTo)).onFalse(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo));
         //altX.onTrue(new InstantCommand(ShotLogger::shotScored));
 
         //altLeftBumper.whileTrue(new ClimberRetractCommand());
         //driveLeftBumper.whileTrue(new ClimberRetractCommand());
         driveLeftBumper.onTrue(new InstantCommand(CollectorSubsystem.getInstance()::intake)).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
-        altLeftBumper.onTrue(new InstantCommand(ShooterSubsystem.getInstance()::intake)).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));
+        altLeftBumper.onTrue(new AmpArmCommand()).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));
     }
 }

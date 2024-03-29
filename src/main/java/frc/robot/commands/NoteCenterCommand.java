@@ -42,21 +42,25 @@ public class NoteCenterCommand extends Command {
 
     @Override
     public void execute() {
-       if(isCentered) {
+        if(isCentered) {
           return;
        }
 
        if(phase == PHASE.CENTER) {
            centerTimer++;
-           if(centerTimer > 25) {
-               collectorSubsystem.setPower(-0.1);
+           if(centerTimer > 45) {
+               collectorSubsystem.setPower(-0.2);
                phase = PHASE.REVERSE;
+               centerTimer = 0;
            }
        }
        else if(phase == PHASE.REVERSE) {
           if(Constants.NOTE_SENSOR.get()) { // Sensor cleared
-             phase = PHASE.FORWARD;
-             collectorSubsystem.setVelocity(0.01);
+              if(centerTimer > 5) {
+                 phase = PHASE.FORWARD;
+                 collectorSubsystem.setPower(0.1);
+             }
+             centerTimer++;
           }
        } else if(phase == PHASE.FORWARD) {
           if(!Constants.NOTE_SENSOR.get()) { // Sensor blocked

@@ -56,11 +56,16 @@ public final class Constants extends A05Constants {
             new A05Constants.RobotSettings(1, "Practice", 0.5969, 0.5969, 5.240, 5.654,
                     0.969, 5.039, 1.026, 0.9164)
     };
-    public static final A05Constants.AutonomousPath[] AUTONOMOUS_PATHS = {
-            new A05Constants.AutonomousPath("One note and park (source side)", 0, "oneNoteSourceSide.json"),
-            new A05Constants.AutonomousPath("Two note and park (source side)", 1, "twoNoteSourceSide.json"),
-            new A05Constants.AutonomousPath("Two note and park (amp side)", 2, "twoNoteAmpSide.json"),
-            new A05Constants.AutonomousPath("One note and park (amp side)", 3, "oneNoteAmpSide.json")
+    public static final AutonomousPath[] AUTONOMOUS_PATHS = {
+            new AutonomousPath("One note (source)", 0, "oneNoteSource.json"),
+            new AutonomousPath("Two note (source)", 1, "twoNoteSource.json"),
+            new AutonomousPath("Two note (source)", 2, "twoNoteSource.json"),
+            new AutonomousPath("One note (amp)", 3, "oneNoteAmp.json"),
+            new AutonomousPath("Two note (amp)", 4, "twoNoteAmp.json"),
+            new AutonomousPath("One note (middle)", 5, "oneNoteMiddle.json"),
+            new AutonomousPath("Two note (middle)", 6, "twoNoteMiddle.json"),
+            new AutonomousPath("Three note (middle)", 7, "threeNoteMiddle.json"),
+
     };
     public static final A05Constants.DriverSettings[] DRIVER_SETTINGS = {
             new DriverSettings("ocean", 0)
@@ -178,7 +183,7 @@ public final class Constants extends A05Constants {
     }
 
     public static final class LinearInterpolation {
-        public static final double offset = 0.380;
+        public static final double offset = 0.4;
         static final LinearInterpolation[] calibratedPoints = {
                 new LinearInterpolation(0.01, 14.015 + offset, 5000),
                 new LinearInterpolation(1.49, 14.015 + offset, 5000),
@@ -221,7 +226,7 @@ public final class Constants extends A05Constants {
         }
 
         private static double fifth(double distance) {
-            return nthPolynomial(distance,-11.7175, 110.705, -400.389, 679.433, -517.733, 135.302);
+            return nthPolynomial(distance,20.3397, -236.578, 1088.76, -2477.25, 2787.91, -1232.31);
         }
 
         private static double fourth(double distance) {
@@ -238,7 +243,7 @@ public final class Constants extends A05Constants {
 
         public static LinearInterpolation interpolate(double distance) {
             distance = Utl.clip(distance, 1.53, 3.5);
-            return new LinearInterpolation(distance, third(distance), 5000, true);
+            return new LinearInterpolation(distance, fifth(distance), 5000, true);
             /*
             int highIndex = 0; // Index of the first calibrated point the distance parameter is less than
 

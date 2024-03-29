@@ -79,7 +79,7 @@ public class SpeakerShootCommand extends DriveCommand {
 
         conditionedSpeed = 0.0;
 
-        linearInterpolation.goToArm();
+        armSubsystem.goToSmartMotionPosition(linearInterpolation.arm + Constants.LinearInterpolation.offset);
 
         if(!NoteCenterCommand.isCentered) { // WAIT, don't spin up the shooter yet because the NoteCenterCommand could have moved the note weirdly
             return;
