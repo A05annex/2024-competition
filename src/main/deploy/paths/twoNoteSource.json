@@ -4,7 +4,7 @@
   "robotScheduledActions": [
     {
       "robotActionCommand": "GroundPickupCommand",
-      "robotScheduledActionTime": 0.3999999999999999
+      "robotScheduledActionTime": 0.5999999999999999
     }
   ],
   "title": "untitled",
@@ -17,18 +17,18 @@
       "fieldX": -0.2814217557251908,
       "fieldHeading": -2.1025937856063392,
       "time": 0.0,
-      "field_dHeading": -0.05997068626320293,
+      "field_dHeading": -0.05542293757241588,
       "derivativesEdited": false
     },
     {
       "robotActionCommand": "AutoShootCommand",
       "headingDerivativeEdited": true,
       "field_dX": 0.0,
-      "fieldY": -7.424253308128543,
+      "fieldY": -7.0397542533081285,
       "field_dY": 0.0,
-      "fieldX": -0.11534971644612568,
-      "fieldHeading": -2.15711259130016,
-      "time": 0.25,
+      "fieldX": -0.04806238185255296,
+      "fieldHeading": -2.1529782743085355,
+      "time": 0.45,
       "field_dHeading": 0.0,
       "derivativesEdited": true,
       "robotActionDuration": 1.5
@@ -40,18 +40,18 @@
       "field_dY": 1.25,
       "fieldX": 0.009612476370509881,
       "fieldHeading": -3.14159,
-      "time": 1.1,
+      "time": 1.3,
       "field_dHeading": 0.0,
       "derivativesEdited": true
     },
     {
       "headingDerivativeEdited": true,
       "field_dX": 0.0,
-      "fieldY": -5.780519848771266,
+      "fieldY": -5.415245746691871,
       "field_dY": 0.1,
       "fieldX": 0.0,
       "fieldHeading": -3.14159,
-      "time": 1.85,
+      "time": 2.0500000000000003,
       "field_dHeading": 0.0,
       "derivativesEdited": true
     },
@@ -59,11 +59,11 @@
       "robotActionCommand": "AutoShootCommand",
       "headingDerivativeEdited": true,
       "field_dX": 0.0,
-      "fieldY": -7.232003780718335,
+      "fieldY": -6.8859546313799616,
       "field_dY": 0.0,
-      "fieldX": 0.17302457466918675,
-      "fieldHeading": -2.1502667141850855,
-      "time": 3.05,
+      "fieldX": 0.12496219281663379,
+      "fieldHeading": -2.1201708115664477,
+      "time": 3.5,
       "field_dHeading": 0.0,
       "derivativesEdited": true,
       "robotActionDuration": 1.5
@@ -75,8 +75,8 @@
       "field_dY": 2.153194706994329,
       "fieldX": 0.845897920604914,
       "fieldHeading": -2.5794450787948815,
-      "time": 3.7,
-      "field_dHeading": -0.545227807198203,
+      "time": 4.15,
+      "field_dHeading": -0.5617805536384537,
       "derivativesEdited": true
     },
     {
@@ -86,40 +86,29 @@
       "field_dY": 2.826068052930057,
       "fieldX": 3.1144423440453686,
       "fieldHeading": -3.14159,
-      "time": 5.5,
+      "time": 5.95,
       "field_dHeading": 0.0,
       "derivativesEdited": true
     },
     {
       "headingDerivativeEdited": true,
       "field_dX": 0.0,
-      "fieldY": -0.9262192816635155,
+      "fieldY": -0.9454442344045362,
       "field_dY": 1.0,
-      "fieldX": 3.373979206049148,
+      "fieldX": 3.412429111531191,
       "fieldHeading": -3.14159,
-      "time": 5.9,
+      "time": 6.3500000000000005,
       "field_dHeading": 0.0,
       "derivativesEdited": true
     },
     {
       "headingDerivativeEdited": true,
       "field_dX": 0.0,
-      "fieldY": -0.6,
-      "field_dY": 0.1,
-      "fieldX": 3.373979206049148,
+      "fieldY": -0.37830812854442275,
+      "field_dY": 0.0,
+      "fieldX": 3.527778827977315,
       "fieldHeading": -3.14159,
-      "time": 6.3,
-      "field_dHeading": 0.0,
-      "derivativesEdited": true
-    },
-    {
-      "headingDerivativeEdited": true,
-      "field_dX": 0.0,
-      "fieldY": -0.9262192816635155,
-      "field_dY": -1.0,
-      "fieldX": 3.373979206049148,
-      "fieldHeading": -3.14159,
-      "time": 6.7,
+      "time": 6.75,
       "field_dHeading": 0.0,
       "derivativesEdited": true
     }

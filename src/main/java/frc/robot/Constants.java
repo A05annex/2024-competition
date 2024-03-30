@@ -59,7 +59,7 @@ public final class Constants extends A05Constants {
     public static final AutonomousPath[] AUTONOMOUS_PATHS = {
             new AutonomousPath("One note (source)", 0, "oneNoteSource.json"),
             new AutonomousPath("Two note (source)", 1, "twoNoteSource.json"),
-            new AutonomousPath("Two note (source)", 2, "twoNoteSource.json"),
+            new AutonomousPath("Three note (source)", 2, "threeNoteSource.json"),
             new AutonomousPath("One note (amp)", 3, "oneNoteAmp.json"),
             new AutonomousPath("Two note (amp)", 4, "twoNoteAmp.json"),
             new AutonomousPath("One note (middle)", 5, "oneNoteMiddle.json"),
@@ -242,7 +242,7 @@ public final class Constants extends A05Constants {
         }
 
         public static LinearInterpolation interpolate(double distance) {
-            distance = Utl.clip(distance, 1.53, 3.5);
+            distance = Utl.clip(distance, 1.54, 3.5);
             return new LinearInterpolation(distance, fifth(distance), 5000, true);
             /*
             int highIndex = 0; // Index of the first calibrated point the distance parameter is less than

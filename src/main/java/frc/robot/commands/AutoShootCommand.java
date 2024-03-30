@@ -16,7 +16,7 @@ public class AutoShootCommand extends DriveCommand {
 
     private final ShooterFeedCommand shooterFeedCommand = new ShooterFeedCommand();
     //TODO: test this value, may need to change
-    private final double TARGET_ROTATION_KP = 0.8;
+    private final double TARGET_ROTATION_KP = 0.2;
     private final A05Constants.AprilTagSet tagSet = Constants.aprilTagSetDictionary.get("speaker center");
     private boolean feedStarted;
     private int isFinishedDelay = 0;
@@ -41,7 +41,8 @@ public class AutoShootCommand extends DriveCommand {
             return; // Wait till next tick
         }
 
-        this.conditionedRotate = (camera.getTarget(tagSet).getYaw() - 4.60) / 35.0 * TARGET_ROTATION_KP;
+
+        //this.conditionedRotate = camera.camera.hasTargets() ? (camera.getTarget(tagSet).getYaw() + 1.0) / 35.0 * TARGET_ROTATION_KP : 0.0;
 
         // lets linear interpolate to find arm and rpm numbers
 
@@ -64,6 +65,11 @@ public class AutoShootCommand extends DriveCommand {
         conditionedSpeed = 0.0;
 
         armSubsystem.goToSmartMotionPosition(Constants.LinearInterpolation.interpolate(camera.getXFromLastTarget(tagSet)).arm + Constants.LinearInterpolation.offset);
+
+        if(!NoteCenterCommand.isCentered) { // WAIT, don't spin up the shooter yet because the NoteCenterCommand could have moved the note weirdly
+            //return;
+        }
+
         shooterSubsystem.speaker();
 
         iSwerveDrive.swerveDrive(conditionedDirection, conditionedSpeed, conditionedRotate);
@@ -81,7 +87,7 @@ public class AutoShootCommand extends DriveCommand {
 
     @Override
     public boolean isFinished() {
-        return feedStarted && shooterFeedCommand.isFinished() && isFinishedDelay > 25;
+        return feedStarted && shooterFeedCommand.isFinished() && isFinishedDelay > 5;
     }
 
     @Override

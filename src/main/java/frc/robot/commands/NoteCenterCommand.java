@@ -1,8 +1,10 @@
 package frc.robot.commands;
 
+import com.revrobotics.CANSparkBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.CollectorSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 import javax.swing.plaf.IconUIResource;
 
@@ -30,6 +32,7 @@ public class NoteCenterCommand extends Command {
 
     @Override
     public void initialize() {
+        ShooterSubsystem.getInstance().setBrakeMode(CANSparkBase.IdleMode.kBrake);
         centerTimer = 0;
         if(Constants.NOTE_SENSOR.get()) {
           isCentered = true;
@@ -76,5 +79,7 @@ public class NoteCenterCommand extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        ShooterSubsystem.getInstance().setBrakeMode(CANSparkBase.IdleMode.kCoast);
+    }
 }
