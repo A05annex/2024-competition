@@ -85,7 +85,7 @@ public class SpeakerShootCommand extends DriveCommand {
             return;
         }
 
-        ShooterSubsystem.getInstance().speaker();
+        shooterSubsystem.speaker();
 
         ShotLogger.storeShotData(linearInterpolation);
 

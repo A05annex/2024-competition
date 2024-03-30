@@ -6,6 +6,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.subsystems.PhotonCameraWrapper;
 import org.a05annex.frc.subsystems.SpeedCachedSwerve;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 
 public class AutoShootCommand extends DriveCommand {
@@ -16,9 +17,9 @@ public class AutoShootCommand extends DriveCommand {
 
     private final ShooterFeedCommand shooterFeedCommand = new ShooterFeedCommand();
     //TODO: test this value, may need to change
-    private final double TARGET_ROTATION_KP = 0.2;
+    private final double TARGET_ROTATION_KP = 0.8;
     private final A05Constants.AprilTagSet tagSet = Constants.aprilTagSetDictionary.get("speaker center");
-    private boolean feedStarted;
+    private boolean feedStarted = false;
     private int isFinishedDelay = 0;
 
     public AutoShootCommand() {
@@ -30,6 +31,8 @@ public class AutoShootCommand extends DriveCommand {
 
     @Override
     public void initialize() {
+        feedStarted = false;
+        isFinishedDelay = 0;
     }
 
     @Override
@@ -37,16 +40,23 @@ public class AutoShootCommand extends DriveCommand {
         // do we have new target data of the speaker?
         camera.updateTrackingData();
 
-        if(!camera.isTargetDataNew(tagSet)) {
-            return; // Wait till next tick
+
+        try {
+            if(!camera.isTargetDataNew(tagSet) && SpeedCachedSwerve.getInstance().getRobotRelativePositionSince(shooterSubsystem.lastTag.getTimestampSeconds()).cacheOverrun) {
+                super.execute(); // Run normal drive algorithm
+                return; // Wait till next tick
+            }
+        } catch (Exception e) {
+            return;
         }
 
 
-        //this.conditionedRotate = camera.camera.hasTargets() ? (camera.getTarget(tagSet).getYaw() + 1.0) / 35.0 * TARGET_ROTATION_KP : 0.0;
+        // we have a target, lets do the control math and edit the rotation to heading lock it.
+        this.conditionedRotate = camera.isTargetDataNew() ? -(camera.getTarget(tagSet).getYaw() + 1) / 35.0 * TARGET_ROTATION_KP : 0.0;
 
         // lets linear interpolate to find arm and rpm numbers
 
-        Constants.LinearInterpolation linearInterpolation = Constants.LinearInterpolation.interpolate(camera.getXFromLastTarget(tagSet));
+        Constants.LinearInterpolation linearInterpolation = Constants.LinearInterpolation.interpolate(camera.isTargetDataNew() ? camera.getXFromLastTarget(tagSet) : filterForTarget(Constants.aprilTagSetDictionary.get("speaker center")).getBestCameraToTarget().getX() - SpeedCachedSwerve.getInstance().getRobotRelativePositionSince(shooterSubsystem.lastTag.getTimestampSeconds()).forward);
 
         /*
           The LinearInterpolation class contains a value goodData. LinearInterpolation.interpolate was passed a distance
@@ -64,7 +74,7 @@ public class AutoShootCommand extends DriveCommand {
 
         conditionedSpeed = 0.0;
 
-        armSubsystem.goToSmartMotionPosition(Constants.LinearInterpolation.interpolate(camera.getXFromLastTarget(tagSet)).arm + Constants.LinearInterpolation.offset);
+        armSubsystem.goToSmartMotionPosition(linearInterpolation.arm + Constants.LinearInterpolation.offset);
 
         if(!NoteCenterCommand.isCentered) { // WAIT, don't spin up the shooter yet because the NoteCenterCommand could have moved the note weirdly
             //return;
@@ -94,5 +104,16 @@ public class AutoShootCommand extends DriveCommand {
     public void end(boolean interrupted) {
         shooterSubsystem.stop();
         ArmSubsystem.ArmPosition.PROTECTED.goTo();
+    }
+
+    private PhotonTrackedTarget filterForTarget(A05Constants.AprilTagSet tagSet) {
+        for(PhotonTrackedTarget target : shooterSubsystem.lastTag.targets) {
+            for(int i = 0; i < tagSet.tagIDs().length; i++) {
+                if(target.getFiducialId() == tagSet.tagIDs()[i]) {
+                    return target;
+                }
+            }
+        }
+        return null;
     }
 }

@@ -6,23 +6,13 @@ import frc.robot.Constants;
 import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-import javax.swing.plaf.IconUIResource;
-
 
 public class NoteCenterCommand extends Command {
-    private final CollectorSubsystem collectorSubsystem = CollectorSubsystem.getInstance();
-
     public static boolean isCentered = true;
-
+    private final CollectorSubsystem collectorSubsystem = CollectorSubsystem.getInstance();
     private int centerTimer = 0;
 
     private PHASE phase;
-
-    private enum PHASE {
-       CENTER,
-       REVERSE,
-       FORWARD,
-    }
 
     public NoteCenterCommand() {
         // each subsystem used by the command must be passed into the
@@ -35,7 +25,7 @@ public class NoteCenterCommand extends Command {
         ShooterSubsystem.getInstance().setBrakeMode(CANSparkBase.IdleMode.kBrake);
         centerTimer = 0;
         if(Constants.NOTE_SENSOR.get()) {
-          isCentered = true;
+            isCentered = true;
         } else {
             isCentered = false;
             phase = PHASE.CENTER;
@@ -46,31 +36,30 @@ public class NoteCenterCommand extends Command {
     @Override
     public void execute() {
         if(isCentered) {
-          return;
-       }
+            return;
+        }
 
-       if(phase == PHASE.CENTER) {
-           centerTimer++;
-           if(centerTimer > 45) {
-               collectorSubsystem.setPower(-0.2);
-               phase = PHASE.REVERSE;
-               centerTimer = 0;
-           }
-       }
-       else if(phase == PHASE.REVERSE) {
-          if(Constants.NOTE_SENSOR.get()) { // Sensor cleared
-              if(centerTimer > 5) {
-                 phase = PHASE.FORWARD;
-                 collectorSubsystem.setPower(0.1);
-             }
-             centerTimer++;
-          }
-       } else if(phase == PHASE.FORWARD) {
-          if(!Constants.NOTE_SENSOR.get()) { // Sensor blocked
-             isCentered = true;
-             collectorSubsystem.stop();
-          }
-       }
+        if(phase == PHASE.CENTER) {
+            centerTimer++;
+            if(centerTimer > 45) {
+                collectorSubsystem.setPower(-0.2);
+                phase = PHASE.REVERSE;
+                centerTimer = 0;
+            }
+        } else if(phase == PHASE.REVERSE) {
+            if(Constants.NOTE_SENSOR.get()) { // Sensor cleared
+                if(centerTimer > 5) {
+                    phase = PHASE.FORWARD;
+                    collectorSubsystem.setPower(0.1);
+                }
+                centerTimer++;
+            }
+        } else if(phase == PHASE.FORWARD) {
+            if(!Constants.NOTE_SENSOR.get()) { // Sensor blocked
+                isCentered = true;
+                collectorSubsystem.stop();
+            }
+        }
     }
 
     @Override
@@ -81,5 +70,11 @@ public class NoteCenterCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         ShooterSubsystem.getInstance().setBrakeMode(CANSparkBase.IdleMode.kCoast);
+    }
+
+    private enum PHASE {
+        CENTER,
+        REVERSE,
+        FORWARD,
     }
 }
