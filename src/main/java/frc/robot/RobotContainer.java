@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05Constants;
@@ -59,7 +58,7 @@ public class RobotContainer extends A05RobotContainer {
                 robotSettings.maxSpeedCalibration);
 
         driveSubsystem.setDefaultCommand(driveCommand);
-        ClimberSubsystem.getInstance().setDefaultCommand(new ManualClimberCommand());
+        //ClimberSubsystem.getInstance().setDefaultCommand(new ManualClimberCommand());
 
         ArmSubsystem.getInstance().setDefaultCommand(new ManualArmCommand());
 
@@ -100,39 +99,20 @@ public class RobotContainer extends A05RobotContainer {
         // See https://docs.wpilib.org/en/stable/docs/software/commandbased/binding-commands-to-triggers.html
 
         driveBack.onTrue(new InstantCommand(navx::initializeHeadingAndNav)); // Reset the NavX field relativity
-        altBack.onTrue(new InstantCommand(ArmSubsystem.getInstance()::toggleManualControl));
+        driveStart.onTrue(new InstantCommand(ArmSubsystem.getInstance()::toggleManualControl));
 
-        altStart.onTrue(new SourceIntakeCommand());
-        //driveStart.onTrue(new InstantCommand(CollectorSubsystem.getInstance()::feed)).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
+        driveA.whileTrue(new GroundPickupCommand());
+        altA.whileTrue(new GroundPickupCommand());
 
-        driveY.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo)).whileTrue(new InstantCommand(CollectorSubsystem.getInstance()::stop));
-        altY.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo)).whileTrue(new InstantCommand(CollectorSubsystem.getInstance()::stop));
+        driveX.onTrue(new InstantCommand(CollectorSubsystem.getInstance()::eject)).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
+        altX.onTrue(new InstantCommand(CollectorSubsystem.getInstance()::eject)).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
 
+        driveY.onTrue(new InstantCommand(ShooterSubsystem.getInstance()::speaker)).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));
+        altY.onTrue(new InstantCommand(ShooterSubsystem.getInstance()::speaker)).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));
 
-        // All heading commands finish if the driver moves the rotate stick
-        driveB.onTrue(new DynamicFaceRightCommand()); // Adjusts for color, faces amp or source, whichever is to the right
-        driveA.onTrue(new FaceSpeakerCommand()); // Faces up-field, at speaker
-        //driveX.onTrue(new DynamicFaceLeftCommand()); // Adjusts for color, faces amp or source, whichever is to the left
-        driveX.whileTrue(new EjectCommand());
+        driveRightBumper.onTrue(new InstantCommand(CollectorSubsystem.getInstance()::feed)).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
 
-        //driveX.whileTrue(new AutoShootCommand());
-
-        //driveRightBumper.onTrue(new GroundPickupCommand()).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
-        driveRightBumper.onTrue(new InstantCommand(ShooterSubsystem.getInstance()::speaker)).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));
-        altRightBumper.toggleOnTrue(new GroundPickupCommand());
-        //.onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
-
-        //altB.whileTrue(new DynamicTargetRightCommandGroup()); // Adjusts for color, targets amp or source, whichever is to the right
-        altA.whileTrue(new SpeakerShootCommand()); // Scores at the speaker
-        //altX.whileTrue(new DynamicTargetLeftCommandGroup()); // Adjusts for color, targets amp or source, whichever is to the left
-
-        altX.whileTrue(new EjectCommand());
-        altB.whileTrue(new InstantCommand(ArmSubsystem.ArmPosition.AMP::goTo)).onFalse(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo));
-        //altX.onTrue(new InstantCommand(ShotLogger::shotScored));
-
-        //altLeftBumper.whileTrue(new ClimberRetractCommand());
-        //driveLeftBumper.whileTrue(new ClimberRetractCommand());
-        driveLeftBumper.onTrue(new InstantCommand(CollectorSubsystem.getInstance()::intake)).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
-        altLeftBumper.onTrue(new AmpArmCommand()).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));
+        driveB.onTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo));
+        altB.onTrue(new InstantCommand(ArmSubsystem.ArmPosition.PROTECTED::goTo));
     }
 }

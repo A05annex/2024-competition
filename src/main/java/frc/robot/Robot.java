@@ -8,15 +8,12 @@ package frc.robot;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.ClimberTensionCommand;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05Robot;
 import org.a05annex.frc.NavX;
-import org.a05annex.frc.subsystems.SpeedCachedSwerve;
 
 import java.util.Collections;
 
@@ -44,22 +41,22 @@ public class Robot extends A05Robot {
 
         SmartDashboard.putBoolean("Manual Arm", ArmSubsystem.getInstance().manualControl());
 
-        SmartDashboard.putNumber("left climber", ClimberSubsystem.getInstance().getLeftPosition());
-        SmartDashboard.putNumber("left rpm", ClimberSubsystem.getInstance().getLeftRpm());
-        SmartDashboard.putNumber("right climber", ClimberSubsystem.getInstance().getRightPosition());
-        SmartDashboard.putNumber("right rpm", ClimberSubsystem.getInstance().getRightRpm());
+//        SmartDashboard.putNumber("left climber", ClimberSubsystem.getInstance().getLeftPosition());
+//        SmartDashboard.putNumber("left rpm", ClimberSubsystem.getInstance().getLeftRpm());
+//        SmartDashboard.putNumber("right climber", ClimberSubsystem.getInstance().getRightPosition());
+//        SmartDashboard.putNumber("right rpm", ClimberSubsystem.getInstance().getRightRpm());
 
-        if(Constants.CAMERA.camera.isConnected()) {
-            Constants.CAMERA.updateTrackingData();
-            //SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("speaker center")));
-            SmartDashboard.putBoolean("newest frame targs", Constants.CAMERA.getNewestFrame().hasTargets());
-            if(Constants.CAMERA.camera.hasTargets()) {
-                //SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("amp")) * Constants.CAMERA_ANGLE.cos());
-            }
-        } else {
-            //SmartDashboard.putNumber("Distance", -1.0);
-            SmartDashboard.putBoolean("newest frame targs", false);
-        }
+//        if(Constants.CAMERA.camera.isConnected()) {
+//            Constants.CAMERA.updateTrackingData();
+//            //SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("speaker center")));
+//            SmartDashboard.putBoolean("newest frame targs", Constants.CAMERA.getNewestFrame().hasTargets());
+//            if(Constants.CAMERA.camera.hasTargets()) {
+//                //SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("amp")) * Constants.CAMERA_ANGLE.cos());
+//            }
+//        } else {
+//            //SmartDashboard.putNumber("Distance", -1.0);
+//            SmartDashboard.putBoolean("newest frame targs", false);
+//        }
     }
 
     public void enabledTelemetry() {
@@ -72,7 +69,7 @@ public class Robot extends A05Robot {
 
     public void enableInit() {
         ArmSubsystem.getInstance().enableInit();
-        new ClimberTensionCommand().schedule();
+        //new ClimberTensionCommand().schedule();
     }
 
     /**

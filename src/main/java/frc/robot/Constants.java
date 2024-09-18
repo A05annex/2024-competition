@@ -10,15 +10,11 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.A05Constants;
-import org.a05annex.frc.subsystems.PhotonCameraWrapper;
 import org.a05annex.util.AngleD;
 import org.a05annex.util.AngleUnit;
 import org.a05annex.util.Utl;
-import org.opencv.core.Mat;
-import org.photonvision.PhotonCamera;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -32,7 +28,7 @@ public final class Constants extends A05Constants {
     public static final boolean HAS_USB_CAMERA = false;
     public static final boolean HAS_LIMELIGHT = false;
     public static final AngleD CAMERA_ANGLE = new AngleD(AngleUnit.DEGREES, 26.67);
-    public static final PhotonCameraWrapper CAMERA = new PhotonCameraWrapper(new PhotonCamera("Arducam_OV9281_USB_Camera"), 0.32, CAMERA_ANGLE.cloneAngleD());
+    ///public static final PhotonCameraWrapper CAMERA = new PhotonCameraWrapper(new PhotonCamera("Arducam_OV9281_USB_Camera"), 0.32, CAMERA_ANGLE.cloneAngleD());
     //TODO: set correct channel ID
     public static final DigitalInput NOTE_SENSOR = new DigitalInput(8);
     public static final DutyCycleEncoder ARM_ANALOG_ENCODER = new DutyCycleEncoder(9);
@@ -51,10 +47,11 @@ public final class Constants extends A05Constants {
      * These settings are loaded into {@link #ROBOT_SETTINGS_LIST} during {@link Robot#robotInit()}
      */
     public static final A05Constants.RobotSettings[] ROBOT_SETTINGS = {
-            new A05Constants.RobotSettings(0, "Competition", 0.5461, 0.5461, 5.0974, 0.313,
-                    2.735, 2.522, 1.026, 0.9650),
+            new A05Constants.RobotSettings(0, "Competition", 0.5461, 0.5461, 5.100, 0.310,
+                    0.492, 2.462, 1.026, 0.9650),
             new A05Constants.RobotSettings(1, "Practice", 0.5969, 0.5969, 5.240, 5.654,
                     0.969, 5.039, 1.026, 0.9164)
+
     };
     public static final AutonomousPath[] AUTONOMOUS_PATHS = {
             new AutonomousPath("One note (source)", 0, "oneNoteSource.json"),
@@ -98,20 +95,6 @@ public final class Constants extends A05Constants {
         aprilTagSetDictionary.put("stage far", new AprilTagSet(new int[]{13}, new int[]{14}, 1.3208, new AngleD(AngleUnit.DEGREES, 180.0)));
         aprilTagSetDictionary.put("stage left", new AprilTagSet(new int[]{11}, new int[]{15}, 1.3208, new AngleD(AngleUnit.DEGREES, 60.0)));
         aprilTagSetDictionary.put("stage right", new AprilTagSet(new int[]{12}, new int[]{16}, 1.3208, new AngleD(AngleUnit.DEGREES, 300.0)));
-    }
-
-    public static CLIMBER_ARM_STATUS getClimberArmStatus() {
-        final double collision = 50.0, danger = 30.0;
-
-        double climber = Utl.max(ClimberSubsystem.getInstance().getLeftPosition(), ClimberSubsystem.getInstance().getRightPosition());
-
-        if(climber > collision) {
-            return CLIMBER_ARM_STATUS.COLLISION;
-        } else if(climber > danger) {
-            return CLIMBER_ARM_STATUS.DANGER;
-        } else {
-            return CLIMBER_ARM_STATUS.OKAY;
-        }
     }
 
     /**
@@ -177,9 +160,7 @@ public final class Constants extends A05Constants {
                 BACKWARD_ARM_MOTOR = 13, // right
                 LEFT_SHOOTER_MOTOR = 9,
                 RIGHT_SHOOTER_MOTOR = 12,
-                COLLECTOR_MOTOR = 14,
-                RIGHT_CLIMBER_MOTOR = 10,
-                LEFT_CLIMBER_MOTOR = 15;
+                COLLECTOR_MOTOR = 14;
     }
 
     public static final class LinearInterpolation {

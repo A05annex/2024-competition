@@ -109,10 +109,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Constants.CAMERA.updateTrackingData();
-        if(Constants.CAMERA.camera.isConnected() && Constants.CAMERA.isTargetDataNew(Constants.aprilTagSetDictionary.get("speaker center"))) {
-            lastTag = Constants.CAMERA.getNewestFrameWithTarget();
-        }
+//        Constants.CAMERA.updateTrackingData();
+//        if(Constants.CAMERA.camera.isConnected() && Constants.CAMERA.isTargetDataNew(Constants.aprilTagSetDictionary.get("speaker center"))) {
+//            lastTag = Constants.CAMERA.getNewestFrameWithTarget();
+//        }
     }
 }
 

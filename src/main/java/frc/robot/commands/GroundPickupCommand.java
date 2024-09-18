@@ -22,7 +22,7 @@ public class GroundPickupCommand extends Command {
 
     @Override
     public void initialize() {
-        shooterSubsystem.setBrakeMode(CANSparkBase.IdleMode.kBrake);
+        //shooterSubsystem.setBrakeMode(CANSparkBase.IdleMode.kBrake);
         ArmSubsystem.ArmPosition.GROUND.goTo();
         collectorSubsystem.intake();
     }

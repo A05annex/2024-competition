@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.util.Utl;
 
@@ -33,15 +32,15 @@ public class ManualArmCommand extends Command {
      */
     @Override
     public void execute() {
-        if(ClimberSubsystem.getInstance().getLeftPosition() > 3.0 || ClimberSubsystem.getInstance().getLeftPosition() > 3.0) {
-            if(!climbPos || !ArmSubsystem.getInstance().isInPosition(ArmSubsystem.ArmPosition.CLIMB.position)) {
-                ArmSubsystem.ArmPosition.CLIMB.goTo();
-            }
-            climbPos = true;
-            return;
-        } else {
-            climbPos = false;
-        }
+//        if(ClimberSubsystem.getInstance().getLeftPosition() > 3.0 || ClimberSubsystem.getInstance().getLeftPosition() > 3.0) {
+//            if(!climbPos || !ArmSubsystem.getInstance().isInPosition(ArmSubsystem.ArmPosition.CLIMB.position)) {
+//                ArmSubsystem.ArmPosition.CLIMB.goTo();
+//            }
+//            climbPos = true;
+//            return;
+//        } else {
+//            climbPos = false;
+//        }
 
         double stick = -A05Constants.ALT_XBOX.getRightY();
 

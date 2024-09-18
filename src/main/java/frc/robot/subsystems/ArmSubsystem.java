@@ -139,22 +139,22 @@ public class ArmSubsystem extends SubsystemBase {
     // Go to position with smart motion
     public void goToSmartMotionPosition(double position) {
         //Check to make sure the arm and climber are ok.
-        if(Constants.getClimberArmStatus() == CLIMBER_ARM_STATUS.COLLISION) {
-            /*
-            It's very possible that the arm and climber are actively touching, and we don't know how, so its safest
-            to just put the motors in brake mode.
-            */
-            stop();
-            return;
-        } else if(Constants.getClimberArmStatus() == CLIMBER_ARM_STATUS.DANGER) {
-            /*
-            The climber is higher than we want, and getting close to touching the arm. Move the arm to the protected
-            position, just to be safe.
-            */
-            //forwardMotor.setSmartMotionTarget(ArmPosition.PROTECTED.position);
-            //backwardMotor.setSmartMotionTarget(ArmPosition.PROTECTED.position);
-            return;
-        }
+//        if(Constants.getClimberArmStatus() == CLIMBER_ARM_STATUS.COLLISION) {
+//            /*
+//            It's very possible that the arm and climber are actively touching, and we don't know how, so its safest
+//            to just put the motors in brake mode.
+//            */
+//            stop();
+//            return;
+//        } else if(Constants.getClimberArmStatus() == CLIMBER_ARM_STATUS.DANGER) {
+//            /*
+//            The climber is higher than we want, and getting close to touching the arm. Move the arm to the protected
+//            position, just to be safe.
+//            */
+//            //forwardMotor.setSmartMotionTarget(ArmPosition.PROTECTED.position);
+//            //backwardMotor.setSmartMotionTarget(ArmPosition.PROTECTED.position);
+//            return;
+//        }
 
         forwardMotor.setSmartMotionTarget(position);
         backwardMotor.setSmartMotionTarget(position);
