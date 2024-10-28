@@ -38,7 +38,6 @@ public class AutoShootCommand extends DriveCommand {
     @Override
     public void execute() {
         // do we have new target data of the speaker?
-        camera.updateTrackingData();
 
 
         try {

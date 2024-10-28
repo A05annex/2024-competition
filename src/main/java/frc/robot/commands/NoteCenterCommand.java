@@ -22,7 +22,7 @@ public class NoteCenterCommand extends Command {
 
     @Override
     public void initialize() {
-        ShooterSubsystem.getInstance().setBrakeMode(CANSparkBase.IdleMode.kBrake);
+//        ShooterSubsystem.getInstance().setBrakeMode(CANSparkBase.IdleMode.kBrake);
         centerTimer = 0;
         if(Constants.NOTE_SENSOR.get()) {
             isCentered = true;

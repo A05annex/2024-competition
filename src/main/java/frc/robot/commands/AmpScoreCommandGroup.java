@@ -6,6 +6,6 @@ import frc.robot.Constants;
 
 public class AmpScoreCommandGroup extends SequentialCommandGroup {
     public AmpScoreCommandGroup() {
-        super(new AmpAprilTagCommand(Constants.CAMERA, 0.87, -0.06, "amp"), new AmpArmCommand());
+        super(new AmpAprilTagCommand(0.87, -0.06, "amp"), new AmpArmCommand());
     }
 }

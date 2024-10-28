@@ -13,9 +13,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import org.a05annex.frc.A05Constants;
-import org.a05annex.frc.A05Robot;
-import org.a05annex.frc.NavX;
+import org.a05annex.frc.*;
 import org.a05annex.frc.subsystems.SpeedCachedSwerve;
 
 import java.util.Collections;
@@ -29,36 +27,39 @@ import java.util.Collections;
  */
 public class Robot extends A05Robot {
     public void permanentTelemetry() {
-        SmartDashboard.putNumber("heading", NavX.getInstance().getHeading().getDegrees());
-        SmartDashboard.putBoolean("red?", NetworkTableInstance.getDefault().getTable("FMSInfo").getEntry("IsRedAlliance").getBoolean(true));
-        SmartDashboard.putNumber("analog encoder", Constants.ARM_ANALOG_ENCODER.getAbsolutePosition());
-        SmartDashboard.putBoolean("Note Sensor", Constants.NOTE_SENSOR.get());
+//        SmartDashboard.putNumber("heading", NavX.getInstance().getHeading().getDegrees());
+//        SmartDashboard.putBoolean("red?", NetworkTableInstance.getDefault().getTable("FMSInfo").getEntry("IsRedAlliance").getBoolean(true));
+//        SmartDashboard.putNumber("analog encoder", Constants.ARM_ANALOG_ENCODER.getAbsolutePosition());
+//        SmartDashboard.putBoolean("Note Sensor", Constants.NOTE_SENSOR.get());
+//
+//        SmartDashboard.putNumber("collector rpm", CollectorSubsystem.getInstance().getRpm());
+//        SmartDashboard.putNumber("Shooter rpm", ShooterSubsystem.getInstance().getVelocity());
+//        SmartDashboard.putNumber("rihtShooter", ShooterSubsystem.getInstance().getRightVelocity());
+//        SmartDashboard.putNumber("forward arm encoder", ArmSubsystem.getInstance().getFrontPos());
+//        SmartDashboard.putNumber("backward arm encoder", ArmSubsystem.getInstance().getBackPos());
+//
+//        SmartDashboard.putData(CommandScheduler.getInstance());
+//
+//        SmartDashboard.putBoolean("Manual Arm", ArmSubsystem.getInstance().manualControl());
+//
+//        SmartDashboard.putNumber("left climber", ClimberSubsystem.getInstance().getLeftPosition());
+//        SmartDashboard.putNumber("left rpm", ClimberSubsystem.getInstance().getLeftRpm());
+//        SmartDashboard.putNumber("right climber", ClimberSubsystem.getInstance().getRightPosition());
+//        SmartDashboard.putNumber("right rpm", ClimberSubsystem.getInstance().getRightRpm());
+        NavX.HeadingInfo headingInfo = NavX.getInstance().getHeadingInfo();
+        SmartDashboard.putNumber("Actual Heading", headingInfo.heading.getDegrees());
+        SmartDashboard.putNumber("Expected Heading", headingInfo.expectedHeading.getDegrees());
 
-        SmartDashboard.putNumber("collector rpm", CollectorSubsystem.getInstance().getRpm());
-        SmartDashboard.putNumber("Shooter rpm", ShooterSubsystem.getInstance().getVelocity());
-        SmartDashboard.putNumber("rihtShooter", ShooterSubsystem.getInstance().getRightVelocity());
-        SmartDashboard.putNumber("forward arm encoder", ArmSubsystem.getInstance().getFrontPos());
-        SmartDashboard.putNumber("backward arm encoder", ArmSubsystem.getInstance().getBackPos());
-
-        SmartDashboard.putData(CommandScheduler.getInstance());
-
-        SmartDashboard.putBoolean("Manual Arm", ArmSubsystem.getInstance().manualControl());
-
-        SmartDashboard.putNumber("left climber", ClimberSubsystem.getInstance().getLeftPosition());
-        SmartDashboard.putNumber("left rpm", ClimberSubsystem.getInstance().getLeftRpm());
-        SmartDashboard.putNumber("right climber", ClimberSubsystem.getInstance().getRightPosition());
-        SmartDashboard.putNumber("right rpm", ClimberSubsystem.getInstance().getRightRpm());
-
-        if(Constants.CAMERA.camera.isConnected()) {
-            Constants.CAMERA.updateTrackingData();
-            //SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("speaker center")));
+        if(Constants.CAMERA.camera.isConnected() && Constants.CAMERA.hasTargets(Constants.aprilTagSetDictionary.get("source close"))) {
+            SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("source close")));
             SmartDashboard.putBoolean("newest frame targs", Constants.CAMERA.getNewestFrame().hasTargets());
-            if(Constants.CAMERA.camera.hasTargets()) {
-                //SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("amp")) * Constants.CAMERA_ANGLE.cos());
-            }
+            SmartDashboard.putNumber("corrected X", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("source close")));
+            //InferredRobotPosition robotPosition = InferredRobotPosition.getInferredRobotPosition("source close");
+            SmartDashboard.putString("True Coords", String.format("X: %.3f, Y: %.3f", InferredRobotPosition.getRobotPosition("source close").x, InferredRobotPosition.getRobotPosition("source close").y));
         } else {
             //SmartDashboard.putNumber("Distance", -1.0);
             SmartDashboard.putBoolean("newest frame targs", false);
+            SmartDashboard.putNumber("corrected X", -1.0);
         }
     }
 
@@ -84,6 +85,10 @@ public class Robot extends A05Robot {
         super.robotInit();
 
         Constants.setSparkConfig(false, false);
+
+        Constants.CAMERA.setXCorrectionFunction(Constants::cameraCorrectionFunction);
+        Constants.CAMERA.setYCorrectionFunction(Constants::cameraYInverseFunction);
+        RobotPosition.setCamera(Constants.CAMERA);
 
         // Set the drive constants that are specific to this swerve geometry.
         // Some drive geometry is passed in RobotContainer's constructor
@@ -157,8 +162,6 @@ public class Robot extends A05Robot {
      */
     @Override
     public void teleopPeriodic() {
-        super.teleopPeriodic();
-
         enabledTelemetry();
     }
 

@@ -39,10 +39,6 @@ public class SpeakerShootCommand extends DriveCommand {
 
     @Override
     public void execute() {
-        camera.updateTrackingData();
-        // do we have new target data of the speaker?
-
-
         try {
             if(!camera.isTargetDataNew(tagSet) && SpeedCachedSwerve.getInstance().getRobotRelativePositionSince(shooterSubsystem.lastTag.getTimestampSeconds()).cacheOverrun) {
                 super.execute(); // Run normal drive algorithm

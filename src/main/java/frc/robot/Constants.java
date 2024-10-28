@@ -17,7 +17,6 @@ import org.a05annex.frc.subsystems.PhotonCameraWrapper;
 import org.a05annex.util.AngleD;
 import org.a05annex.util.AngleUnit;
 import org.a05annex.util.Utl;
-import org.opencv.core.Mat;
 import org.photonvision.PhotonCamera;
 
 /**
@@ -33,7 +32,15 @@ public final class Constants extends A05Constants {
     public static final boolean HAS_LIMELIGHT = false;
     public static final AngleD CAMERA_ANGLE = new AngleD(AngleUnit.DEGREES, 26.67);
     public static final PhotonCameraWrapper CAMERA = new PhotonCameraWrapper(new PhotonCamera("Arducam_OV9281_USB_Camera"), 0.32, CAMERA_ANGLE.cloneAngleD());
-    //TODO: set correct channel ID
+
+    public static double cameraCorrectionFunction(double reportedX) {
+        return 0.879163 * reportedX + 0.0213692;
+    }
+
+    public static double cameraYInverseFunction(double reportedY) {
+        return -1.0 * cameraCorrectionFunction(reportedY);
+    }
+
     public static final DigitalInput NOTE_SENSOR = new DigitalInput(8);
     public static final DutyCycleEncoder ARM_ANALOG_ENCODER = new DutyCycleEncoder(9);
     /**
@@ -51,8 +58,8 @@ public final class Constants extends A05Constants {
      * These settings are loaded into {@link #ROBOT_SETTINGS_LIST} during {@link Robot#robotInit()}
      */
     public static final A05Constants.RobotSettings[] ROBOT_SETTINGS = {
-            new A05Constants.RobotSettings(0, "Competition", 0.5461, 0.5461, 5.0974, 0.313,
-                    2.735, 2.522, 1.026, 0.9650),
+            new A05Constants.RobotSettings(0, "Competition", 0.5461, 0.5461, 5.0897, 0.3130,
+                    0.4924, 2.5050, 1.0, 0.9650),
             new A05Constants.RobotSettings(1, "Practice", 0.5969, 0.5969, 5.240, 5.654,
                     0.969, 5.039, 1.026, 0.9164)
     };
@@ -78,10 +85,10 @@ public final class Constants extends A05Constants {
         return !switch6.get();
     }
 
-    // for practice, length and width from center of the wheels, in m (note chassis is 30" square,
+    // for practice, length and width from center of the wheels, in m. note chassis is 30" square,
     // the bolt pattern is 29" square, wheels are 2.75" in from the bolt pattern or centered on the
     // corners of a 23.5"(0.5969m) square.
-    // For competition, length and width from center of the wheels, in m (note chassis is 28" square,
+    // For competition, length and width from center of the wheels, in m. note chassis is 28" square,
     // the bolt pattern is 27" square, wheels are 2.75" in from the bolt pattern or centered on the
     // corners of a 21.5"(0.5461m) square.
 
@@ -93,7 +100,7 @@ public final class Constants extends A05Constants {
         aprilTagSetDictionary.put("amp", new AprilTagSet(new int[]{5}, new int[]{6}, 1.355725, new AngleD(AngleUnit.DEGREES, 90), new AngleD(AngleUnit.DEGREES, -90.0)));
         aprilTagSetDictionary.put("speaker center", new AprilTagSet(new int[]{4}, new int[]{7}, 1.450975));
         aprilTagSetDictionary.put("speaker offset", new AprilTagSet(new int[]{3}, new int[]{8}, 1.450975));
-        aprilTagSetDictionary.put("source close", new AprilTagSet(new int[]{10}, new int[]{1}, 1.355725, new AngleD(AngleUnit.DEGREES, 330.0), new AngleD(AngleUnit.DEGREES, 30.0)));
+        aprilTagSetDictionary.put("source close", new AprilTagSet(new int[]{10}, new int[]{1}, 1.355725, new AngleD(AngleUnit.DEGREES, 0.0), new AngleD(AngleUnit.DEGREES, 0.0)));
         aprilTagSetDictionary.put("source far", new AprilTagSet(new int[]{9}, new int[]{2}, 1.355725, new AngleD(AngleUnit.DEGREES, 330.0), new AngleD(AngleUnit.DEGREES, 30.0)));
         aprilTagSetDictionary.put("stage far", new AprilTagSet(new int[]{13}, new int[]{14}, 1.3208, new AngleD(AngleUnit.DEGREES, 180.0)));
         aprilTagSetDictionary.put("stage left", new AprilTagSet(new int[]{11}, new int[]{15}, 1.3208, new AngleD(AngleUnit.DEGREES, 60.0)));
@@ -199,7 +206,7 @@ public final class Constants extends A05Constants {
         public final double distance;
         public final double arm;
         public final double rpm;
-        public final boolean goodData; // used to declare if the linear interpolation data is calcualated or jsut returned because it was out of zone
+        public final boolean goodData; // used to declare if the linear interpolation data is calculated or just returned because it was out of zone
 
         LinearInterpolation(double distance, double arm, double rpm, boolean goodData) {
             this.distance = distance;
