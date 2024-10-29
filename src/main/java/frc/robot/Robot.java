@@ -5,16 +5,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ClimberTensionCommand;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.CollectorSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 import org.a05annex.frc.*;
-import org.a05annex.frc.subsystems.SpeedCachedSwerve;
 
 import java.util.Collections;
 
@@ -51,15 +46,14 @@ public class Robot extends A05Robot {
         SmartDashboard.putNumber("Expected Heading", headingInfo.expectedHeading.getDegrees());
 
         if(Constants.CAMERA.camera.isConnected() && Constants.CAMERA.hasTargets(Constants.aprilTagSetDictionary.get("source close"))) {
-            SmartDashboard.putNumber("Distance", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("source close")));
             SmartDashboard.putBoolean("newest frame targs", Constants.CAMERA.getNewestFrame().hasTargets());
-            SmartDashboard.putNumber("corrected X", Constants.CAMERA.getXFromLastTarget(Constants.aprilTagSetDictionary.get("source close")));
-            //InferredRobotPosition robotPosition = InferredRobotPosition.getInferredRobotPosition("source close");
-            SmartDashboard.putString("True Coords", String.format("X: %.3f, Y: %.3f", InferredRobotPosition.getRobotPosition("source close").x, InferredRobotPosition.getRobotPosition("source close").y));
+            InferredRobotPosition robotPosition = InferredRobotPosition.getInferredRobotPosition("source close");
+            SmartDashboard.putString("True Coords", String.format("X: %.3f, Y: %.3f", robotPosition.x, robotPosition.y));
+            SmartDashboard.putNumber("time", robotPosition.timestamp);
+            SmartDashboard.putBoolean("valid", robotPosition.isValid);
+            SmartDashboard.putBoolean("new", robotPosition.isNew);
         } else {
-            //SmartDashboard.putNumber("Distance", -1.0);
             SmartDashboard.putBoolean("newest frame targs", false);
-            SmartDashboard.putNumber("corrected X", -1.0);
         }
     }
 
@@ -72,7 +66,7 @@ public class Robot extends A05Robot {
     }
 
     public void enableInit() {
-        ArmSubsystem.getInstance().enableInit();
+        //ArmSubsystem.getInstance().enableInit();
         new ClimberTensionCommand().schedule();
     }
 

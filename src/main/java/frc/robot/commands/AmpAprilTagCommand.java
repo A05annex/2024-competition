@@ -1,13 +1,11 @@
 package frc.robot.commands;
 
 import org.a05annex.frc.InferredRobotPosition;
-import org.a05annex.frc.commands.A05AprilTagPositionCommand;
-import org.a05annex.frc.subsystems.PhotonCameraWrapper;
+import org.a05annex.frc.commands.A05TagTargetCommand;
 import org.a05annex.util.AngleD;
-import org.a05annex.util.Utl;
 
 
-public class AmpAprilTagCommand extends A05AprilTagPositionCommand {
+public class AmpAprilTagCommand extends A05TagTargetCommand {
 
     public AmpAprilTagCommand(double xPosition, double yPosition, String positionParametersKey) {
         // NOTE: the super adds the drive subsystem requirement
@@ -29,16 +27,16 @@ public class AmpAprilTagCommand extends A05AprilTagPositionCommand {
         // NOTE: there is a variable called 'canPerformTargeting' that needs to get set to true in order to use
         // executeTargeting(). checkIfCanPerformTargeting will set this to true if the conditions in it are met
 
-        checkIfCanPerformTargeting();
+        verifyOkToTarget();
 
 
-        if(!canPerformTargeting) {
+        if(!canTarget) {
             return;
         }
         inferredRobotPosition = InferredRobotPosition.getInferredRobotPosition(tagSet);
 
 
-        executeTargeting();
+        calculateAndDrive();
     }
 
     @Override
