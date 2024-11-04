@@ -17,6 +17,7 @@ public class ArmSubsystem extends SubsystemBase {
     private final SparkNeo forwardMotor = SparkNeo.factory(Constants.CAN_Devices.FORWARD_ARM_MOTOR);
     private final SparkNeo backwardMotor = SparkNeo.factory(Constants.CAN_Devices.BACKWARD_ARM_MOTOR);
     // Declare PID constants for smart motion control
+    @SuppressWarnings("FieldCanBeLocal")
     private final double
             smKp = 0.0005, smKi = 0.0001, smKiZone = 0.2, smKff = 0.000156, smMaxRPM = 3000.0,
             smMaxDeltaRPMSec = 3000.0, smMinRPM = 0.0, smError = 0.1, smKd = 0.0;

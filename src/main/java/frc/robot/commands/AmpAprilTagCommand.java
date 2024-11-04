@@ -33,10 +33,10 @@ public class AmpAprilTagCommand extends A05TagTargetCommand {
         if(!canTarget) {
             return;
         }
-        inferredRobotPosition = InferredRobotPosition.getInferredRobotPosition(tagSet);
+        inferredRobotPosition = InferredRobotPosition.getRobotPosition(tagSet);
 
 
-        calculateAndDrive();
+        calculateThenDrive();
     }
 
     @Override

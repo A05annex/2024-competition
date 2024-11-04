@@ -22,7 +22,7 @@ public class FaceSpeakerCommand extends A05DriveCommand {
         conditionStick();
         navX.setExpectedHeading(navX.getHeadingInfo().getClosestUpField());
         conditionedRotate = new AngleD(navX.getHeadingInfo().expectedHeading).subtract(new AngleD(navX.getHeadingInfo().heading))
-                .getRadians() * A05Constants.getDriveOrientationkp();
+                .getRadians() * A05Constants.getDriveOrientationKp();
         conditionedRotate = Utl.clip(conditionedRotate, -0.5, 0.5);
         iSwerveDrive.swerveDrive(conditionedDirection, conditionedSpeed, conditionedRotate);
     }

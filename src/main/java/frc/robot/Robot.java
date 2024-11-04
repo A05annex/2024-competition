@@ -5,11 +5,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ClimberTensionCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import org.a05annex.frc.*;
+import org.a05annex.frc.subsystems.SpeedCachedSwerve;
 
 import java.util.Collections;
 
@@ -33,7 +35,7 @@ public class Robot extends A05Robot {
 //        SmartDashboard.putNumber("forward arm encoder", ArmSubsystem.getInstance().getFrontPos());
 //        SmartDashboard.putNumber("backward arm encoder", ArmSubsystem.getInstance().getBackPos());
 //
-//        SmartDashboard.putData(CommandScheduler.getInstance());
+        SmartDashboard.putData(CommandScheduler.getInstance());
 //
 //        SmartDashboard.putBoolean("Manual Arm", ArmSubsystem.getInstance().manualControl());
 //
@@ -42,13 +44,17 @@ public class Robot extends A05Robot {
 //        SmartDashboard.putNumber("right climber", ClimberSubsystem.getInstance().getRightPosition());
 //        SmartDashboard.putNumber("right rpm", ClimberSubsystem.getInstance().getRightRpm());
         NavX.HeadingInfo headingInfo = NavX.getInstance().getHeadingInfo();
-        SmartDashboard.putNumber("Actual Heading", headingInfo.heading.getDegrees());
-        SmartDashboard.putNumber("Expected Heading", headingInfo.expectedHeading.getDegrees());
+        //SmartDashboard.putNumber("Actual Heading", headingInfo.heading.getDegrees());
+        //SmartDashboard.putNumber("Expected Heading", headingInfo.expectedHeading.getDegrees());
+        SmartDashboard.putBoolean("is caching paused", InferredRobotPosition.isCachingPaused());
+
+        SpeedCachedSwerve.getInstance().setLatencyOffset(Constants.updateConstant("latency offset", 0.125));
 
         if(Constants.CAMERA.camera.isConnected() && Constants.CAMERA.hasTargets(Constants.aprilTagSetDictionary.get("source close"))) {
             SmartDashboard.putBoolean("newest frame targs", Constants.CAMERA.getNewestFrame().hasTargets());
-            InferredRobotPosition robotPosition = InferredRobotPosition.getInferredRobotPosition("source close");
-            SmartDashboard.putString("True Coords", String.format("X: %.3f, Y: %.3f", robotPosition.x, robotPosition.y));
+            InferredRobotPosition robotPosition = InferredRobotPosition.getRobotPosition("source close");
+            SmartDashboard.putString("True Coords Metric", String.format("X: %.3f, Y: %.3f", robotPosition.x, robotPosition.y));
+            SmartDashboard.putString("True Coords Imperial", String.format("X: %.3f, Y: %.3f", Units.metersToInches(robotPosition.x), Units.metersToInches(robotPosition.y)));
             SmartDashboard.putNumber("time", robotPosition.timestamp);
             SmartDashboard.putBoolean("valid", robotPosition.isValid);
             SmartDashboard.putBoolean("new", robotPosition.isNew);
@@ -86,12 +92,14 @@ public class Robot extends A05Robot {
 
         // Set the drive constants that are specific to this swerve geometry.
         // Some drive geometry is passed in RobotContainer's constructor
-        Constants.setDriveOrientationkp(Constants.DRIVE_ORIENTATION_kP);
+        Constants.setDriveOrientationKp(Constants.DRIVE_ORIENTATION_kP);
 
         Constants.setPrintDebug(false);
 
         // update dictionary with all needed values
         Constants.setAprilTagSetDictionary();
+
+        InferredRobotPosition.pauseCaching();
 
         // Load the robot settings list
         Collections.addAll(A05Constants.ROBOT_SETTINGS_LIST, Constants.ROBOT_SETTINGS);
@@ -112,6 +120,7 @@ public class Robot extends A05Robot {
     @Override
     public void disabledInit() {
         ArmSubsystem.getInstance().stop();
+        InferredRobotPosition.pauseCaching();
     }
 
 
@@ -143,7 +152,7 @@ public class Robot extends A05Robot {
 
     @Override
     public void teleopInit() {
-        if(!a05RobotContainer.driveRightStickPress.getAsBoolean()) {
+        if(!A05RobotContainer.driveRightStickPress.getAsBoolean()) {
             enableInit();
         }
         // Cancels autonomous command

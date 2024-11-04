@@ -28,7 +28,7 @@ public class DynamicFaceRightCommand extends A05DriveCommand {
                                                                                                                        // 90 = red amp, 300 = blue source
         navX.setExpectedHeading(navX.getHeadingInfo().getClosestHeading(new AngleD(AngleUnit.DEGREES, heading)));
         conditionedRotate = new AngleD(navX.getHeadingInfo().expectedHeading).subtract(new AngleD(navX.getHeadingInfo().heading))
-                .getRadians() * A05Constants.getDriveOrientationkp();
+                .getRadians() * A05Constants.getDriveOrientationKp();
         conditionedRotate = Utl.clip(conditionedRotate, -0.5, 0.5);
         iSwerveDrive.swerveDrive(conditionedDirection, conditionedSpeed, conditionedRotate);
     }

@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import org.a05annex.frc.subsystems.SparkNeo;

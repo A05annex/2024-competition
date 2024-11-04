@@ -50,7 +50,7 @@ public class RobotContainer extends A05RobotContainer {
 
         speedCachedSwerve.setDriveSubsystem(driveSubsystem);
         speedCachedSwerve.setCacheLength(1000);
-        speedCachedSwerve.setLatencyOffset(0.075);
+        speedCachedSwerve.setLatencyOffset(0.125);
 
         driveCommand = new DriveCommand(speedCachedSwerve);
 
@@ -136,6 +136,6 @@ public class RobotContainer extends A05RobotContainer {
 //        driveLeftBumper.onTrue(new InstantCommand(CollectorSubsystem.getInstance()::intake)).onFalse(new InstantCommand(CollectorSubsystem.getInstance()::stop));
 //        altLeftBumper.onTrue(new AmpArmCommand()).onFalse(new InstantCommand(ShooterSubsystem.getInstance()::stop));
 
-        driveA.whileTrue(new AprilTagPositionCommand(Constants.CAMERA, 0.5, 0.5, "source close"));
+        driveA.whileTrue(new AprilTagPositionCommand(Constants.CAMERA, 1.0, 0.0, "source close"));
     }
 }
