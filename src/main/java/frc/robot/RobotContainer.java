@@ -12,10 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AprilTagPositionCommand;
-import frc.robot.commands.DriveCommand;
-import frc.robot.commands.ManualClimberCommand;
+import frc.robot.commands.AutopilotDriveCommand;
 import frc.robot.commands.NoteCenterCommand;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CollectorSubsystem;
 import org.a05annex.frc.A05Constants;
 import org.a05annex.frc.A05RobotContainer;
@@ -50,7 +48,7 @@ public class RobotContainer extends A05RobotContainer {
         speedCachedSwerve.setCacheLength(1000);
         speedCachedSwerve.setLatencyOffset(0.125);
 
-        driveCommand = new DriveCommand(speedCachedSwerve);
+        driveCommand = new AutopilotDriveCommand(speedCachedSwerve);
 
         speedCachedSwerve.setDriveGeometry(robotSettings.length, robotSettings.width,
                 robotSettings.rf, robotSettings.rr,
@@ -58,7 +56,7 @@ public class RobotContainer extends A05RobotContainer {
                 robotSettings.maxSpeedCalibration);
 
         driveSubsystem.setDefaultCommand(driveCommand);
-        ClimberSubsystem.getInstance().setDefaultCommand(new ManualClimberCommand());
+        //ClimberSubsystem.getInstance().setDefaultCommand(new ManualClimberCommand());
 
         //ArmSubsystem.getInstance().setDefaultCommand(new ManualArmCommand());
 
